@@ -1,4 +1,15 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    dangerouslyAllowSVG: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "bigmusclesnutrition.com",
+        port: "",
+      },
+    ],
+  },
+};
 
 export default nextConfig;
