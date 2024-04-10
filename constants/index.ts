@@ -125,7 +125,7 @@ export const popularProducts = [
   },
   {
     id: 2,
-    img: "/best-sellers/gold-whey.webp",
+    img: "/best-sellers/good-product.webp",
     name: "Organic Whey Protein",
     desc: "Fuel your muscles with our pure, grass-fed organic whey protein.",
     prize: "₹2199",
@@ -149,7 +149,7 @@ export const popularProducts = [
   },
   {
     id: 4,
-    img: "/best-sellers/gold-whey.webp",
+    img: "/best-sellers/good-product.webp",
     name: "Power Pre-workout",
     desc: "Boost your workout intensity with our advanced pre-workout formula.",
     prize: "₹1299",
@@ -160,7 +160,7 @@ export const popularProducts = [
   },
   {
     id: 5,
-    img: "/best-sellers/gold-whey.webp",
+    img: "/best-sellers/good-product.webp",
     name: "Daily Probiotic",
     desc: "Support your gut health with our daily probiotic blend.",
     prize: "₹899",

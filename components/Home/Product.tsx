@@ -54,9 +54,9 @@ const Product = ({
       <Image
         src={img}
         alt="jordans"
-        height="225"
-        width="332"
-        className="object-cover w-[332px] h-[225px]"
+        height="400"
+        width="400"
+        className="object-cover w-[400px] h-[400px]"
       />
       <p className="text-sm text-gray-400  dark:text-neutral-200 font-extrabold">
         {category}
@@ -81,10 +81,7 @@ const Product = ({
         <Button className="rounded-lg duration-300 transition-all hover:scale-105">
           Buy Now
         </Button>
-        <Button
-          className="rounded-lg duration-300 transition-all hover:scale-105 bg-white text-black border border-black"
-          variant={"secondary"}
-        >
+        <Button className="rounded-lg duration-300 transition-all hover:scale-105 bg-white text-black border border-black">
           Add To Cart
         </Button>
       </div>
