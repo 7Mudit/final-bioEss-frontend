@@ -1,4 +1,5 @@
 import BannerSection from "@/components/Home/BannerSection";
+import BestSellersSection from "@/components/Home/BestSellersSection";
 import CategoriesSection from "@/components/Home/CategoriesSection";
 import FreeSection from "@/components/Home/FreeSection";
 import ShopByGoalSection from "@/components/Home/ShopByGoalSection";
@@ -9,6 +10,7 @@ export default function Home() {
     <main className="flex flex-col">
       <BannerSection />
       <CategoriesSection />
+      <BestSellersSection />
       <BannerSection />
       <ShopByGoalSection />
       <TrustSection />
