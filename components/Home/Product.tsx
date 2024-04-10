@@ -81,7 +81,10 @@ const Product = ({
         <Button className="rounded-lg duration-300 transition-all hover:scale-105">
           Buy Now
         </Button>
-        <Button className="rounded-lg duration-300 transition-all hover:scale-105 bg-white text-black border border-black">
+        <Button
+          className="rounded-lg duration-300 transition-all hover:scale-105 bg-white text-black border border-black"
+          variant={"outline"}
+        >
           Add To Cart
         </Button>
       </div>
