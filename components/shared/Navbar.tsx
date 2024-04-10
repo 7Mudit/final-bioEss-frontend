@@ -39,11 +39,11 @@ import { ModeToggle } from "../ui/Toggle";
 
 const Navbar = () => {
   return (
-    <div className="flex px-2 sm:px-4 justify-between h-[72px] items-center">
+    <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center">
       {/* logo */}
       <Link href="/">
         <Image
-          src="/logo.svg"
+          src="/logoFinal.png"
           width={170}
           height={38}
           className=""
