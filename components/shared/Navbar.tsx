@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import React from "react";
 import {
@@ -36,14 +37,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { ModeToggle } from "../ui/Toggle";
+import { useTheme } from "next-themes";
 
 const Navbar = () => {
+  const { theme } = useTheme();
   return (
     <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center">
       {/* logo */}
       <Link href="/">
         <Image
-          src="/logoFinal.png"
+          src={theme === "dark" ? "/logoDark.png" : "/logoFinal.png"}
           width={120}
           height={38}
           className=""

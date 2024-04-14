@@ -6,6 +6,7 @@ import {
   CarouselItem,
   CarouselNext,
 } from "@/components/ui/carousel";
+import Link from "next/link";
 
 export default function Products({ heading, products }: any) {
   return (
@@ -19,7 +20,9 @@ export default function Products({ heading, products }: any) {
         <CarouselContent className="   gap-5">
           {products.map((product: any, index: any) => (
             <CarouselItem key={index} className="max-w-[384px] cursor-pointer">
-              <Product {...product} />
+              <Link href={`product/${product.id}`}>
+                <Product {...product} />
+              </Link>
             </CarouselItem>
           ))}
         </CarouselContent>
