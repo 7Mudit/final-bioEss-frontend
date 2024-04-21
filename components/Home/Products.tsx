@@ -20,9 +20,7 @@ export default function Products({ heading, products }: any) {
         <CarouselContent className="   gap-5">
           {products.map((product: any, index: any) => (
             <CarouselItem key={index} className="max-w-[384px] cursor-pointer">
-              <Link href={`product/${product.id}`}>
-                <Product {...product} />
-              </Link>
+              <Product {...product} />
             </CarouselItem>
           ))}
         </CarouselContent>

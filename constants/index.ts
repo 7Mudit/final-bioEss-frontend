@@ -2,21 +2,28 @@ import freebies1 from "../public/productimages/freebies1.webp";
 import freebies2 from "../public/productimages/freebies2.webp";
 import freebies3 from "../public/productimages/freebies3.webp";
 import freebies4 from "../public/productimages/freebies4.webp";
-import productimage1 from "../public/productimages/productimage1.webp";
-import productimage2 from "../public/productimages/productimage2.webp";
-import productimage3 from "../public/productimages/productimage3.webp";
-import productimage4 from "../public/productimages/productimage4.webp";
-import productimage5 from "../public/productimages/productimage5.webp";
-import productimage6 from "../public/productimages/productimage6.webp";
-import productimage7 from "../public/productimages/productimage7.webp";
-import productimage8 from "../public/productimages/productimage8.webp";
-import productimage9 from "../public/productimages/productimage9.webp";
-import productimage10 from "../public/productimages/productimage10.webp";
-import productimage11 from "../public/productimages/productimage11.webp";
-import productimage12 from "../public/productimages/productimage12.webp";
-import productimage13 from "../public/productimages/productimage13.webp";
-import productimage14 from "../public/productimages/productimage14.webp";
-import productimage15 from "../public/productimages/productimage15.webp";
+import Bulk_front from "../public/productimages/Bulk front.jpg";
+import Bulk_ing from "../public/productimages/Bulk ing.jpg";
+import Bulk_ins from "../public/productimages/Bulk ins.jpg";
+import creatine_front from "../public/productimages/creatine front.jpg";
+import creatine_left from "../public/productimages/creatine left.jpg";
+import creatine_right from "../public/productimages/creatine right.jpg";
+import joint_batch from "../public/productimages/JOINT batch.jpg";
+import joint_compo from "../public/productimages/JOINT compo.jpg";
+import joint_front from "../public/productimages/JOINT front.jpg";
+import multi_batch from "../public/productimages/Multi batch.jpg";
+import multi_compo from "../public/productimages/Multi compo.jpg";
+import multi_front from "../public/productimages/Multi front.jpg";
+import zma_batch from "../public/productimages/ZMA batch.jpg";
+import zma_compo from "../public/productimages/ZMA compo.jpg";
+import zma_front from "../public/productimages/ZMA front.jpg";
+import fusion_choco_details from "../public/productimages/fusion choco details.jpg";
+import fusion_cookie_details from "../public/productimages/fusion cookie front.jpg";
+import fusion_front_choco from "../public/productimages/fusion front choco.jpg";
+import fusion_mango_front from "../public/productimages/fusion mango front.jpg";
+import fusion_mango_ingre from "../public/productimages/fusion mango ingre.jpg";
+import fusion_right_same from "../public/productimages/fusion RIGHT same for all flavours..jpg";
+import fusion_cookie_ingre from "../public/productimages/fusoin cookie ingre.jpg";
 
 export const products = [
   {
@@ -133,61 +140,967 @@ export const info = [
 export const popularProducts = [
   {
     id: 1,
-    img: "/best-sellers/creatine.webp",
-    name: "Ultimate Multivitamin",
-    desc: "Comprehensive blend of essential vitamins to support overall health.",
-    prize: "₹999",
-    prizeStrike: "₹1299",
-    discountPrize: "₹300",
-    category: "Vitamins",
-    stars: 5,
+    img: "/productimages/Bulk front.jpg",
+    name: "BEN WHEY BULK EDITION",
+    desc: "Our powerhouse protein powder tailored to fuel your bulking regime and support your muscle-building goals.",
+    prize: "₹3000",
+    prizeStrike: "₹1890",
+    discountPrize: "37%",
+    category: "Protein",
+    rating: 5,
     hot: true,
+    sizes: ["1 kg"],
+    available: 5,
+    flavures: ["RICH CHOCOLATE"],
+
+    productimages: [Bulk_front, Bulk_ing, Bulk_ins],
+
+    customer_reviews: 217,
+
+    description: [
+      {
+        heading: "",
+        content: `Introducing our powerhouse protein powder tailored to fuel your bulking regime and support your muscle-building goals. With 22 grams of protein in every scoop, our formula provides the essential amino acids your muscles need to thrive.
+      `,
+      },
+
+      {
+        heading: "",
+        content: `But that's not all – we've supercharged our blend with 3 grams of creatine per serving. Creatine is renowned for its ability to enhance strength and power output, making it the perfect addition to your bulking arsenal. `,
+      },
+
+      {
+        heading: "",
+        content: `We understand that absorption is key to reaping the full benefits of protein and creatine. That's why we've included digestive enzymes to optimize nutrient uptake, ensuring that every gram of protein and creatine is effectively utilized by your body.`,
+      },
+      {
+        heading: "",
+        content: `For those watching their sugar intake or managing diabetes, our protein powder is a game-changer. With zero added sugar, you can enjoy the sweetness of success without compromising your health goals.
+      `,
+      },
+      {
+        heading: "",
+        content: `When it comes to quality, we don't cut corners. Our whey is sourced from trusted suppliers, guaranteeing purity and quality with every batch. Plus, our formula boasts best-in-segment `,
+      },
+      {
+        heading: "",
+        content: `mixability, so you can enjoy a smooth and creamy shake every time, without any clumps or grittiness.
+
+       And because we believe in keeping it real, you won't find any artificial flavoring substances in our product. Just the natural, delicious taste of high-quality whey protein.
+       `,
+      },
+      {
+        heading: "",
+        content: `Elevate your bulking game with our protein powder – the ultimate fusion of science, quality, and taste to support your muscle-building journey, every step of the way.`,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is whey protein suitable for vegetarians?",
+        answer:
+          "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
+      },
+      {
+        question:
+          "What are the differences between whey protein concentrate and whey protein isolate?",
+        answer:
+          "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
+      },
+      {
+        question:
+          "How does whey protein aid in muscle recovery after workouts?",
+        answer:
+          "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
+      },
+      {
+        question: " Can whey protein help with weight management and satiety?",
+        answer:
+          "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
+      },
+      {
+        question:
+          "Are there any potential allergens in Premium Gold Whey Protein?",
+        answer:
+          "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
+      },
+      {
+        question:
+          "What are the recommended serving sizes for Premium Gold Whey Protein?",
+        answer:
+          "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
+      },
+      {
+        question:
+          "How does Premium Gold Whey Protein contribute to immune function and overall health?",
+        answer:
+          "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
+      },
+    ],
+
+    frebies: [
+      {
+        image: freebies1,
+        title: "Free Shaker*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies2,
+        title: "Free T-Shirt*",
+        pricerange: [2500, 3499],
+      },
+      {
+        image: freebies3,
+        title: "Free Stringer*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies4,
+        title: "Free T-Shirt & Shaker*",
+        pricerange: [4500],
+      },
+    ],
+
+    customer_rating: [
+      {
+        heading: "Convenient Packaging",
+        review:
+          "The packaging is convenient and easy to store. Will definitely buy it again.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4.5,
+      },
+      {
+        heading: "No Clumps, No Grit – Just Perfection!",
+        review: "Mix well with water or milk. No clumps or gritty texture.",
+        name: "Tarun Singh",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fast Delivery Appreciation",
+        review: "Appreciate the fast delivery. Always arrives on time.",
+        name: "Shubham Verma",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fitness Staple: Can't Go Without It for Months!",
+        review:
+          "Been using it for months now. Can't imagine my fitness routine without it.",
+        name: "Pankaj Sharma",
+        date: "Mar,2024",
+        rating: 4,
+      },
+      {
+        heading: "Protein Packed: A Daily Intake Essential!",
+        review:
+          "Provides a good amount of protein per serving. Helps me meet my daily intake.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4,
+      },
+    ],
   },
   {
     id: 2,
-    img: "/best-sellers/good-product.webp",
-    name: "Organic Whey Protein",
-    desc: "Fuel your muscles with our pure, grass-fed organic whey protein.",
-    prize: "₹2199",
-    prizeStrike: "₹2599",
-    discountPrize: "₹400",
-    category: "Protein Powder",
-    stars: 4.8,
+    img: "/productimages/creatine front.jpg",
+    name: "BEN Creatine Monohydrate",
+    desc: "BEN Creatine Monohyhdrate, the ultimate solution for athletes and fitness enthusiasts .",
+    prize: "₹1200",
+    prizeStrike: "₹780",
+    discountPrize: "35%",
+    category: "Aminos",
+    rating: 4.8,
     sale: true,
+    sizes: ["250 gm"],
+    available: 5,
+    flavures: [],
+    customer_reviews: 217,
+
+    description: [
+      {
+        heading: "",
+        content: `BEN Creatine Monohyhdrate, the ultimate solution for athletes and fitness enthusiasts seeking unparalleled performance enhancement. With our revolutionary 200 mesh creatine, we've set a new standard for solubility, ensuring effortless mixing and rapid absorption.`,
+      },
+
+      {
+        heading: "",
+        content: `Quality and safety are our top priorities. That's why our imported creatine undergoes stringent testing for heavy metals, guaranteeing purity and peace of mind for our customers.
+  
+  
+      But we didn't stop there. We've harnessed the power of micronization to further enhance absorption, ensuring that every gram of BEN Creatine is maximally utilized by your body to fuel your workouts and support muscle growth. `,
+      },
+
+      {
+        heading: "",
+        content: `Experience the difference with BEN Creatine – where cutting-edge technology meets uncompromising quality to help you achieve your fitness goals, one scoop at a time.`,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is whey protein suitable for vegetarians?",
+        answer:
+          "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
+      },
+      {
+        question:
+          "What are the differences between whey protein concentrate and whey protein isolate?",
+        answer:
+          "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
+      },
+      {
+        question:
+          "How does whey protein aid in muscle recovery after workouts?",
+        answer:
+          "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
+      },
+      {
+        question: " Can whey protein help with weight management and satiety?",
+        answer:
+          "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
+      },
+      {
+        question:
+          "Are there any potential allergens in Premium Gold Whey Protein?",
+        answer:
+          "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
+      },
+      {
+        question:
+          "What are the recommended serving sizes for Premium Gold Whey Protein?",
+        answer:
+          "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
+      },
+      {
+        question:
+          "How does Premium Gold Whey Protein contribute to immune function and overall health?",
+        answer:
+          "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
+      },
+    ],
+
+    frebies: [
+      {
+        image: freebies1,
+        title: "Free Shaker*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies2,
+        title: "Free T-Shirt*",
+        pricerange: [2500, 3499],
+      },
+      {
+        image: freebies3,
+        title: "Free Stringer*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies4,
+        title: "Free T-Shirt & Shaker*",
+        pricerange: [4500],
+      },
+    ],
+
+    productimages: [creatine_front, creatine_left, creatine_right],
+
+    customer_rating: [
+      {
+        heading: "Convenient Packaging",
+        review:
+          "The packaging is convenient and easy to store. Will definitely buy it again.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4.5,
+      },
+      {
+        heading: "No Clumps, No Grit – Just Perfection!",
+        review: "Mix well with water or milk. No clumps or gritty texture.",
+        name: "Tarun Singh",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fast Delivery Appreciation",
+        review: "Appreciate the fast delivery. Always arrives on time.",
+        name: "Shubham Verma",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fitness Staple: Can't Go Without It for Months!",
+        review:
+          "Been using it for months now. Can't imagine my fitness routine without it.",
+        name: "Pankaj Sharma",
+        date: "Mar,2024",
+        rating: 4,
+      },
+      {
+        heading: "Protein Packed: A Daily Intake Essential!",
+        review:
+          "Provides a good amount of protein per serving. Helps me meet my daily intake.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4,
+      },
+    ],
   },
   {
     id: 3,
-    img: "/best-sellers/creatine.webp",
-    name: "Omega-3 Fish Oil",
-    desc: "High-quality, purified Omega-3 fish oil for heart health and cognitive function.",
-    prize: "₹749",
-    prizeStrike: "₹999",
-    discountPrize: "₹250",
-    category: "Fish Oil",
-    stars: 4.7,
+    img: "/productimages/JOINT front.jpg",
+    name: "BEN Joint Support",
+    desc: "Introducing our revolutionary Joint Blend, a comprehensive formula crafted to support joint health and mobility.",
+    prize: "₹550",
+    prizeStrike: "₹313.5",
+    discountPrize: "43 %",
+    category: "Daily wellness",
+    rating: 4.7,
     newPro: true,
+    sizes: ["60 capsules"],
+    available: 5,
+    flavures: [],
+    customer_reviews: 217,
+
+    description: [
+      {
+        heading: "",
+        content: `Introducing our revolutionary Joint Blend, a comprehensive formula crafted to support joint health and mobility, allowing you to move with ease and comfort. This powerful blend combines key ingredients known for their efficacy in promoting joint strength, flexibility, and overall wellness.
+       `,
+      },
+
+      {
+        heading: "Here's why our Joint Blend stands out:",
+        content: `
+
+      `,
+      },
+
+      {
+        heading: "Glucosamine: ",
+        content: `Glucosamine is a natural compound found in the body that plays a vital role in the formation and repair of cartilage. By incorporating glucosamine into our blend, we aim to support cartilage health and joint function, promoting mobility and flexibility.
+
+      `,
+      },
+
+      {
+        heading: "Methylsulfonylmethane (MSM): ",
+        content: `MSM is a sulfur-containing compound known for its anti-inflammatory properties and ability to support connective tissue health. By including MSM in our formula, we aim to alleviate joint discomfort and inflammation, allowing for improved joint function and range of motion.`,
+      },
+      {
+        heading: "IChondroitin: ",
+        content: `Chondroitin is a key component of cartilage and is often used in conjunction with glucosamine to support joint health. By supplementing with chondroitin, our blend aims to enhance the structural integrity of cartilage, reduce joint pain, and improve joint function.
+      `,
+      },
+      {
+        heading: "Curcuma Longa (Turmeric): ",
+        content: `Curcuma longa, commonly known as turmeric, is a potent anti-inflammatory and antioxidant herb. Its active compound, curcumin, has been shown to reduce inflammation and alleviate joint pain associated with conditions such as arthritis. By incorporating turmeric into our blend, we aim to provide additional support for joint health and comfort.`,
+      },
+      {
+        heading: "Vitamin D3: ",
+        content: `Vitamin D3 plays a crucial role in bone health and may help reduce the risk of joint-related conditions. Adequate vitamin D levels have been linked to improved joint function and reduced inflammation. By including vitamin D3 in our formula, we aim to support overall joint health and well-being.`,
+      },
+      {
+        heading: "",
+        content: `Our Joint Blend is meticulously formulated to deliver maximum efficacy and potency, providing comprehensive support for your joints. Whether you're an athlete looking to maintain peak performance or an individual seeking relief from joint discomfort, our Joint Blend is here to help you stay active, mobile, and pain-free.
+      
+      Experience the difference with our Joint Blend and reclaim your freedom of movement today.
+      `,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is whey protein suitable for vegetarians?",
+        answer:
+          "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
+      },
+      {
+        question:
+          "What are the differences between whey protein concentrate and whey protein isolate?",
+        answer:
+          "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
+      },
+      {
+        question:
+          "How does whey protein aid in muscle recovery after workouts?",
+        answer:
+          "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
+      },
+      {
+        question: " Can whey protein help with weight management and satiety?",
+        answer:
+          "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
+      },
+      {
+        question:
+          "Are there any potential allergens in Premium Gold Whey Protein?",
+        answer:
+          "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
+      },
+      {
+        question:
+          "What are the recommended serving sizes for Premium Gold Whey Protein?",
+        answer:
+          "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
+      },
+      {
+        question:
+          "How does Premium Gold Whey Protein contribute to immune function and overall health?",
+        answer:
+          "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
+      },
+    ],
+
+    productimages: [joint_front, joint_batch, joint_compo],
+
+    frebies: [
+      {
+        image: freebies1,
+        title: "Free Shaker*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies2,
+        title: "Free T-Shirt*",
+        pricerange: [2500, 3499],
+      },
+      {
+        image: freebies3,
+        title: "Free Stringer*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies4,
+        title: "Free T-Shirt & Shaker*",
+        pricerange: [4500],
+      },
+    ],
+
+    customer_rating: [
+      {
+        heading: "Convenient Packaging",
+        review:
+          "The packaging is convenient and easy to store. Will definitely buy it again.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4.5,
+      },
+      {
+        heading: "No Clumps, No Grit – Just Perfection!",
+        review: "Mix well with water or milk. No clumps or gritty texture.",
+        name: "Tarun Singh",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fast Delivery Appreciation",
+        review: "Appreciate the fast delivery. Always arrives on time.",
+        name: "Shubham Verma",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fitness Staple: Can't Go Without It for Months!",
+        review:
+          "Been using it for months now. Can't imagine my fitness routine without it.",
+        name: "Pankaj Sharma",
+        date: "Mar,2024",
+        rating: 4,
+      },
+      {
+        heading: "Protein Packed: A Daily Intake Essential!",
+        review:
+          "Provides a good amount of protein per serving. Helps me meet my daily intake.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4,
+      },
+    ],
   },
   {
     id: 4,
-    img: "/best-sellers/good-product.webp",
-    name: "Power Pre-workout",
-    desc: "Boost your workout intensity with our advanced pre-workout formula.",
-    prize: "₹1299",
-    prizeStrike: "₹1599",
-    discountPrize: "₹300",
-    category: "Pre-workout",
-    stars: 4.9,
+    img: "/productimages/Multi front.jpg",
+    name: "BEN Multivitamin",
+    desc: "Your comprehensive solution for meeting your daily nutritional needs and optimizing your health.",
+    prize: "₹550",
+    prizeStrike: "₹313.5",
+    discountPrize: "43 %",
+    category: "Daily wellness",
+    rating: 4.9,
+    sizes: ["60 capsules"],
+    available: 5,
+    flavures: [],
+    customer_reviews: 217,
+
+    description: [
+      {
+        heading: "",
+        content: `Introducing BEN Multivitamin – your comprehensive solution for meeting your daily nutritional needs and optimizing your health. With its advanced formulation and superior ingredients, BEN Multivitamin is designed to support your overall well-being and vitality.`,
+      },
+
+      {
+        heading: "Here's why BEN Multivitamin stands out:",
+        content: ``,
+      },
+
+      {
+        heading: "Maximum Bioavailability: ",
+        content: `BEN Multivitamin features the most bioavailable forms of all its ingredients, ensuring that your body can effectively absorb and utilize the essential nutrients it contains. This means you get the most out of every dose, maximizing the benefits for your health.`,
+      },
+
+      {
+        heading: "Complete Daily Requirement:",
+        content: `With BEN Multivitamin, you can rest assured that you're meeting 100% of your recommended daily allowance (RDA) for most vitamins. This ensures that you have all the essential nutrients your body needs to function optimally and thrive each day.`,
+      },
+      {
+        heading: "Comprehensive Formula: ",
+        content: `BEN Multivitamin packs a powerful punch with its blend of 23 essential vitamins and minerals. From vitamin A to zinc, each ingredient is carefully selected to provide you with a complete nutritional profile, supporting various aspects of your health.
+      
+      `,
+      },
+      {
+        heading: "",
+        content: `Whether you're looking to boost your immune system, support your energy levels, or promote overall wellness, BEN Multivitamin has you covered. Incorporate it into your daily routine and experience the difference it can make in your health and vitality.`,
+      },
+      {
+        heading: "Choose BEN Multivitamin – ",
+        content: `your partner in achieving optimal health and well-being.`,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is whey protein suitable for vegetarians?",
+        answer:
+          "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
+      },
+      {
+        question:
+          "What are the differences between whey protein concentrate and whey protein isolate?",
+        answer:
+          "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
+      },
+      {
+        question:
+          "How does whey protein aid in muscle recovery after workouts?",
+        answer:
+          "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
+      },
+      {
+        question: " Can whey protein help with weight management and satiety?",
+        answer:
+          "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
+      },
+      {
+        question:
+          "Are there any potential allergens in Premium Gold Whey Protein?",
+        answer:
+          "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
+      },
+      {
+        question:
+          "What are the recommended serving sizes for Premium Gold Whey Protein?",
+        answer:
+          "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
+      },
+      {
+        question:
+          "How does Premium Gold Whey Protein contribute to immune function and overall health?",
+        answer:
+          "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
+      },
+    ],
+
+    productimages: [multi_front, multi_batch, multi_compo],
+
+    frebies: [
+      {
+        image: freebies1,
+        title: "Free Shaker*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies2,
+        title: "Free T-Shirt*",
+        pricerange: [2500, 3499],
+      },
+      {
+        image: freebies3,
+        title: "Free Stringer*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies4,
+        title: "Free T-Shirt & Shaker*",
+        pricerange: [4500],
+      },
+    ],
+
+    customer_rating: [
+      {
+        heading: "Convenient Packaging",
+        review:
+          "The packaging is convenient and easy to store. Will definitely buy it again.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4.5,
+      },
+      {
+        heading: "No Clumps, No Grit – Just Perfection!",
+        review: "Mix well with water or milk. No clumps or gritty texture.",
+        name: "Tarun Singh",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fast Delivery Appreciation",
+        review: "Appreciate the fast delivery. Always arrives on time.",
+        name: "Shubham Verma",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fitness Staple: Can't Go Without It for Months!",
+        review:
+          "Been using it for months now. Can't imagine my fitness routine without it.",
+        name: "Pankaj Sharma",
+        date: "Mar,2024",
+        rating: 4,
+      },
+      {
+        heading: "Protein Packed: A Daily Intake Essential!",
+        review:
+          "Provides a good amount of protein per serving. Helps me meet my daily intake.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4,
+      },
+    ],
   },
   {
     id: 5,
-    img: "/best-sellers/good-product.webp",
-    name: "Daily Probiotic",
-    desc: "Support your gut health with our daily probiotic blend.",
-    prize: "₹899",
-    prizeStrike: "₹1199",
-    discountPrize: "₹300",
-    category: "Gut Health",
-    stars: 4.6,
+    img: "/productimages/fusion mango front.jpg",
+    name: "BEN WHEY FUSION",
+    desc: " A fusion of Whey Isolate and Whey concentrate meticulously crafted to elevate your fitness journey.",
+    prize: "₹3400",
+    prizeStrike: "₹2240",
+    discountPrize: "38 %",
+    category: "Protein",
+    rating: 4.6,
+    sizes: ["1 KG"],
+    available: 5,
+    flavures: ["CHOCO", "COOKIE AND CREAM", "MANGO"],
+    customer_reviews: 217,
+
+    description: [
+      {
+        heading: "",
+        content: `Bioessestia’s Whey FUSION in a fusion of Whey Isolate and Whey concentrate meticulously crafted to elevate your fitness journey. Packed with 27 grams of pure protein in every scoop, our formula is designed to fuel your muscles and support optimal recovery after intense workouts. `,
+      },
+
+      {
+        heading: "",
+        content: `But it's not just about protein quantity; we've ensured quality and absorption are top priorities. Our blend of whey isolate and concentrate offers the perfect balance for improved digestion and absorption. Plus, we've incorporated digestive enzymes to further enhance nutrient uptake, ensuring every gram of protein is utilized by your body efficiently. `,
+      },
+
+      {
+        heading: "",
+        content: `For those mindful of their calorie intake or managing diabetes, our protein powder is a perfect choice. With zero added sugar and only 160 calories per serving, you can indulge guilt-free while staying on track with your goals.`,
+      },
+      {
+        heading: "",
+        content: `We understand the importance of purity and quality, which is why our whey is sourced from trusted suppliers, guaranteeing the highest standards in every batch. Say goodbye to clumpy, chalky shakes - our protein powder boasts unrivaled mixability, ensuring a smooth and delicious experience with every sip.
+      `,
+      },
+      {
+        heading: "",
+        content: `And because we believe in transparency, you won't find any artificial flavoring substances in our product. Just the natural, delicious taste of high-quality whey protein.`,
+      },
+      {
+        heading: "",
+        content: `Elevate your fitness game with our protein powder - the perfect blend of science, quality, and taste to support your goals, every step of the way.`,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is whey protein suitable for vegetarians?",
+        answer:
+          "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
+      },
+      {
+        question:
+          "What are the differences between whey protein concentrate and whey protein isolate?",
+        answer:
+          "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
+      },
+      {
+        question:
+          "How does whey protein aid in muscle recovery after workouts?",
+        answer:
+          "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
+      },
+      {
+        question: " Can whey protein help with weight management and satiety?",
+        answer:
+          "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
+      },
+      {
+        question:
+          "Are there any potential allergens in Premium Gold Whey Protein?",
+        answer:
+          "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
+      },
+      {
+        question:
+          "What are the recommended serving sizes for Premium Gold Whey Protein?",
+        answer:
+          "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
+      },
+      {
+        question:
+          "How does Premium Gold Whey Protein contribute to immune function and overall health?",
+        answer:
+          "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
+      },
+    ],
+    productimages: [
+      fusion_mango_front,
+      fusion_choco_details,
+      fusion_cookie_details,
+      fusion_cookie_ingre,
+      fusion_front_choco,
+
+      fusion_mango_ingre,
+      fusion_right_same,
+    ],
+
+    frebies: [
+      {
+        image: freebies1,
+        title: "Free Shaker*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies2,
+        title: "Free T-Shirt*",
+        pricerange: [2500, 3499],
+      },
+      {
+        image: freebies3,
+        title: "Free Stringer*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies4,
+        title: "Free T-Shirt & Shaker*",
+        pricerange: [4500],
+      },
+    ],
+
+    customer_rating: [
+      {
+        heading: "Convenient Packaging",
+        review:
+          "The packaging is convenient and easy to store. Will definitely buy it again.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4.5,
+      },
+      {
+        heading: "No Clumps, No Grit – Just Perfection!",
+        review: "Mix well with water or milk. No clumps or gritty texture.",
+        name: "Tarun Singh",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fast Delivery Appreciation",
+        review: "Appreciate the fast delivery. Always arrives on time.",
+        name: "Shubham Verma",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fitness Staple: Can't Go Without It for Months!",
+        review:
+          "Been using it for months now. Can't imagine my fitness routine without it.",
+        name: "Pankaj Sharma",
+        date: "Mar,2024",
+        rating: 4,
+      },
+      {
+        heading: "Protein Packed: A Daily Intake Essential!",
+        review:
+          "Provides a good amount of protein per serving. Helps me meet my daily intake.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4,
+      },
+    ],
+  },
+  {
+    id: 6,
+    img: "/productimages/ZMA front.jpg",
+    name: "BEN ZMA",
+    desc: "the ultimate supplement for optimizing athletic performance and enhancing immune health.",
+    prize: "₹350",
+    prizeStrike: "₹199.5",
+    discountPrize: "43 %",
+    category: "Daily wellness",
+    rating: 4.6,
+    sizes: ["60 capsules"],
+    available: 5,
+    flavures: [],
+
+    productimages: [zma_front, zma_batch, zma_compo],
+
+    customer_reviews: 217,
+
+    description: [
+      {
+        heading: "",
+        content: `Introducing BEN ZMA – the ultimate supplement for optimizing athletic performance, enhancing immune health, and promoting overall well-being. Crafted with precision and backed by science, BEN ZMA harnesses the power of Zinc Magnesium Aspartate (ZMA) to elevate your health and fitness regimen.`,
+      },
+
+      {
+        heading:
+          "Unlock your full potential with BEN ZMA's potent blend of Zinc, Magnesium, and Vitamin B6. This dynamic trio works synergistically to support various facets of your health:",
+        content: `Enhanced Athletic Performance: BEN ZMA is formulated to help you reach new heights in your fitness journey. By providing essential nutrients like zinc and magnesium, it aids in muscle recovery, strength development, and endurance enhancement.
+    `,
+      },
+
+      {
+        heading: "Testosterone Boost: ",
+        content: `Elevate your testosterone levels naturally with BEN ZMA. Zinc, a key component of this supplement, is known to play a crucial role in testosterone production, potentially helping you maximize your performance in the gym and beyond.`,
+      },
+      {
+        heading: "",
+        content: `Immune Health Support: Your immune system is your body's first line of defense. BEN ZMA fortifies your immune system with the power of zinc, which is essential for immune function. By incorporating BEN ZMA into your daily routine, you can potentially bolster your body's defenses against common illnesses.
+    
+    `,
+      },
+      {
+        heading: "Bioavailability:",
+        content: `BEN ZMA utilizes the most bioavailable forms of its ingredients, ensuring optimal absorption and utilization by your body. This means you get the maximum benefits from every dose, allowing you to make the most out of your supplementation.`,
+      },
+      {
+        heading:
+          "But that's not all – BEN ZMA goes above and beyond by incorporating premium forms of its ingredients:",
+        content: `Magnesium Bisglycinate: Experience improved sleep quality, regular heart rhythms, and reduced anxiety thanks to the superior form of magnesium found in BEN ZMA. Say goodbye to restless nights and hello to rejuvenating sleep.`,
+      },
+      {
+        heading: "Zinc Bisglycinate:",
+        content: `Boost your immune function and accelerate recovery with the advanced zinc bisglycinate in BEN ZMA. Whether you're an athlete pushing your limits or simply striving for optimal health, this powerhouse ingredient has you covered.`,
+      },
+      {
+        heading: "Elevate your health and fitness journey with BEN ZMA –",
+        content: `the ultimate supplement for peak performance, immune support, and overall vitality. Unlock your potential with BEN ZMA today!`,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is whey protein suitable for vegetarians?",
+        answer:
+          "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
+      },
+      {
+        question:
+          "What are the differences between whey protein concentrate and whey protein isolate?",
+        answer:
+          "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
+      },
+      {
+        question:
+          "How does whey protein aid in muscle recovery after workouts?",
+        answer:
+          "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
+      },
+      {
+        question: " Can whey protein help with weight management and satiety?",
+        answer:
+          "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
+      },
+      {
+        question:
+          "Are there any potential allergens in Premium Gold Whey Protein?",
+        answer:
+          "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
+      },
+      {
+        question:
+          "What are the recommended serving sizes for Premium Gold Whey Protein?",
+        answer:
+          "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
+      },
+      {
+        question:
+          "How does Premium Gold Whey Protein contribute to immune function and overall health?",
+        answer:
+          "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
+      },
+    ],
+
+    frebies: [
+      {
+        image: freebies1,
+        title: "Free Shaker*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies2,
+        title: "Free T-Shirt*",
+        pricerange: [2500, 3499],
+      },
+      {
+        image: freebies3,
+        title: "Free Stringer*",
+        pricerange: [1999, 2499],
+      },
+      {
+        image: freebies4,
+        title: "Free T-Shirt & Shaker*",
+        pricerange: [4500],
+      },
+    ],
+
+    customer_rating: [
+      {
+        heading: "Convenient Packaging",
+        review:
+          "The packaging is convenient and easy to store. Will definitely buy it again.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4.5,
+      },
+      {
+        heading: "No Clumps, No Grit – Just Perfection!",
+        review: "Mix well with water or milk. No clumps or gritty texture.",
+        name: "Tarun Singh",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fast Delivery Appreciation",
+        review: "Appreciate the fast delivery. Always arrives on time.",
+        name: "Shubham Verma",
+        date: "Mar,2024",
+        rating: 5,
+      },
+      {
+        heading: "Fitness Staple: Can't Go Without It for Months!",
+        review:
+          "Been using it for months now. Can't imagine my fitness routine without it.",
+        name: "Pankaj Sharma",
+        date: "Mar,2024",
+        rating: 4,
+      },
+      {
+        heading: "Protein Packed: A Daily Intake Essential!",
+        review:
+          "Provides a good amount of protein per serving. Helps me meet my daily intake.",
+        name: "Rajveer Singh Rathod",
+        date: "Mar,2024",
+        rating: 4,
+      },
+    ],
   },
 ];
 
@@ -251,6 +1164,7 @@ export const trendingProducts = [
     stars: 4.5,
   },
 ];
+
 export const fitnessBudgetStacks = [
   {
     id: 11,
@@ -313,214 +1227,3 @@ export const categoryData = [
   { title: "Herbs", img: "/assets/images/supplement.webp" },
   // Add more categories as needed
 ];
-
-export const productData = {
-  heading: "Premium Gold Whey Protein",
-  rating: 3.6,
-  originalPrice: 849,
-  discount: 41.41,
-  available: 5,
-  sizes: ["1 KG", "2 KG", "500 GM"],
-
-  productimages: [
-    productimage1,
-    productimage2,
-    productimage3,
-    productimage4,
-    productimage5,
-    productimage6,
-    productimage7,
-    productimage8,
-    productimage9,
-    productimage10,
-    productimage11,
-    productimage12,
-    productimage13,
-    productimage14,
-    productimage15,
-  ],
-
-  flavures: [
-    "BELGIAN CHOCOLATE",
-    "DOUBLE RICH CHOCOLATE",
-    "STRAWBERRY MILKSHAKE",
-    "SMOOTH BANANA CREAM",
-    "COOKIE & CREAM",
-    "ROCKY ROAD",
-    "SALTED CARAMEL",
-    "MANGO MAGIC",
-    "MALAI KULFI",
-  ],
-  customer_reviews: 217,
-
-  description: [
-    {
-      heading: "",
-      content: `Big Muscle's Premium Gold Whey Protein is pinnacle of superior protein supplementation. Meticulously crafted, our product stands as the best protein supplement, with the world's finest whey protein concentrate and whey protein isolate ensuring unparalleled absorption. Each 35-gram serving delivers 25 grams of high-quality protein, ideal for muscle growth and recovery. Formulated for elite athletes and fitness enthusiasts, it supports peak performance and physique sculpting. Recognizing the body's need for nutrients during intense activity, Premium Gold Whey Protein offers reliability and effectiveness. Choose Premium Gold Whey Protein today to power your full potential with Big Muscle Nutrition. `,
-    },
-
-    {
-      heading: "Big Muscles Premium Gold Whey Protein",
-      content: `Crafted with precision and care, Big Muscle's Premium Gold Whey Protein is a beacon of excellence in nutrition. We select the world's finest whey protein concentrate and whey protein isolate. This ensures unparalleled absorption and use within the body. At the core of Premium Gold Whey Protein is a dedication to quality and efficacy. Each 35-gram serving delivers an impressive 25 grams of high-quality protein. It's ideal for fueling muscle growth and recovery.
-
-
-    We understand the body's need for essential nutrients, especially during intense physical activity. That's why we've formulated Premium Gold Whey Protein to be a reliable source of premium-grade protein. Whether you're an elite athlete or a dedicated fitness enthusiast, our product supports your journey confidently and easily. Premium Gold Whey Protein caters to individuals seeking peak performance and physique sculpting. It's the ultimate choice for those who focus on quality and effectiveness in their protein supplementation. Choose Premium Gold Whey Protein and unlock your full potential today. `,
-    },
-
-    {
-      heading:
-        "Accelerating Fitness Potential with Whey Protein: Understanding Types and Benefits",
-      content: `Whey protein is often hailed as the "gold standard" of protein supplementation. It emerges as a vital part of the fitness and wellness landscape. Whey protein comes from the liquid part of milk during cheese making. It has gained recognition for its many health benefits. This is especially true in the fitness community. Whey protein is a complete protein as it contains all nine essential amino acids. They are crucial for muscle repair, growth, and overall well-being. Its comprehensive amino acid profile makes it a cornerstone in post-workout recovery and muscle synthesis.
-
-
-    There are two main types of whey protein: whey protein concentrate and whey protein isolate. Whey protein concentrate has some of the fat and lactose from milk, which makes it a more balanced source of nutrients. On the other hand, whey protein isolate undergoes further refining. Isolate protein is a type of protein powder that is subjected to more processing than a concentrate. This removes excess fat and lactose. This results in a purer protein product with minimal carbohydrates and fats. This makes whey protein isolate ideal for individuals seeking a lean protein source. It doesn't have unnecessary additives.
-    
-    
-    Branched-chain amino acids (BCAAs) are a significant part of whey protein. Leucine, isoleucine, and valine lead the charge. These BCAAs play a pivotal role in fostering muscle protein synthesis. They also help muscle recovery and enhance athletic performance. Whey protein has a rich BCAA content. It's an invaluable resource for athletes and fitness enthusiasts. They use it to optimize their training outcomes.
-    
-    
-    When considering the best whey protein supplement, purity, efficacy, and affordability are important factors. Whey protein isolate may have a higher price due to its refined composition. However, whey protein concentrate is a cost-effective option and maintains quality. The best whey protein supplement aligns with individual preferences, dietary requirements, and fitness goals. It offers a synergistic blend of performance and value.`,
-    },
-    {
-      heading:
-        "Discovering the Holistic Benefits of Whey Protein: Beyond Muscle Building",
-      content: `Incorporating whey protein into your daily dietary routine extends far beyond its renowned role in muscle building and recovery. Isolate protein has many benefits for health and well-being. It's a cornerstone of a balanced, holistic lifestyle.
-
-
-    Many studies show whey protein may help manage weight. One key mechanism lies in its ability to promote satiety. This leads to reduced calorie consumption and improved portion control. Whey protein can make you feel full, reducing cravings and preventing overeating. This makes it easier to lose and maintain weight.
-    
-    
-    Moreover, whey protein has emerged as a potent ally in aiding immune function. It also helps to prevent inflammation. Whey protein is rich in bioactive peptides and immunoglobulins. It has immunomodulatory properties that strengthen the body's defenses against pathogens and infections. Its anti-inflammatory effects help reduce oxidative stress and combat chronic inflammation. This promotes health and longevity.
-    
-    
-    The cardiovascular benefits of whey protein further brings to light its value as a dietary supplement. Research suggests that whey protein supplementation may improve lipid profiles. This includes reductions in LDL cholesterol levels and improvements in HDL cholesterol levels. These lipid-modulating effects play an integral role in cardiovascular health. They reduce the risk of heart disease and related complications.
-    
-    
-    When deciding on the best whey protein supplement, consider more than just health benefits. Also think about purity, efficacy, and affordability. While protein isolate offers a purer protein source with minimal fats and carbohydrates, whey protein concentrate is a cost-effective option without compromising quality. In the end, the best whey protein supplement aligns with individual preferences and dietary needs. It also fits budget constraints. It offers a blend of health benefits and value.
-    
-    `,
-    },
-    {
-      heading:
-        "Indulgent Flavors and Inclusive Quality: Premium Gold Whey Protein",
-      content: `Even in taste, we commit to excellence. We offer 11 delectable flavors. They include: Belgian Chocolate, Double Rich Chocolate, Café Latte, Vanilla Cream, Strawberry Milkshake, Smooth Banana Cream, Cookie and Cream, and Rocky Road. Premium Gold Whey Protein offers a delicious way to please your taste buds and meet your nutritional needs. Whether you prefer classic chocolate or crave something adventurous like smooth banana cream, it has something for everyone.
-
-
-    Premium Gold Whey Protein excels in taste and performance. It stands as a testament to our unwavering dedication to quality. It also proves our support towards inclusivity. Our product is 100% vegetarian, gluten-free, soy-free, and non-GMO. It aligns with diverse dietary preferences and restrictions. We believe that everyone should have access to high-quality protein supplementation. Our commitment to inclusivity reflects our mission. We aim to empower individuals on their journey toward optimal health and wellness.`,
-    },
-    {
-      heading:
-        "Power Up with Premium Gold Whey Protein: Your Ultimate Protein Solution",
-      content: `For the best in protein supplementation, choose Premium Gold Whey Protein. It effectively meets daily protein needs while supporting muscle growth, aiding recovery, and enhancing overall health. This premium supplement combines the finest ingredients in a delicious and versatile form. Opt for the best protein supplement on the market by selecting Premium Gold Whey Protein. Its superior blend of whey protein concentrate and isolate protein guarantees quality without compromising taste. With its rich amino acid profile, including essential branched-chain amino acids, it promotes optimal performance. Plus, it caters to diverse needs and budgets, offering whey protein isolate for purity and whey protein concentrate for affordability. Unleash your full potential with Premium Gold Whey Protein from Big Muscle Nutrition.`,
-    },
-    {
-      heading: "CONCLUSION",
-      content: `Experience the pinnacle of protein supplementation with Big Muscles Premium Gold Whey Protein. It's the best whey protein supplement, meticulously crafted to elevate your fitness journey. Premium Gold Whey Protein is more than just a product. It's an investment in your health, performance, and overall well-being. Realize your true potential with Premium Gold Whey Protein today.`,
-    },
-  ],
-  faqs: [
-    {
-      question: "Is whey protein suitable for vegetarians?",
-      answer:
-        "Yes, whey protein is suitable for vegetarians as Premium Gold Whey Protein is 100% vegetarian.",
-    },
-    {
-      question:
-        "What are the differences between whey protein concentrate and whey protein isolate?",
-      answer:
-        "Whey protein concentrate retains some fat and lactose, while whey protein isolate undergoes further processing for minimal carbohydrates and fats.",
-    },
-    {
-      question: "How does whey protein aid in muscle recovery after workouts?",
-      answer:
-        "Whey protein, present in isolate protein aids in muscle recovery by providing essential amino acids crucial for muscle repair and growth.",
-    },
-    {
-      question: " Can whey protein help with weight management and satiety?",
-      answer:
-        "Yes, whey protein promotes a feeling of fullness, reducing calorie consumption and aiding in weight management.",
-    },
-    {
-      question:
-        "Are there any potential allergens in Premium Gold Whey Protein?",
-      answer:
-        "Premium Gold Whey Protein is gluten-free, soy-free, and non-GMO, making it suitable for individuals with various dietary restrictions.",
-    },
-    {
-      question:
-        "What are the recommended serving sizes for Premium Gold Whey Protein?",
-      answer:
-        "Each serving of Premium Gold Whey Protein contains 35 grams, delivering 25 grams of high-quality protein.",
-    },
-    {
-      question:
-        "How does Premium Gold Whey Protein contribute to immune function and overall health?",
-      answer:
-        "Whey protein has immune strengthening properties and anti-inflammatory effects, boosting immune function and promoting overall health.",
-    },
-  ],
-
-  frebies: [
-    {
-      image: freebies1,
-      title: "Free Shaker*",
-      pricerange: [1999, 2499],
-    },
-    {
-      image: freebies2,
-      title: "Free T-Shirt*",
-      pricerange: [2500, 3499],
-    },
-    {
-      image: freebies3,
-      title: "Free Stringer*",
-      pricerange: [1999, 2499],
-    },
-    {
-      image: freebies4,
-      title: "Free T-Shirt & Shaker*",
-      pricerange: [4500],
-    },
-  ],
-
-  customer_rating: [
-    {
-      heading: "Convenient Packaging",
-      review:
-        "The packaging is convenient and easy to store. Will definitely buy it again.",
-      name: "Rajveer Singh Rathod",
-      date: "Mar,2024",
-      rating: 4.5,
-    },
-    {
-      heading: "No Clumps, No Grit – Just Perfection!",
-      review: "Mix well with water or milk. No clumps or gritty texture.",
-      name: "Tarun Singh",
-      date: "Mar,2024",
-      rating: 5,
-    },
-    {
-      heading: "Fast Delivery Appreciation",
-      review: "Appreciate the fast delivery. Always arrives on time.",
-      name: "Shubham Verma",
-      date: "Mar,2024",
-      rating: 5,
-    },
-    {
-      heading: "Fitness Staple: Can't Go Without It for Months!",
-      review:
-        "Been using it for months now. Can't imagine my fitness routine without it.",
-      name: "Pankaj Sharma",
-      date: "Mar,2024",
-      rating: 4,
-    },
-    {
-      heading: "Protein Packed: A Daily Intake Essential!",
-      review:
-        "Provides a good amount of protein per serving. Helps me meet my daily intake.",
-      name: "Rajveer Singh Rathod",
-      date: "Mar,2024",
-      rating: 4,
-    },
-  ],
-};

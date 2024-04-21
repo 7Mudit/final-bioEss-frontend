@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { productData } from "@/constants/index";
+import { popularProducts } from "@/constants/index";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -22,8 +22,11 @@ interface Review {
   rating: number;
   date: string;
 }
+interface URLProps {
+  params: { id: string };
+}
 
-const Page = () => {
+const Page = ({ params }: URLProps) => {
   const swiperRef = React.useRef<any>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -34,6 +37,10 @@ const Page = () => {
   const [openReviewForm, setOpenReviewForm] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
 
+  const filteredProduct = popularProducts.find(
+    (product) => product.id === parseInt(params.id)
+  );
+
   const handleAddToCart = () => {
     const finalData = {
       selectedSize: selectedSize,
@@ -42,12 +49,6 @@ const Page = () => {
     };
 
     console.log(finalData);
-  };
-
-  const increaseQuantity = () => {
-    if (quantity < productData.available) {
-      setQuantity(quantity + 1);
-    }
   };
 
   const handlingOfReviewForm = () => {
@@ -117,6 +118,29 @@ const Page = () => {
       console.log("New Review:", reviewData);
     }
   };
+  if (!filteredProduct) {
+    return <div>Product not found</div>; // Handle undefined `filteredProduct`
+  }
+  const increaseQuantity = () => {
+    if (quantity < filteredProduct.available) {
+      setQuantity(quantity + 1);
+    }
+  };
+  const handleSizeSelection = (size: string) => {
+    if (selectedSize === size) {
+      setSelectedSize(""); // Deselect if already selected
+    } else {
+      setSelectedSize(size); // Select new size
+    }
+  };
+
+  const handleFlavourSelection = (flavour: string) => {
+    if (selectedflavour === flavour) {
+      setSelectedFlavour(""); // Deselect if already selected
+    } else {
+      setSelectedFlavour(flavour); // Select new flavour
+    }
+  };
 
   return (
     <div>
@@ -151,7 +175,7 @@ const Page = () => {
               modules={[EffectFade, FreeMode]}
               className="mySwiper w-8/12 "
             >
-              {productData.productimages.map((productimage, index) => (
+              {filteredProduct.productimages.map((productimage, index) => (
                 <SwiperSlide key={index}>
                   <Image src={productimage} alt={"product images"} />
                 </SwiperSlide>
@@ -198,7 +222,7 @@ const Page = () => {
               className={descriptionBox ? "product-descriptions " : "hidden"}
             >
               <div className="flex flex-col w-full shadow-2xl px-3 border gap-6">
-                {productData.productimages.map((image, index) => (
+                {filteredProduct.productimages.map((image, index) => (
                   <Image
                     key={index}
                     alt="product images"
@@ -209,7 +233,7 @@ const Page = () => {
               </div>
 
               <div className="flex flex-col gap-10">
-                {productData.description.map((description, index) => (
+                {filteredProduct.description.map((description, index) => (
                   <div key={index} className="flex flex-col gap-5">
                     <h1 className="text-2xl sm:text-3xl font-bold ">
                       {description.heading}
@@ -220,7 +244,7 @@ const Page = () => {
               </div>
 
               <div className="flex flex-col gap-10 py-10">
-                {productData.faqs.map((faq, index) => (
+                {filteredProduct.faqs.map((faq, index) => (
                   <div key={index} className="flex flex-col gap-5">
                     <h1 className="text-lg sm:text-xl font-bold ">
                       Q{index + 1}. {faq.question}
@@ -238,72 +262,75 @@ const Page = () => {
 
         <div className="info-container border-b border-l border-slate-500 w-full md:w-6/12 p-4 flex items-start flex-col gap-10">
           <div className="w-full flex flex-col gap-1  justify-start">
-            <p className="text-3xl sm:text-4xl">{productData.heading}</p>
+            <p className="text-3xl sm:text-4xl">{filteredProduct.name}</p>
             <div className="flex gap-3 w-full items-center justify-start">
               <Star
                 color={"text-yellow-500"}
                 size={32}
-                stars={productData.rating}
+                stars={filteredProduct.rating}
               />
               <p className="text-slate-500">
-                {productData.customer_reviews} reviews{" "}
+                {filteredProduct.customer_reviews} reviews{" "}
               </p>
             </div>
 
             <div className="rating-and-reviews"></div>
-            <p className="font-bold  text-4xl">₹ {productData.originalPrice}</p>
+            <p className="font-bold  text-4xl">{filteredProduct.prizeStrike}</p>
             <p>shipping calculated at checkout</p>
           </div>
-
-          <div className="flex flex-col gap-5">
-            <p>SELECT SIZE</p>
-            <div className="flex flex-wrap gap-4">
-              {productData.sizes.map((size, index) => (
-                <label key={index} className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="size"
-                    value={size}
-                    className="hidden"
-                    onChange={(e) => setSelectedSize(e.target.value)} // Set selected size to state
-                  />
-                  <div
-                    className={`border border-black px-4 py-2 rounded-lg cursor-pointer dark:border-white ${
-                      selectedSize === size ? "bg-red-600 text-white" : ""
-                    }`}
-                  >
-                    {size}
-                  </div>
-                </label>
-              ))}
-            </div>
-
+          {filteredProduct.sizes.length !== 0 && (
             <div className="flex flex-col gap-5">
-              <p>SELECT FLAVOUR</p>
-              <div className="flex gap-4 flex-wrap">
-                {productData.flavures.map((flavour, index) => (
+              <p>SELECT SIZE</p>
+              <div className="flex flex-wrap gap-4">
+                {filteredProduct.sizes.map((size, index) => (
                   <label key={index} className="inline-flex items-center">
                     <input
                       type="radio"
-                      name="flavour"
-                      value={flavour}
+                      name="size"
+                      value={size}
                       className="hidden"
-                      onChange={(e) => setSelectedFlavour(e.target.value)} // Set selected flavour to state
+                      checked={selectedSize === size} // Add checked attribute
+                      onChange={() => handleSizeSelection(size)}
                     />
                     <div
-                      className={`border hover:bg-red-600 hover:text-white border-black dark:border-white px-4 py-2 rounded-lg cursor-pointer ${
-                        selectedflavour === flavour
-                          ? "bg-red-600 text-white"
-                          : ""
+                      className={`border border-black px-4 py-2 rounded-lg cursor-pointer dark:border-white ${
+                        selectedSize === size ? "bg-red-600 text-white" : ""
                       }`}
                     >
-                      {flavour}
+                      {size}
                     </div>
                   </label>
                 ))}
               </div>
+              {filteredProduct.flavures.length !== 0 && (
+                <div className="flex flex-col gap-5">
+                  <p>SELECT FLAVOUR</p>
+                  <div className="flex gap-4 flex-wrap">
+                    {filteredProduct.flavures.map((flavour, index) => (
+                      <label key={index} className="inline-flex items-center">
+                        <input
+                          type="radio"
+                          name="flavour"
+                          value={flavour}
+                          className="hidden"
+                          onChange={(e) => setSelectedFlavour(e.target.value)} // Set selected flavour to state
+                        />
+                        <div
+                          className={`border hover:bg-red-600 hover:text-white border-black dark:border-white px-4 py-2 rounded-lg cursor-pointer ${
+                            selectedflavour === flavour
+                              ? "bg-red-600 text-white"
+                              : ""
+                          }`}
+                        >
+                          {flavour}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
           <div className="flex flex-col gap-5">
             <p>SELECT QUANTITY</p>
@@ -325,7 +352,7 @@ const Page = () => {
               <div
                 onClick={increaseQuantity}
                 className={
-                  quantity < productData.available
+                  quantity < filteredProduct.available
                     ? "w-10 h-10 text-white bg-red-600 hover:cursor-pointer flex justify-center  items-center rounded-full border"
                     : "w-10 h-10 text-white bg-red-300  flex justify-center  items-center rounded-full border"
                 }
@@ -353,7 +380,7 @@ const Page = () => {
           <div className="freebies flex flex-col gap-5 items-start">
             <p className="">GET EXCITING FREEBIES</p>
             <div className="flex gap-5 flex-wrap">
-              {productData.frebies.map((free, index) => (
+              {filteredProduct.frebies.map((free, index) => (
                 <div
                   key={index}
                   className="rounded-lg w-7/12 sm:w-6/12 lg:w-5/12 flex flex-col gap-2 shadow-lg items-start justify-center p-2"
@@ -396,7 +423,7 @@ const Page = () => {
           </div>
           <div className={descriptionBox ? "product-descriptions " : "hidden"}>
             <div className="flex flex-col w-full shadow-2xl px-3 border gap-6">
-              {productData.productimages.map((image, index) => (
+              {filteredProduct.productimages.map((image, index) => (
                 <Image
                   key={index}
                   alt="product images"
@@ -407,7 +434,7 @@ const Page = () => {
             </div>
 
             <div className="flex flex-col gap-10">
-              {productData.description.map((description, index) => (
+              {filteredProduct.description.map((description, index) => (
                 <div key={index} className="flex flex-col gap-5">
                   <h1 className="text-2xl sm:text-3xl font-bold ">
                     {description.heading}
@@ -422,13 +449,13 @@ const Page = () => {
 
       {/* customer reviews */}
       <div className="customer-ratings px-3 py-10   ">
-        <div className="w-full flex flex-col gap-5 bg-[#fff8f4] p-4">
+        <div className="w-full flex flex-col gap-5  p-4">
           <p className="text-xl font-bold">Customer Reviews</p>
           <div className="flex justify-between items-center ">
             <div className="flex flex-col md:flex-row gap-3  items-start md:items-center ">
-              <Star color={"black"} size={24} stars={productData.rating} />
+              <Star color={"black"} size={24} stars={filteredProduct.rating} />
               <p className="text-[2.5vw] text-slate-400 md:text-[1vw]">
-                based on {productData.customer_reviews} reviews
+                based on {filteredProduct.customer_reviews} reviews
               </p>
             </div>
             <p
@@ -498,7 +525,7 @@ const Page = () => {
           </div>
 
           <div className="reviews   ">
-            {productData.customer_rating.map((review, index) => (
+            {filteredProduct.customer_rating.map((review, index) => (
               <div key={index} className="w-full flex flex-col gap-5 py-5">
                 <div className="flex w-full justify-between items-center">
                   <Star size={24} color={"black"} stars={review.rating} />

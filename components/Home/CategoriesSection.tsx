@@ -3,30 +3,20 @@ import React from "react";
 
 const categories = [
   {
-    name: "Creatine",
+    name: "Aminos",
     bgColor: "#ff4555",
-    img: "/categories/creatine.jpeg",
+    img: "/categories/Aminos.png",
   },
   {
     bgColor: "#00c0ff",
-    name: "Daily Wellness",
-    img: "/categories/daily-wellness.jpeg",
+    name: "Daily wellness",
+    img: "/categories/Daily Wellness.png",
   },
   {
     bgColor: "#ff0000",
-    name: "Protein",
-    img: "/categories/protein.jpeg",
+    name: "Proteins",
+    img: "/categories/Protein.PNG",
   },
-  // {
-  //   bgColor: "#7bc588",
-  //   name: "Pre Workout",
-  //   img: "/categories/pre-workout.webp",
-  // },
-  // {
-  //   bgColor: "#80d800",
-  //   name: "Accessories",
-  //   img: "/categories/accessories.webp",
-  // },
 ];
 
 const CategoriesSection = () => {
@@ -39,7 +29,7 @@ const CategoriesSection = () => {
         >
           <Image
             src={category.img}
-            className="w-[130px] h-[160px] lg:w-[250px] lg:h-[250px]"
+            className="w-[130px] h-[160px] rounded-xl lg:w-[250px] lg:h-[250px]"
             width={250}
             height={250}
             alt="Category"
