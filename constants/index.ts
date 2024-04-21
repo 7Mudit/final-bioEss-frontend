@@ -2,28 +2,28 @@ import freebies1 from "../public/productimages/freebies1.webp";
 import freebies2 from "../public/productimages/freebies2.webp";
 import freebies3 from "../public/productimages/freebies3.webp";
 import freebies4 from "../public/productimages/freebies4.webp";
-import Bulk_front from "../public/productimages/Bulk front.jpg";
-import Bulk_ing from "../public/productimages/Bulk ing.jpg";
-import Bulk_ins from "../public/productimages/Bulk ins.jpg";
-import creatine_front from "../public/productimages/creatine front.jpg";
-import creatine_left from "../public/productimages/creatine left.jpg";
-import creatine_right from "../public/productimages/creatine right.jpg";
-import joint_batch from "../public/productimages/JOINT batch.jpg";
-import joint_compo from "../public/productimages/JOINT compo.jpg";
-import joint_front from "../public/productimages/JOINT front.jpg";
-import multi_batch from "../public/productimages/Multi batch.jpg";
-import multi_compo from "../public/productimages/Multi compo.jpg";
-import multi_front from "../public/productimages/Multi front.jpg";
-import zma_batch from "../public/productimages/ZMA batch.jpg";
-import zma_compo from "../public/productimages/ZMA compo.jpg";
-import zma_front from "../public/productimages/ZMA front.jpg";
-import fusion_choco_details from "../public/productimages/fusion choco details.jpg";
-import fusion_cookie_details from "../public/productimages/fusion cookie front.jpg";
-import fusion_front_choco from "../public/productimages/fusion front choco.jpg";
-import fusion_mango_front from "../public/productimages/fusion mango front.jpg";
-import fusion_mango_ingre from "../public/productimages/fusion mango ingre.jpg";
-import fusion_right_same from "../public/productimages/fusion RIGHT same for all flavours..jpg";
-import fusion_cookie_ingre from "../public/productimages/fusoin cookie ingre.jpg";
+import Bulk_front from "../public/productimages/Bulk_front.jpg";
+import Bulk_ing from "../public/productimages/Bulk_ing.jpg";
+import Bulk_ins from "../public/productimages/Bulk_ins.jpg";
+import creatine_front from "../public/productimages/creatine_front.jpg";
+import creatine_left from "../public/productimages/creatine_left.jpg";
+import creatine_right from "../public/productimages/creatine_right.jpg";
+import joint_batch from "../public/productimages/JOINT_batch.jpg";
+import joint_compo from "../public/productimages/JOINT_compo.jpg";
+import joint_front from "../public/productimages/JOINT_front.jpg";
+import multi_batch from "../public/productimages/Multi_batch.jpg";
+import multi_compo from "../public/productimages/Multi_compo.jpg";
+import multi_front from "../public/productimages/Multi_front.jpg";
+import zma_batch from "../public/productimages/ZMA_batch.jpg";
+import zma_compo from "../public/productimages/ZMA_compo.jpg";
+import zma_front from "../public/productimages/ZMA_front.jpg";
+import fusion_choco_details from "../public/productimages/fusion_choco_details.jpg";
+import fusion_cookie_details from "../public/productimages/fusion_cookie_front.jpg";
+import fusion_front_choco from "../public/productimages/fusion_front_choco.jpg";
+import fusion_mango_front from "../public/productimages/fusion_mango_front.jpg";
+import fusion_mango_ingre from "../public/productimages/fusion_mango_ingre.jpg";
+import fusion_right_same from "../public/productimages/fusion_RIGHT_same_for_all_flavours..jpg";
+import fusion_cookie_ingre from "../public/productimages/fusoin_cookie_ingre.jpg";
 
 export const products = [
   {
@@ -140,7 +140,7 @@ export const info = [
 export const popularProducts = [
   {
     id: 1,
-    img: "/productimages/Bulk front.jpg",
+    img: "/productimages/Bulk_front.jpg",
     name: "BEN WHEY BULK EDITION",
     desc: "Our powerhouse protein powder tailored to fuel your bulking regime and support your muscle-building goals.",
     prize: "₹3000",
@@ -303,7 +303,7 @@ export const popularProducts = [
   },
   {
     id: 2,
-    img: "/productimages/creatine front.jpg",
+    img: "/productimages/creatine_front.jpg",
     name: "BEN Creatine Monohydrate",
     desc: "BEN Creatine Monohyhdrate, the ultimate solution for athletes and fitness enthusiasts .",
     prize: "₹1200",
@@ -447,7 +447,7 @@ export const popularProducts = [
   },
   {
     id: 3,
-    img: "/productimages/JOINT front.jpg",
+    img: "/productimages/JOINT_front.jpg",
     name: "BEN Joint Support",
     desc: "Introducing our revolutionary Joint Blend, a comprehensive formula crafted to support joint health and mobility.",
     prize: "₹550",
@@ -618,7 +618,7 @@ export const popularProducts = [
   },
   {
     id: 4,
-    img: "/productimages/Multi front.jpg",
+    img: "/productimages/Multi_front.jpg",
     name: "BEN Multivitamin",
     desc: "Your comprehensive solution for meeting your daily nutritional needs and optimizing your health.",
     prize: "₹550",
@@ -777,7 +777,7 @@ export const popularProducts = [
   },
   {
     id: 5,
-    img: "/productimages/fusion mango front.jpg",
+    img: "/productimages/fusion_mango_front.jpg",
     name: "BEN WHEY FUSION",
     desc: " A fusion of Whey Isolate and Whey concentrate meticulously crafted to elevate your fitness journey.",
     prize: "₹3400",
@@ -938,7 +938,7 @@ export const popularProducts = [
   },
   {
     id: 6,
-    img: "/productimages/ZMA front.jpg",
+    img: "/productimages/ZMA_front.jpg",
     name: "BEN ZMA",
     desc: "the ultimate supplement for optimizing athletic performance and enhancing immune health.",
     prize: "₹350",
