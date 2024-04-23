@@ -1,42 +1,12 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import {
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  ShoppingCart,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
-import { LucideSquareArrowDownRight } from "lucide-react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "../ui/Toggle";
 import { useTheme } from "next-themes";
+import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { Button } from "../ui/button";
 
 const Navbar = () => {
   const { theme } = useTheme();
@@ -60,8 +30,33 @@ const Navbar = () => {
         <a href="#new-arrivals">Combos</a>
       </div>
       <div className="flex flex-row items-center justify-center gap-5">
-        <User size={20} className="cursor-pointer" />
-        <ShoppingCart size={20} className="cursor-pointer" />
+        <SignedOut>
+          <SignUpButton mode="modal">
+            <Button
+              variant={"outline"}
+              className=" border border-blue-500 text-blue-500 rounded-md shadow-sm hover:bg-blue-500 hover:text-white transition-colors duration-300"
+            >
+              Login/Sign Up
+            </Button>
+          </SignUpButton>
+        </SignedOut>
+
+        <SignedIn>
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "h-10 w-10",
+              },
+              variables: {
+                colorPrimary: "#3b82f6",
+              },
+            }}
+            afterSignOutUrl="/"
+          />
+          <ShoppingCart size={20} className="cursor-pointer" />
+        </SignedIn>
+        {/* <User size={20} className="cursor-pointer" /> */}
+
         <ModeToggle />
       </div>
     </div>
