@@ -7,10 +7,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const imageArr = [
-  { img: "/banners/banner1.webp" },
-  { img: "/banners/banner2.webp" },
-  { img: "/banners/banner3.webp" },
-  { img: "/banners/banner4.webp" },
+  { img: "/banners/bannerupdated.jpg" },
+  // { img: "/banners/banner1.webp" },
+  // { img: "/banners/banner2.webp" },
+  // { img: "/banners/banner3.webp" },
+  // { img: "/banners/banner4.webp" },
 ];
 
 const BannerSection: React.FC = () => {

@@ -145,7 +145,7 @@ const Page = ({ params }: URLProps) => {
   return (
     <div>
       <div className="uppercontainer py-10   flex md:flex-row flex-col">
-        <div className="display-container  flex flex-col gap-10  overflow-y-scroll max-h-[1200px]   w-full md:w-9/12 p-2 sm:p-4">
+        <div className="display-container custom-scrollbar  flex flex-col gap-10  overflow-y-scroll max-h-[800px]   w-full md:w-9/12 p-2 sm:p-4">
           <div className="flex w-full justify-center border-b-2 border-600  items-center">
             <button
               onClick={() => !isBeginning && swiperRef.current?.slidePrev()}
@@ -221,7 +221,7 @@ const Page = ({ params }: URLProps) => {
             <div
               className={descriptionBox ? "product-descriptions " : "hidden"}
             >
-              <div className="flex flex-col w-full shadow-2xl px-3 border gap-6">
+              {/* <div className="flex flex-col w-full shadow-2xl px-3 border gap-6">
                 {filteredProduct.productimages.map((image, index) => (
                   <Image
                     key={index}
@@ -230,7 +230,7 @@ const Page = ({ params }: URLProps) => {
                     className="w-full "
                   />
                 ))}
-              </div>
+              </div> */}
 
               <div className="flex flex-col gap-10">
                 {filteredProduct.description.map((description, index) => (
@@ -377,7 +377,7 @@ const Page = ({ params }: URLProps) => {
             </div>
           </div>
 
-          <div className="freebies flex flex-col gap-5 items-start">
+          {/* <div className="freebies flex flex-col gap-5 items-start">
             <p className="">GET EXCITING FREEBIES</p>
             <div className="flex gap-5 flex-wrap">
               {filteredProduct.frebies.map((free, index) => (
@@ -403,7 +403,7 @@ const Page = ({ params }: URLProps) => {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full flex md:hidden py-10 flex-col px-4">
@@ -422,7 +422,7 @@ const Page = ({ params }: URLProps) => {
             )}
           </div>
           <div className={descriptionBox ? "product-descriptions " : "hidden"}>
-            <div className="flex flex-col w-full shadow-2xl px-3 border gap-6">
+            {/* <div className="flex flex-col w-full shadow-2xl px-3 border gap-6">
               {filteredProduct.productimages.map((image, index) => (
                 <Image
                   key={index}
@@ -431,7 +431,7 @@ const Page = ({ params }: URLProps) => {
                   className="w-full "
                 />
               ))}
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-10">
               {filteredProduct.description.map((description, index) => (

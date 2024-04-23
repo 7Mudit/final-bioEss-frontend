@@ -34,7 +34,7 @@ const CategoriesSection = () => {
             height={250}
             alt="Category"
           />
-          <p className="text-bold font-mono leading-[25px] text-[16px]">
+          <p className="text-bold leading-[25px] text-[18px]">
             {category.name}
           </p>
         </div>

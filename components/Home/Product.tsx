@@ -74,11 +74,9 @@ const Product = ({
       </p>
 
       <div className="flex items-center justify-center flex-row gap-2">
-        <p className="font-extrabold text-xl">{prize}</p>
-        <p className="font-extralight  text-lg">{prizeStrike}</p>
-        <p className="text-[#51b279] line-through text-base">
-          Save {discountPrize}
-        </p>
+        <p className="font-extrabold text-xl">{prizeStrike}</p>
+        <p className="font-extralight  line-through text-lg">{prize}</p>
+        <p className="text-[#51b279]  text-base">Save {discountPrize}</p>
       </div>
 
       <div className="flex flex-col gap-5 sm:flex-row sm:gap-2">
