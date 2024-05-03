@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { LucideMails } from "lucide-react";
+import Link from "next/link";
 const Footer = () => {
   return (
     <>
@@ -42,12 +43,13 @@ const Footer = () => {
           <div className="flex flex-col gap-2  items-start justify-start">
             <h3 className="base-bold mb-3 ">INFORMATION</h3>
             {information.map((product, index) => (
-              <p
+              <Link
+                href={product.link}
                 className="text-gray-500 font-medium text-md hover:underline underline-offset-4 cursor-pointer "
                 key={product.id}
               >
                 {product.name}
-              </p>
+              </Link>
             ))}
           </div>
         </div>
@@ -90,12 +92,13 @@ const Footer = () => {
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-2 items-start justify-center">
                 {information.map((product, index) => (
-                  <p
+                  <Link
+                    href={product.link}
                     className="text-gray-500 font-medium text-md hover:underline underline-offset-4 cursor-pointer "
                     key={product.id}
                   >
                     {product.name}
-                  </p>
+                  </Link>
                 ))}
               </AccordionContent>
             </AccordionItem>

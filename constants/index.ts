@@ -79,22 +79,27 @@ export const information = [
   {
     id: 1,
     name: "Contact Us",
+    link: "contact-us",
   },
   {
     id: 2,
-    name: "Terms of Use",
+    name: "Terms of Service",
+    link: "terms-of-service",
   },
   {
     id: 3,
     name: "Privacy Policy",
+    link: "privacy-policy",
   },
   {
     id: 4,
     name: "Shipping & Delivery Policy",
+    link: "shipping-delivery-policy",
   },
   {
     id: 5,
     name: "Return and Refund",
+    link: "return-refund",
   },
 ];
 

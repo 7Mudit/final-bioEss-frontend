@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 const Navbar = () => {
   const { theme } = useTheme();
   return (
-    <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center">
+    <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center border-b ">
       {/* logo */}
       <Link href="/">
         <Image
