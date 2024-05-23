@@ -145,6 +145,9 @@ const Footer = () => {
       </div>
       <div className="p-5 flex flex-col gap-3  ">
         <p className="text-sm text-center">Copyright© 2024 BioEssentia </p>
+        <p className="text-sm font-bold text-center">
+          A Brand of GILON HEALTH CARE CO.{" "}
+        </p>
         <p className="text-sm text-center">All rights reserved. </p>
       </div>
     </>

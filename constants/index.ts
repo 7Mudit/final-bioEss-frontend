@@ -101,6 +101,11 @@ export const information = [
     name: "Return and Refund",
     link: "return-refund",
   },
+  {
+    id: 6,
+    name: "About Us",
+    link: "about-us",
+  },
 ];
 
 export const info = [
