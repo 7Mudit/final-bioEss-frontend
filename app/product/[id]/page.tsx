@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import { useState } from "react";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/context/cartContext";
 import { useRouter } from "next/navigation";
 
 function Accordion({ title, children }: any) {

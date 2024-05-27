@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useCart } from "@/context/CartContext"; // Ensure this path is correct
+import { useCart } from "@/context/cartContext"; // Ensure this path is correct
 import { useEffect, useState } from "react";
 
 export default function Component() {
