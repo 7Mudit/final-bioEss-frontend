@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { Libre_Franklin } from "next/font/google";
+import { Cormorant_Garamond } from "next/font/google";
+import "./[id]/styles.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const libre_franklin = Libre_Franklin({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-libre_franklin",
+});
+const cormorant_garamond = Cormorant_Garamond({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cormorant_garamond",
+});
 
 export const metadata: Metadata = {
   title: "Bio Essentia",
@@ -16,7 +29,9 @@ export default function ProductLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="max-w-[1440px] mx-auto">
+    <div
+      className={`max-w-[1440px] mx-auto {libre_franklin.variable + ' ' + cormorant_garamond.variable}`}
+    >
       <Navbar />
       {children}
       <Footer />
