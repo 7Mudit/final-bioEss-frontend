@@ -11,7 +11,7 @@ const ShippingPolicy: React.FC = () => {
         Ecom Express, Xpressbees, or Delhivery.
       </p>
       <p className="text-gray-700 mb-3">
-        We try to dispatch all orders within 24-48 hours during normal business
+        We try to dispatch all orders within 2-4 days during normal business
         days. Please be advised that shipments are not sent out on Sundays or
         any holidays.
       </p>
