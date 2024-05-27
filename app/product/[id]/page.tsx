@@ -183,7 +183,7 @@ export default function Component() {
               <span className="text-lg text-red-500 line-through">$79.99</span>
             </div>
             <div className="text-sm dark:text-gray-200 text-gray-500">
-              Free shipping on orders over $50
+              Free shipping on orders over 500₹
             </div>
             <div className="flex items-center gap-2">
               <StarIcon className="w-5 h-5 fill-primary" />
