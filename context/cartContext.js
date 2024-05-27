@@ -17,7 +17,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = () => {
     setCart([]);
   };
-
+  // filee name changes
   return (
     <CartContext.Provider
       value={{ cart, addToCart, removeFromCart, clearCart }}
