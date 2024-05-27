@@ -53,7 +53,9 @@ const Navbar = () => {
             }}
             afterSignOutUrl="/"
           />
-          <ShoppingCart size={20} className="cursor-pointer" />
+          <Link href="/cart">
+            <ShoppingCart size={20} className="cursor-pointer" />
+          </Link>
         </SignedIn>
         {/* <User size={20} className="cursor-pointer" /> */}
 

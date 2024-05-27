@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import { useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { useRouter } from "next/navigation";
 
 function Accordion({ title, children }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,8 +58,17 @@ export default function Component() {
   const [quantity, setQuantity] = useState(1);
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
+  const router = useRouter();
 
-  const handleQuantityChange = (change: any) => {
+  const product = {
+    id: 1,
+    name: "Organic Protein Powder",
+    price: 59.99,
+    image: "/productimages/fusion_mango_front.jpg",
+    quantity,
+  };
+
+  const handleQuantityChange = (change: number) => {
     setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity + change;
       return newQuantity > 0 ? newQuantity : 1;
@@ -71,6 +82,11 @@ export default function Component() {
   const handleReviewSubmit = () => {
     console.log("Review:", review);
     console.log("Stars:", stars);
+  };
+  const { addToCart } = useCart();
+  const handleAddToCart = () => {
+    addToCart({ ...product, quantity });
+    router.push("/cart");
   };
 
   return (
@@ -249,7 +265,9 @@ export default function Component() {
               </div>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button size="lg">Add to Cart</Button>
+              <Button size="lg" onClick={handleAddToCart}>
+                Add to Cart
+              </Button>
               <Button size="lg" variant="outline">
                 Buy Now
               </Button>
@@ -347,9 +365,9 @@ export default function Component() {
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-primary" />
                     <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon class="w-5 h-5 fill-primary" />
-                    <StarIcon class="w-5 h-5 fill-primary" />
-                    <StarIcon class="w-5 h-5 fill-muted stroke-muted-foreground" />
+                    <StarIcon className="w-5 h-5 fill-primary" />
+                    <StarIcon className="w-5 h-5 fill-primary" />
+                    <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
                   </div>
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -434,6 +452,7 @@ function MinusIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={props.className} // Use className instead of class
     >
       <path d="M5 12h14" />
     </svg>
@@ -453,6 +472,7 @@ function PlusIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={props.className} // Use className instead of class
     >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
@@ -473,6 +493,7 @@ function StarIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={props.className} // Use className instead of class
     >
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
