@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "../ui/Toggle";
 import { useTheme } from "next-themes";
-import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+// import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 
 const Navbar = () => {
