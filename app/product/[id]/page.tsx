@@ -179,8 +179,8 @@ export default function Component() {
           <div className="grid gap-4">
             <h1 className="font-bold text-3xl">Organic Protein Powder</h1>
             <div className="text-2xl font-bold dark:text-white text-gray-900">
-              $59.99{" "}
-              <span className="text-lg text-red-500 line-through">$79.99</span>
+              ₹59.99{" "}
+              <span className="text-lg text-red-500 line-through">₹79.99</span>
             </div>
             <div className="text-sm dark:text-gray-200 text-gray-500">
               Free shipping on orders over 500₹
