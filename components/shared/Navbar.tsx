@@ -24,13 +24,13 @@ const Navbar = () => {
       </Link>
 
       <div className="hidden md:flex  flex-row  items-center justify-center gap-5">
-        <a href="#best-sellers">Products</a>
+        <Link href="/product/2">Products</Link>
         <a href="#best-sellers">Best Sellers</a>
         <a href="#new-arrivals">New Arrivals</a>
         <a href="#new-arrivals">Combos</a>
       </div>
       <div className="flex flex-row items-center justify-center gap-5">
-        <SignedOut>
+        {/* <SignedOut>
           <SignUpButton mode="modal">
             <Button
               variant={"outline"}
@@ -39,24 +39,24 @@ const Navbar = () => {
               Login/Sign Up
             </Button>
           </SignUpButton>
-        </SignedOut>
+        </SignedOut> */}
 
-        <SignedIn>
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "h-10 w-10",
-              },
-              variables: {
-                colorPrimary: "#3b82f6",
-              },
-            }}
-            afterSignOutUrl="/"
-          />
-          <Link href="/cart">
-            <ShoppingCart size={20} className="cursor-pointer" />
-          </Link>
-        </SignedIn>
+        {/* <SignedIn> */}
+        {/* <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "h-10 w-10",
+            },
+            variables: {
+              colorPrimary: "#3b82f6",
+            },
+          }}
+          afterSignOutUrl="/"
+        /> */}
+        <Link href="/cart">
+          <ShoppingCart size={20} className="cursor-pointer" />
+        </Link>
+        {/* </SignedIn> */}
         {/* <User size={20} className="cursor-pointer" /> */}
 
         <ModeToggle />

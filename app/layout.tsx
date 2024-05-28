@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <ClerkProvider
+        {/* <ClerkProvider
           appearance={{
             elements: {
               formButtonPrimary:
@@ -31,16 +31,16 @@ export default function RootLayout({
             },
             variables: { colorPrimary: "black" },
           }}
+        > */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <CartProvider>{children}</CartProvider>
-          </ThemeProvider>
-        </ClerkProvider>
+          <CartProvider>{children}</CartProvider>
+        </ThemeProvider>
+        {/* </ClerkProvider> */}
       </body>
     </html>
   );
