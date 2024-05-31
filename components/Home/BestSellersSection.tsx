@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Products from "./Products";
+import https from "https";
 
 const BestSellersSection = () => {
   const [products, setProducts] = useState([]);
@@ -18,7 +19,12 @@ const BestSellersSection = () => {
 
       try {
         const response = await axios.get(
-          "http://20.40.53.224:3000/api/66585955a3fe976423095792/products"
+          "http://20.40.53.224:3000/api/66585955a3fe976423095792/products",
+          {
+            httpsAgent: new https.Agent({
+              rejectUnauthorized: false, // Ignore SSL certificate errors
+            }),
+          }
         );
         setProducts(response.data);
         toast.success("Products loaded successfully!", {
@@ -40,7 +46,6 @@ const BestSellersSection = () => {
 
     fetchProducts();
   }, []);
-
   return (
     <div className="flex flex-col my-[60px] gap-[50px]">
       <Toaster /> {/* Add this line to render toasts */}
