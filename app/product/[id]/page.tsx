@@ -110,7 +110,7 @@ export default function ProductPage({ params }: any) {
       const toastId = toast.loading("Loading data...");
       try {
         const response = await fetch(
-          `http://20.40.53.224:3000/api/66585955a3fe976423095792/products/${productId}`
+          `https://bioessentia.store/api/66585955a3fe976423095792/products/${productId}`
         );
         const data = await response.json();
         setProduct(data);

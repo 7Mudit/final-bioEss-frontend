@@ -19,7 +19,7 @@ const BestSellersSection = () => {
 
       try {
         const response = await axios.get(
-          "http://20.40.53.224:3000/api/66585955a3fe976423095792/products",
+          "https://bioessentia.store/api/66585955a3fe976423095792/products",
           {
             httpsAgent: new https.Agent({
               rejectUnauthorized: false, // Ignore SSL certificate errors
