@@ -1,11 +1,55 @@
-import React from "react";
-import { popularProducts } from "@/constants";
+"use client";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import Products from "./Products";
+
 const BestSellersSection = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const toastId = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!toastId.current) {
+        toastId.current = toast.loading("Loading products...");
+      }
+
+      try {
+        const response = await axios.get(
+          "http://20.40.53.224:3000/api/66585955a3fe976423095792/products"
+        );
+        setProducts(response.data);
+        toast.success("Products loaded successfully!", {
+          id: toastId.current,
+        });
+      } catch (err: any) {
+        setError(err.message);
+        toast.error(`Error: ${err.message}`, {
+          id: toastId.current,
+        });
+      } finally {
+        setLoading(false);
+        if (toastId.current) {
+          toast.dismiss(toastId.current);
+          toastId.current = undefined;
+        }
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="flex flex-col my-[60px] gap-[50px]">
-      <h1 className="text-center leading-[37px] text-[34px]">Best Sellers</h1>
-      <Products products={popularProducts} heading="Popular Products" />
+      <Toaster /> {/* Add this line to render toasts */}
+      <h1 className="text-center leading-[37px] text-[34px]">Products</h1>
+      {loading && <div className="text-center">Loading...</div>}
+      {error && <div className="text-center text-red-500">Error: {error}</div>}
+      {products.length !== 0 && (
+        <Products products={products} heading="Popular Products" />
+      )}
     </div>
   );
 };

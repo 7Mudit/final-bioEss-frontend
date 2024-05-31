@@ -4,26 +4,26 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useCart } from "@/context/cartContext"; // Ensure this path is correct
+import { useCart } from "@/context/cartContext";
 import { useEffect, useState } from "react";
 
 export default function Component() {
-  const { cart, removeFromCart, addToCart, clearCart } = useCart();
+  const { cart, updateCart, removeFromCart, clearCart } = useCart();
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const cartTotal = cart.reduce(
-      (acc: any, item: any) => acc + item.price * item.quantity,
+      (acc, item) => acc + item.price * item.quantity,
       0
     );
     setTotal(cartTotal);
   }, [cart]);
 
-  const handleQuantityChange = (product: any, change: any) => {
-    const updatedProduct = { ...product, quantity: product.quantity + change };
-    if (updatedProduct.quantity <= 0) return;
-    removeFromCart(product.id);
-    addToCart(updatedProduct);
+  const handleQuantityChange = (product: any, change: Number) => {
+    const newQuantity = product.quantity + change;
+    if (newQuantity <= 0) return;
+    const updatedProduct = { ...product, quantity: newQuantity };
+    updateCart(updatedProduct);
   };
 
   if (cart.length === 0) {
@@ -35,7 +35,7 @@ export default function Component() {
           </h2>
           <Link
             className="inline-flex h-10 items-center justify-center rounded-md bg-gray-900 px-6 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-            href="/" // Ensure this path is correct
+            href="/"
           >
             Go to Shop
           </Link>
@@ -47,27 +47,24 @@ export default function Component() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6">
       <div className="grid gap-8">
-        {cart.map((product: any) => (
+        {cart.map((product) => (
           <div
-            key={product.id}
+            key={product._id}
             className="grid gap-6 border-b border-gray-200 pb-8 dark:border-gray-800"
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr_auto] sm:gap-6">
               <Image
-                alt={product.name}
+                alt={product.images[0].url}
                 className="aspect-square rounded-md object-cover"
                 height={100}
-                src={product.image}
+                src={product.images[0].url}
                 width={100}
               />
               <div className="grid gap-1">
                 <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-sm text-gray-500 line-clamp-2 dark:text-gray-400">
-                  Dummy Description
-                </p>
                 <div className="flex items-center gap-2">
                   <div className="text-lg font-semibold">
-                    ${product.price.toFixed(2)}
+                    ₹{product.price.toFixed(2)}
                   </div>
                   <div className="flex items-center gap-2">
                     <Button
@@ -97,7 +94,7 @@ export default function Component() {
                 <Button
                   size="icon"
                   variant="outline"
-                  onClick={() => removeFromCart(product.id)}
+                  onClick={() => removeFromCart(product._id)}
                 >
                   <TrashIcon className="h-5 w-5" />
                 </Button>
@@ -107,7 +104,7 @@ export default function Component() {
         ))}
         <div className="flex flex-col items-end gap-4">
           <div className="text-2xl font-semibold">
-            Total: ${total.toFixed(2)}
+            Total: ₹{total.toFixed(2)}
           </div>
           <Button size="lg" onClick={clearCart}>
             Clear Cart

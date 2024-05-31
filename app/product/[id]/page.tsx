@@ -1,4 +1,7 @@
 "use client";
+import { useEffect, useState } from "react";
+
+import parse from "html-react-parser";
 import {
   CarouselItem,
   CarouselContent,
@@ -29,9 +32,48 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import { useState } from "react";
+
 import { useCart } from "@/context/cartContext";
+
 import { useRouter } from "next/navigation";
+
+import toast from "react-hot-toast";
+
+interface Image {
+  _id: string;
+  url: string;
+}
+
+interface Category {
+  _id: string;
+  name: string;
+}
+
+interface Flavour {
+  _id: string;
+  name: string;
+}
+
+interface Size {
+  _id: string;
+  name: string;
+}
+
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  benefits: string;
+  suggestedUse: string;
+  nutritionalUse: string;
+  price: number;
+  features: string[];
+  fakePrice: number;
+  images: Image[];
+  categoryId: Category;
+  flavourId: Flavour[];
+  sizeId: Size[];
+}
 
 function Accordion({ title, children }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,19 +96,39 @@ function Accordion({ title, children }: any) {
   );
 }
 
-export default function Component() {
+export default function ProductPage({ params }: any) {
   const [quantity, setQuantity] = useState(1);
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
+  const [product, setProduct] = useState<Product | null>(null);
   const router = useRouter();
 
-  const product = {
-    id: 1,
-    name: "Organic Protein Powder",
-    price: 59.99,
-    image: "/productimages/fusion_mango_front.jpg",
-    quantity,
-  };
+  const productId = params.id;
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const toastId = toast.loading("Loading data...");
+      try {
+        const response = await fetch(
+          `http://20.40.53.224:3000/api/66585955a3fe976423095792/products/${productId}`
+        );
+        const data = await response.json();
+        setProduct(data);
+        toast.success("Product loaded successfully!", {
+          id: toastId,
+        });
+      } catch (error: any) {
+        console.error("Error fetching product:", error);
+        toast.error(`Error: ${error.message}`, {
+          id: toastId,
+        });
+      }
+    };
+
+    if (productId) {
+      fetchProduct();
+    }
+  }, [productId]);
 
   const handleQuantityChange = (change: number) => {
     setQuantity((prevQuantity) => {
@@ -83,11 +145,18 @@ export default function Component() {
     console.log("Review:", review);
     console.log("Stars:", stars);
   };
+
   const { addToCart } = useCart();
   const handleAddToCart = () => {
-    addToCart({ ...product, quantity });
-    router.push("/cart");
+    if (product) {
+      addToCart({ ...product, quantity });
+      router.push("/cart");
+    }
   };
+
+  if (!product) {
+    return <div></div>;
+  }
 
   return (
     <div className="max-w-6xl px-6 mx-auto py-10">
@@ -95,95 +164,64 @@ export default function Component() {
         <div className="grid gap-6 md:gap-12 items-start">
           <Carousel className="rounded-lg overflow-hidden relative">
             <CarouselContent>
-              <CarouselItem>
-                <Image
-                  alt="Product Image"
-                  className="aspect-square object-cover w-full"
-                  height={600}
-                  src="/productimages/fusion_mango_front.jpg"
-                  width={600}
-                />
-              </CarouselItem>
-              <CarouselItem>
-                <Image
-                  alt="Product Image"
-                  className="aspect-square object-cover w-full"
-                  height={600}
-                  src="/productimages/Bulk_front.jpg"
-                  width={600}
-                />
-              </CarouselItem>
-              <CarouselItem>
-                <Image
-                  alt="Product Image"
-                  className="aspect-square object-cover w-full"
-                  height={600}
-                  src="/productimages/Multi_front.jpg"
-                  width={600}
-                />
-              </CarouselItem>
+              {product.images.map((image) => (
+                <CarouselItem key={image._id}>
+                  <Image
+                    alt="Product Image"
+                    className="aspect-square object-cover w-full"
+                    height={600}
+                    src={image.url}
+                    width={600}
+                  />
+                </CarouselItem>
+              ))}
             </CarouselContent>
             <CarouselPrevious className="absolute left-0 top-1/2 transform -translate-y-1/2" />
             <CarouselNext className="absolute right-0 top-1/2 transform -translate-y-1/2" />
           </Carousel>
           <h2 className="font-bold text-xl mt-4">Product Description</h2>
           <div className="grid gap-4 text-sm leading-loose">
-            <p>
-              Introducing our premium organic protein powder, crafted with the
-              finest ingredients to fuel your active lifestyle. Packed with
-              high-quality protein, essential vitamins, and minerals, this
-              powder is the perfect addition to your daily routine.
-            </p>
-            <p>
-              Enjoy a smooth and creamy texture that blends seamlessly into your
-              favorite smoothies, shakes, or baked goods. Available in a variety
-              of delicious flavors, our protein powder is sure to satisfy your
-              taste buds while supporting your fitness goals.
-            </p>
+            <div className="markdown-container">
+              {parse(product.description)}
+            </div>
+            {/* <ReactMarkdown>{product.description}</ReactMarkdown> */}
           </div>
-          <Accordion title="Benefits">
-            <ul className="list-disc list-inside">
-              <li>
-                24g of protein per serving to help build and maintain muscle
-              </li>
-              <li>5.5g of naturally occurring BCAAs per serving</li>
-              <li>Gluten free</li>
-              <li>Banned Substance Tested</li>
-              <li>Easy mixing with only a glass and spoon</li>
-              <li>20+ great-tasting flavors</li>
-            </ul>
-          </Accordion>
-          <Accordion title="Suggested Use">
-            <p>
-              Mix about one scoop of the powder into 6 to 8 fluid ounces of cold
-              water, milk, or other beverage. Stir, shake, or blend until
-              dissolved. For best results, mix up your shake 30 to 60 minutes
-              after your workout or use as an anytime snack in your balanced
-              diet.
-            </p>
-            <p>
-              For healthy adults, consume enough protein to meet your daily
-              protein requirements with a combination of high protein foods and
-              protein supplements throughout the day as part of a balanced diet
-              and exercise program.
-            </p>
-          </Accordion>
-          <Accordion title="Nutritional Information">
-            <p>
-              Nutritional information will be shown when a flavor and/or size is
-              selected.
-            </p>
-          </Accordion>
+          {product.benefits && (
+            <Accordion title="Benefits">
+              <div className="markdown-container">
+                {parse(product.benefits)}
+              </div>
+              {/* <ReactMarkdown>{product.benefits}</ReactMarkdown> */}
+            </Accordion>
+          )}
+          {product.suggestedUse && (
+            <Accordion title="Suggested Use">
+              <div className="markdown-container">
+                {parse(product.suggestedUse)}
+              </div>
+              {/* <ReactMarkdown>{product.suggestedUse}</ReactMarkdown> */}
+            </Accordion>
+          )}
+          {product.nutritionalUse && (
+            <Accordion title="Nutritional Information">
+              <div className="markdown-container">
+                {parse(product.nutritionalUse)}
+              </div>
+              {/* <ReactMarkdown>{product.nutritionalUse}</ReactMarkdown> */}
+            </Accordion>
+          )}
         </div>
         <div className="grid gap-8 md:gap-12 items-start">
           <div className="grid gap-4">
-            <h1 className="font-bold text-3xl">Organic Protein Powder</h1>
+            <h1 className="font-bold text-3xl">{product.name}</h1>
             <div className="text-2xl font-bold dark:text-white text-gray-900">
-              ₹59.99{" "}
-              <span className="text-lg text-red-500 line-through">₹79.99</span>
+              ₹{product.price}{" "}
+              <span className="text-lg text-red-500 line-through">
+                ₹{product.fakePrice}
+              </span>
             </div>
             <div className="text-sm dark:text-gray-200 text-gray-500">
-              Free shipping on orders over 500₹
+              Free shipping on orders over ₹500
             </div>
             <div className="flex items-center gap-2">
               <StarIcon className="w-5 h-5 fill-primary" />
@@ -191,17 +229,15 @@ export default function Component() {
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-primary" />
               <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-              <span className="text-sm  text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 (123 reviews)
               </span>
             </div>
             <div className="text-sm dark:text-white text-gray-500">
               <ul className="list-disc list-inside">
-                <li>Muscle support</li>
-                <li>Post-workout recovery</li>
-                <li>100% whey protein powder</li>
-                <li>24g protein per serving</li>
-                <li>5.5g BCAAs per serving</li>
+                {product.features.map((feature, index) => (
+                  <li key={index}>{feature}</li>
+                ))}
               </ul>
             </div>
             <div className="grid gap-4">
@@ -209,14 +245,16 @@ export default function Component() {
                 <Label className="text-base" htmlFor="flavor">
                   Flavor
                 </Label>
-                <Select defaultValue="vanilla">
+                <Select defaultValue={product.flavourId[0]?.name}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Flavor" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="vanilla">Vanilla</SelectItem>
-                    <SelectItem value="chocolate">Chocolate</SelectItem>
-                    <SelectItem value="strawberry">Strawberry</SelectItem>
+                    {product.flavourId.map((flavour) => (
+                      <SelectItem key={flavour._id} value={flavour.name}>
+                        {flavour.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -224,14 +262,16 @@ export default function Component() {
                 <Label className="text-base" htmlFor="size">
                   Size
                 </Label>
-                <Select defaultValue="1lb">
+                <Select defaultValue={product.sizeId[0]?.name}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Size" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1lb">1 lb</SelectItem>
-                    <SelectItem value="2lb">2 lb</SelectItem>
-                    <SelectItem value="5lb">5 lb</SelectItem>
+                    {product.sizeId.map((size) => (
+                      <SelectItem key={size._id} value={size.name}>
+                        {size.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
