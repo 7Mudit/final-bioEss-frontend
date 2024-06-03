@@ -33,16 +33,16 @@ export default function RootLayout({
             variables: { colorPrimary: "black" },
           }}
         > */}
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
-        >
-          <CartProvider>
-            {children} <Analytics />
-          </CartProvider>
-        </ThemeProvider>
+        > */}
+        <CartProvider>
+          {children} <Analytics />
+        </CartProvider>
+        {/* </ThemeProvider> */}
         {/* </ClerkProvider> */}
       </body>
     </html>

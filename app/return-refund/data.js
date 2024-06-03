@@ -11,7 +11,7 @@ export const refund_return_policy = [
     content: [
       "For issues such as stomach upset, headache, flavour appeal, flavour difference from one brand to other etc. would not be applicable for return. Kindly consult with your doctor before buying the product.",
       "Bio Essentia Nutraceutical’s products are non-returnable due to hygiene/health and consumable nature of the product.",
-      "In case you received a damaged/tampered/wrong product, please send us an email with the unboxing video and images of the Product, Invoice, Inner & Outer Packaging and Batch Number to bioessentianutraceuticals@gmail.com,  within 24 hours of the order delivery. We would require 2 - 3 days to revert.",
+      "In case you received a damaged/tampered/wrong product, please send us an email with the unboxing video and images of the Product, Invoice, Inner & Outer Packaging and Batch Number to bioessentianutraceuticals@gmail.com,  within 24 hours of the order delivery. We would require 2 - 3 days to revert. If the case is found to be genuine, payment will be refunded within 4-5 business days.",
       "Please do not use the item you have raised a complaint about for the time being.",
       "If the shipment is tampered or damaged, please do not accept it.",
       "In case your order is returned after unsuccessful delivery attempts, kindly contact our customer support team. We’ll either process the refund (which will be in the form of voucher code) or we’ll send the order again subjected to the availability.",
