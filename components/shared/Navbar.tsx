@@ -59,7 +59,7 @@ const Navbar = () => {
         {/* </SignedIn> */}
         {/* <User size={20} className="cursor-pointer" /> */}
 
-        <ModeToggle />
+        {/* <ModeToggle /> */}
       </div>
     </div>
   );
