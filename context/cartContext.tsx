@@ -1,102 +1,104 @@
 "use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import { fetchCart, updateCart, clearCart } from "@/lib/actions/cart.action";
+import { useAuth } from "@clerk/nextjs";
 
-interface Image {
-  _id: string;
-  url: string;
-}
-
-interface Category {
-  _id: string;
-  name: string;
-}
-
-interface Flavour {
+interface IProduct {
   _id: string;
   name: string;
-}
-
-interface Size {
-  _id: string;
-  name: string;
-}
-
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  benefits: string;
-  suggestedUse: string;
-  nutritionalUse: string;
   price: number;
-  features: string[];
   fakePrice: number;
-  images: Image[];
-  categoryId: Category;
-  flavourId: Flavour[];
-  sizeId: Size[];
+  description: string;
+  features: string[];
+  suggestedUse: string;
+  benefits: string;
+  nutritionalUse: string;
+  isFeatured: boolean;
+  isArchived: boolean;
+
+  images: string[];
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface CartItem {
+  product: IProduct;
   quantity: number;
 }
 
 interface CartContextType {
-  cart: Product[];
-  addToCart: (product: Product) => void;
-  updateCart: (product: Product) => void;
-  removeFromCart: (id: string) => void;
-  clearCart: () => void;
+  cart: CartItem[];
+  updateCart: (product: IProduct, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<Product[]>([]);
+export const useCart = (): CartContextType => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+};
 
-  const addToCart = (product: Product) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.find((item) => item._id === product._id);
-      if (existingProduct) {
-        return prevCart.map((item) =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + product.quantity }
-            : item
-        );
-      } else {
-        return [...prevCart, { ...product, quantity: product.quantity }];
+interface CartProviderProps {
+  children: ReactNode;
+}
+
+export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const { isLoaded, userId } = useAuth();
+
+  useEffect(() => {
+    const getCart = async () => {
+      if (isLoaded && userId) {
+        try {
+          const cartData = await fetchCart(userId);
+          setCart(cartData);
+        } catch (error) {
+          console.error("Failed to fetch cart:", error);
+        }
       }
-    });
+    };
+
+    getCart();
+  }, [isLoaded, userId]);
+
+  const handleUpdateCart = async (product: IProduct, quantity: number) => {
+    if (userId) {
+      try {
+        await updateCart({ userId, productId: product._id, quantity });
+        const updatedCart = await fetchCart(userId);
+        setCart(updatedCart);
+      } catch (error) {
+        console.error("Failed to update cart:", error);
+      }
+    }
   };
 
-  const updateCart = (product: Product) => {
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item._id === product._id
-          ? { ...item, quantity: product.quantity }
-          : item
-      )
-    );
+  const handleClearCart = async () => {
+    if (userId) {
+      try {
+        await clearCart(userId);
+        setCart([]);
+      } catch (error) {
+        console.error("Failed to clear cart:", error);
+      }
+    }
   };
-
-  const removeFromCart = (id: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item._id !== id));
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateCart, removeFromCart, clearCart }}
+      value={{ cart, updateCart: handleUpdateCart, clearCart: handleClearCart }}
     >
       {children}
     </CartContext.Provider>
   );
-};
-
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
 };

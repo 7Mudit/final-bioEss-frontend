@@ -7,23 +7,43 @@ import Image from "next/image";
 import { useCart } from "@/context/cartContext";
 import { useEffect, useState } from "react";
 
-export default function Component() {
-  const { cart, updateCart, removeFromCart, clearCart } = useCart();
+interface IProduct {
+  _id: string;
+  name: string;
+  price: number;
+  fakePrice: number;
+  description: string;
+  features: string[];
+  suggestedUse: string;
+  benefits: string;
+  nutritionalUse: string;
+  isFeatured: boolean;
+  isArchived: boolean;
+
+  images: string[];
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export default function CartComponent() {
+  const { cart, updateCart, clearCart } = useCart();
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const cartTotal = cart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + item.product.price * item.quantity,
       0
     );
     setTotal(cartTotal);
   }, [cart]);
 
-  const handleQuantityChange = (product: any, change: Number) => {
-    const newQuantity = product.quantity + change;
+  const handleQuantityChange = async (product: IProduct, change: number) => {
+    const cartItem = cart.find((item) => item.product._id === product._id);
+    if (!cartItem) return;
+    const newQuantity = cartItem.quantity + change;
     if (newQuantity <= 0) return;
-    const updatedProduct = { ...product, quantity: newQuantity };
-    updateCart(updatedProduct);
+    await updateCart(product, newQuantity);
   };
 
   if (cart.length === 0) {
@@ -47,17 +67,17 @@ export default function Component() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6">
       <div className="grid gap-8">
-        {cart.map((product) => (
+        {cart.map(({ product, quantity }) => (
           <div
             key={product._id}
             className="grid gap-6 border-b border-gray-200 pb-8 dark:border-gray-800"
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr_auto] sm:gap-6">
               <Image
-                alt={product.images[0].url}
+                alt={product.images[0]}
                 className="aspect-square rounded-md object-cover"
                 height={100}
-                src={product.images[0].url}
+                src={product.images[0]}
                 width={100}
               />
               <div className="grid gap-1">
@@ -76,7 +96,7 @@ export default function Component() {
                     </Button>
                     <Input
                       className="w-16 rounded-md border border-gray-200 bg-transparent px-2 py-1 text-center text-sm shadow-sm transition-colors focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 dark:border-gray-800 dark:focus:border-gray-50 dark:focus:ring-gray-50"
-                      value={product.quantity}
+                      value={quantity}
                       readOnly
                       type="number"
                     />
@@ -94,7 +114,7 @@ export default function Component() {
                 <Button
                   size="icon"
                   variant="outline"
-                  onClick={() => removeFromCart(product._id)}
+                  onClick={() => handleQuantityChange(product, 0)}
                 >
                   <TrashIcon className="h-5 w-5" />
                 </Button>
@@ -118,7 +138,7 @@ export default function Component() {
   );
 }
 
-function MinusIcon(props: any) {
+function MinusIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -138,7 +158,7 @@ function MinusIcon(props: any) {
   );
 }
 
-function PlusIcon(props: any) {
+function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -159,7 +179,7 @@ function PlusIcon(props: any) {
   );
 }
 
-function TrashIcon(props: any) {
+function TrashIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}

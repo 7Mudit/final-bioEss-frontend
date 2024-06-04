@@ -6,7 +6,9 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   picture: string;
+  location?: string;
   joinedAt: Date;
+  cart: Array<{ product: Schema.Types.ObjectId; quantity: number }>;
 }
 
 const UserSchema = new Schema({
@@ -17,7 +19,13 @@ const UserSchema = new Schema({
   picture: { type: String, required: true },
   location: { type: String },
   joinedAt: { type: Date, default: Date.now },
+  cart: [
+    {
+      product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+      quantity: { type: Number, required: true, min: 1 },
+    },
+  ],
 });
 
-const User = models.User || model("User", UserSchema); // Corrected model name
+const User = models.User || model("User", UserSchema);
 export default User;

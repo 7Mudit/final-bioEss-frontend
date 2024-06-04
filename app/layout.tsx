@@ -40,7 +40,8 @@ export default function RootLayout({
           disableTransitionOnChange
         > */}
           <CartProvider>
-            {children} <Analytics />
+            {children}
+            <Analytics />
           </CartProvider>
           {/* </ThemeProvider> */}
         </ClerkProvider>
