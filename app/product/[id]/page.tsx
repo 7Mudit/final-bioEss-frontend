@@ -146,10 +146,10 @@ export default function ProductPage({ params }: any) {
     console.log("Stars:", stars);
   };
 
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
   const handleAddToCart = () => {
     if (product) {
-      addToCart({ ...product, quantity });
+      // addToCart({ ...product, quantity });
       router.push("/cart");
     }
   };
