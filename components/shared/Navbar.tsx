@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "../ui/Toggle";
 import { useTheme } from "next-themes";
-// import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 
 const Navbar = () => {
@@ -30,7 +30,7 @@ const Navbar = () => {
         <a href="#new-arrivals">Combos</a>
       </div>
       <div className="flex flex-row items-center justify-center gap-5">
-        {/* <SignedOut>
+        <SignedOut>
           <SignUpButton mode="modal">
             <Button
               variant={"outline"}
@@ -39,25 +39,25 @@ const Navbar = () => {
               Login/Sign Up
             </Button>
           </SignUpButton>
-        </SignedOut> */}
+        </SignedOut>
 
-        {/* <SignedIn> */}
-        {/* <UserButton
-          appearance={{
-            elements: {
-              avatarBox: "h-10 w-10",
-            },
-            variables: {
-              colorPrimary: "#3b82f6",
-            },
-          }}
-          afterSignOutUrl="/"
-        /> */}
-        <Link href="/cart">
-          <ShoppingCart size={20} className="cursor-pointer" />
-        </Link>
-        {/* </SignedIn> */}
-        {/* <User size={20} className="cursor-pointer" /> */}
+        <SignedIn>
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "h-10 w-10",
+              },
+              variables: {
+                colorPrimary: "#3b82f6",
+              },
+            }}
+            afterSignOutUrl="/"
+          />
+          <Link href="/cart">
+            <ShoppingCart size={20} className="cursor-pointer" />
+          </Link>
+        </SignedIn>
+        {/* <User size={20} className="cursor-pointer" />// */}
 
         {/* <ModeToggle /> */}
       </div>

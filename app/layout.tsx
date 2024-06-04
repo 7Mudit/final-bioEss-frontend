@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-// import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { CartProvider } from "@/context/cartContext";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        {/* <ClerkProvider
+        <ClerkProvider
           appearance={{
             elements: {
               formButtonPrimary:
@@ -32,18 +32,18 @@ export default function RootLayout({
             },
             variables: { colorPrimary: "black" },
           }}
-        > */}
-        {/* <ThemeProvider
+        >
+          {/* <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         > */}
-        <CartProvider>
-          {children} <Analytics />
-        </CartProvider>
-        {/* </ThemeProvider> */}
-        {/* </ClerkProvider> */}
+          <CartProvider>
+            {children} <Analytics />
+          </CartProvider>
+          {/* </ThemeProvider> */}
+        </ClerkProvider>
       </body>
     </html>
   );
