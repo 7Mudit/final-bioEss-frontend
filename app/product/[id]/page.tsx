@@ -36,6 +36,7 @@ import { useCart } from "@/context/cartContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Product } from "@/lib/models";
+import { useAuth } from "@clerk/nextjs";
 
 interface Image {
   _id: string;
@@ -110,6 +111,8 @@ export default function ProductPage({ params }: any) {
   const [product, setProduct] = useState<IProduct | null>(null);
 
   const { updateCart } = useCart();
+  const router = useRouter();
+  const { userId } = useAuth();
 
   const productId = params.id;
 
@@ -152,9 +155,12 @@ export default function ProductPage({ params }: any) {
 
   // const { addToCart } = useCart();
   const handleAddToCart = () => {
+    if (!userId) {
+      router.push("/sign-in");
+      return;
+    }
     if (product && selectedFlavor && selectedSize) {
       updateCart(product, quantity, selectedFlavor, selectedSize);
-      // router.push("/cart");
     }
   };
 
