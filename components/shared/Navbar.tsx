@@ -1,15 +1,23 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "../ui/Toggle";
 import { useTheme } from "next-themes";
 import { SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../ui/button";
+import { useCart } from "@/context/cartContext";
 
 const Navbar = () => {
   const { theme } = useTheme();
+  const { cart } = useCart();
+  const [count, setCount] = useState(cart.length);
+
+  useEffect(() => {
+    setCount(cart.length);
+  }, [cart]);
+
   return (
     <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center border-b ">
       {/* logo */}
@@ -53,8 +61,13 @@ const Navbar = () => {
             }}
             afterSignOutUrl="/"
           />
-          <Link href="/cart">
+          <Link href="/cart" className="relative">
             <ShoppingCart size={20} className="cursor-pointer" />
+            {cart.length > 0 && (
+              <div className="absolute -top-2 -right-3 transform translate-x-1/2 -translate-y-1/2 bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs animate-bounce">
+                {cart.length}
+              </div>
+            )}
           </Link>
         </SignedIn>
         {/* <User size={20} className="cursor-pointer" />// */}

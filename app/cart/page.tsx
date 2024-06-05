@@ -1,14 +1,35 @@
 "use client";
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { useCart } from "@/context/cartContext";
 import { useEffect, useState } from "react";
+
+import { useCart } from "@/context/cartContext";
+interface Image {
+  _id: string;
+  url: string;
+}
+
+interface Category {
+  _id: string;
+  name: string;
+}
+
+interface Flavour {
+  _id: string;
+  name: string;
+}
+
+interface Size {
+  _id: string;
+  name: string;
+}
 
 interface IProduct {
   _id: string;
+  storeId: string;
+  categoryId: Category;
   name: string;
   price: number;
   fakePrice: number;
@@ -19,15 +40,24 @@ interface IProduct {
   nutritionalUse: string;
   isFeatured: boolean;
   isArchived: boolean;
-
-  images: string[];
-
+  sizeId: Size[];
+  flavourId: Flavour[];
+  images: Image[];
+  orderItems: string[];
+  feedbacks: string[];
   createdAt: Date;
   updatedAt: Date;
 }
 
+interface CartItem {
+  product: IProduct;
+  quantity: number;
+  flavor: string;
+  size: string;
+}
+
 export default function CartComponent() {
-  const { cart, updateCart, clearCart } = useCart();
+  const { cart, updateCart, removeFromCart, clearCart } = useCart();
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
@@ -38,12 +68,22 @@ export default function CartComponent() {
     setTotal(cartTotal);
   }, [cart]);
 
-  const handleQuantityChange = async (product: IProduct, change: number) => {
-    const cartItem = cart.find((item) => item.product._id === product._id);
-    if (!cartItem) return;
-    const newQuantity = cartItem.quantity + change;
-    if (newQuantity <= 0) return;
-    await updateCart(product, newQuantity);
+  const handleQuantityChange = async (
+    product: IProduct,
+    quantity: number,
+    flavor: string,
+    size: string
+  ) => {
+    if (quantity <= 0) return;
+    await updateCart(product, quantity, flavor, size);
+  };
+
+  const handleRemoveFromCart = async (productId: string) => {
+    await removeFromCart(productId);
+  };
+
+  const handleClearCart = async () => {
+    await clearCart();
   };
 
   if (cart.length === 0) {
@@ -67,21 +107,23 @@ export default function CartComponent() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6">
       <div className="grid gap-8">
-        {cart.map(({ product, quantity }) => (
+        {cart.map(({ product, quantity, flavor, size }, index) => (
           <div
-            key={product._id}
+            key={index}
             className="grid gap-6 border-b border-gray-200 pb-8 dark:border-gray-800"
           >
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr_auto] sm:gap-6">
               <Image
-                alt={product.images[0]}
+                alt={product.images[0].url}
                 className="aspect-square rounded-md object-cover"
                 height={100}
-                src={product.images[0]}
+                src={product.images[0].url}
                 width={100}
               />
               <div className="grid gap-1">
                 <h3 className="text-lg font-semibold">{product.name}</h3>
+                <div className="text-sm text-gray-500">Flavor: {flavor}</div>
+                <div className="text-sm text-gray-500">Size: {size}</div>
                 <div className="flex items-center gap-2">
                   <div className="text-lg font-semibold">
                     ₹{product.price.toFixed(2)}
@@ -90,7 +132,14 @@ export default function CartComponent() {
                     <Button
                       size="icon"
                       variant="outline"
-                      onClick={() => handleQuantityChange(product, -1)}
+                      onClick={() =>
+                        handleQuantityChange(
+                          product,
+                          quantity - 1,
+                          flavor,
+                          size
+                        )
+                      }
                     >
                       <MinusIcon className="h-4 w-4" />
                     </Button>
@@ -103,7 +152,14 @@ export default function CartComponent() {
                     <Button
                       size="icon"
                       variant="outline"
-                      onClick={() => handleQuantityChange(product, 1)}
+                      onClick={() =>
+                        handleQuantityChange(
+                          product,
+                          quantity + 1,
+                          flavor,
+                          size
+                        )
+                      }
                     >
                       <PlusIcon className="h-4 w-4" />
                     </Button>
@@ -114,7 +170,7 @@ export default function CartComponent() {
                 <Button
                   size="icon"
                   variant="outline"
-                  onClick={() => handleQuantityChange(product, 0)}
+                  onClick={() => handleRemoveFromCart(product._id)}
                 >
                   <TrashIcon className="h-5 w-5" />
                 </Button>
@@ -126,7 +182,7 @@ export default function CartComponent() {
           <div className="text-2xl font-semibold">
             Total: ₹{total.toFixed(2)}
           </div>
-          <Button size="lg" onClick={clearCart}>
+          <Button size="lg" onClick={handleClearCart}>
             Clear Cart
           </Button>
           <Button size="lg" onClick={() => alert("Proceed to checkout")}>
@@ -138,7 +194,7 @@ export default function CartComponent() {
   );
 }
 
-function MinusIcon(props: React.SVGProps<SVGSVGElement>) {
+function MinusIcon(props: any) {
   return (
     <svg
       {...props}
@@ -158,7 +214,7 @@ function MinusIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
+function PlusIcon(props: any) {
   return (
     <svg
       {...props}
@@ -179,7 +235,7 @@ function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function TrashIcon(props: React.SVGProps<SVGSVGElement>) {
+function TrashIcon(props: any) {
   return (
     <svg
       {...props}

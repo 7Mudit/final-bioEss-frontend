@@ -3,15 +3,20 @@
 import User from "@/lib/models/user.model";
 import { connectToDb } from "../mongoose";
 import { revalidatePath } from "next/cache";
+import { auth } from "@clerk/nextjs/server";
 
 // Fetch cart items for a user
-export async function fetchCart(userId: string) {
+export async function fetchCart() {
   try {
     await connectToDb();
-    const user = await User.findById(userId).populate("cart.product");
-    console.log(user);
+
+    const { userId } = auth();
+    const user = await User.findOne({ userId }).populate({
+      path: "cart.product",
+      populate: { path: "images" },
+    });
     if (!user) throw new Error("User not found");
-    return user.cart;
+    return JSON.stringify(user.cart);
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch cart");
@@ -22,19 +27,30 @@ export async function fetchCart(userId: string) {
 export async function updateCart(params: any) {
   try {
     await connectToDb();
-    const { userId, productId, quantity } = params;
+    const { userId } = auth();
+    const { productId, quantity, flavor, size } = params;
 
-    await User.findByIdAndUpdate(
-      userId,
-      {
-        $set: { "cart.$[elem].quantity": quantity },
-      },
-      {
-        arrayFilters: [{ "elem.product": productId }],
-        new: true,
-      }
+    const user = await User.findOne({ userId });
+    if (!user) throw new Error("User not found");
+
+    const cartItem = user.cart.find(
+      (item: any) => item.product.toString() === productId
     );
 
+    if (cartItem) {
+      cartItem.quantity = quantity;
+      cartItem.flavor = flavor;
+      cartItem.size = size;
+    } else {
+      user.cart.push({
+        product: productId,
+        quantity,
+        flavor,
+        size,
+      });
+    }
+
+    await user.save();
     revalidatePath("/cart");
   } catch (err) {
     console.log(err);
@@ -42,12 +58,33 @@ export async function updateCart(params: any) {
   }
 }
 
-// Clear cart items for a user
-export async function clearCart(userId: string) {
+// Remove a cart item for a user
+export async function removeFromCart(productId: string) {
   try {
     await connectToDb();
-    await User.findByIdAndUpdate(userId, { cart: [] });
+    const { userId } = auth();
+
+    const user = await User.findOne({ userId });
+    if (!user) throw new Error("User not found");
+
+    user.cart = user.cart.filter(
+      (item: any) => item.product.toString() !== productId
+    );
+
+    await user.save();
     revalidatePath("/cart");
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to remove item from cart");
+  }
+}
+
+// Clear cart items for a user
+export async function clearCart() {
+  try {
+    await connectToDb();
+    const { userId } = auth();
+    await User.findOneAndUpdate({ userId }, { cart: [] });
   } catch (err) {
     console.log(err);
     throw new Error("Failed to clear cart");

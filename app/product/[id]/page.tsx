@@ -32,12 +32,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-
 import { useCart } from "@/context/cartContext";
-
 import { useRouter } from "next/navigation";
-
 import toast from "react-hot-toast";
+import { Product } from "@/lib/models";
 
 interface Image {
   _id: string;
@@ -59,20 +57,27 @@ interface Size {
   name: string;
 }
 
-interface Product {
+interface IProduct {
   _id: string;
-  name: string;
-  description: string;
-  benefits: string;
-  suggestedUse: string;
-  nutritionalUse: string;
-  price: number;
-  features: string[];
-  fakePrice: number;
-  images: Image[];
+  storeId: string;
   categoryId: Category;
-  flavourId: Flavour[];
+  name: string;
+  price: number;
+  fakePrice: number;
+  description: string;
+  features: string[];
+  suggestedUse: string;
+  benefits: string;
+  nutritionalUse: string;
+  isFeatured: boolean;
+  isArchived: boolean;
   sizeId: Size[];
+  flavourId: Flavour[];
+  images: Image[];
+  orderItems: string[];
+  feedbacks: string[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 function Accordion({ title, children }: any) {
@@ -98,30 +103,29 @@ function Accordion({ title, children }: any) {
 
 export default function ProductPage({ params }: any) {
   const [quantity, setQuantity] = useState(1);
+  const [selectedFlavor, setSelectedFlavor] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
-  const [product, setProduct] = useState<Product | null>(null);
-  const router = useRouter();
+  const [product, setProduct] = useState<IProduct | null>(null);
+
+  const { updateCart } = useCart();
 
   const productId = params.id;
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const toastId = toast.loading("Loading data...");
       try {
         const response = await fetch(
           `https://bioessentia.store/api/66585955a3fe976423095792/products/${productId}`
         );
         const data = await response.json();
         setProduct(data);
-        toast.success("Product loaded successfully!", {
-          id: toastId,
-        });
+        setSelectedFlavor(data.flavourId[0]?.name);
+        setSelectedSize(data.sizeId[0]?.name);
       } catch (error: any) {
         console.error("Error fetching product:", error);
-        toast.error(`Error: ${error.message}`, {
-          id: toastId,
-        });
+        toast.error(`Error: ${error.message}`);
       }
     };
 
@@ -148,9 +152,9 @@ export default function ProductPage({ params }: any) {
 
   // const { addToCart } = useCart();
   const handleAddToCart = () => {
-    if (product) {
-      // addToCart({ ...product, quantity });
-      router.push("/cart");
+    if (product && selectedFlavor && selectedSize) {
+      updateCart(product, quantity, selectedFlavor, selectedSize);
+      // router.push("/cart");
     }
   };
 
@@ -235,7 +239,7 @@ export default function ProductPage({ params }: any) {
             </div>
             <div className="text-sm dark:text-white text-gray-500">
               <ul className="list-disc list-inside">
-                {product.features.map((feature, index) => (
+                {product.features.map((feature: any, index: any) => (
                   <li key={index}>{feature}</li>
                 ))}
               </ul>

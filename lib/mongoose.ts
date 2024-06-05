@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "@/lib/models/index";
 
 let isConnected: boolean = false;
 

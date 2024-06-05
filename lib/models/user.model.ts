@@ -6,26 +6,34 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   picture: string;
-  location?: string;
   joinedAt: Date;
-  cart: Array<{ product: Schema.Types.ObjectId; quantity: number }>;
+  cart: {
+    product: Schema.Types.ObjectId;
+    quantity: number;
+    flavor: string;
+    size: string;
+  }[];
 }
 
-const UserSchema = new Schema({
-  clerkId: { type: String, required: true },
+const UserSchema = new Schema<IUser>({
+  clerkId: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String },
   picture: { type: String, required: true },
-  location: { type: String },
   joinedAt: { type: Date, default: Date.now },
   cart: [
     {
-      product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-      quantity: { type: Number, required: true, min: 1 },
+      product: { type: Schema.Types.ObjectId, ref: "Product" },
+      quantity: Number,
+      flavor: String,
+      size: String,
     },
   ],
 });
 
+UserSchema.index({ clerkId: 1 });
+
 const User = models.User || model("User", UserSchema);
+
 export default User;

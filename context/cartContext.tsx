@@ -6,11 +6,39 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { fetchCart, updateCart, clearCart } from "@/lib/actions/cart.action";
+import {
+  fetchCart,
+  updateCart,
+  clearCart,
+  removeFromCart,
+} from "@/lib/actions/cart.action";
 import { useAuth } from "@clerk/nextjs";
+import { toast } from "react-toastify";
+
+interface Image {
+  _id: string;
+  url: string;
+}
+
+interface Category {
+  _id: string;
+  name: string;
+}
+
+interface Flavour {
+  _id: string;
+  name: string;
+}
+
+interface Size {
+  _id: string;
+  name: string;
+}
 
 interface IProduct {
   _id: string;
+  storeId: string;
+  categoryId: Category;
   name: string;
   price: number;
   fakePrice: number;
@@ -21,9 +49,11 @@ interface IProduct {
   nutritionalUse: string;
   isFeatured: boolean;
   isArchived: boolean;
-
-  images: string[];
-
+  sizeId: Size[];
+  flavourId: Flavour[];
+  images: Image[];
+  orderItems: string[];
+  feedbacks: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,11 +61,19 @@ interface IProduct {
 interface CartItem {
   product: IProduct;
   quantity: number;
+  flavor: string;
+  size: string;
 }
 
 interface CartContextType {
   cart: CartItem[];
-  updateCart: (product: IProduct, quantity: number) => Promise<void>;
+  updateCart: (
+    product: IProduct,
+    quantity: number,
+    flavor: string,
+    size: string
+  ) => Promise<void>;
+  removeFromCart: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
 }
 
@@ -61,8 +99,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const getCart = async () => {
       if (isLoaded && userId) {
         try {
-          const cartData = await fetchCart(userId);
-          setCart(cartData);
+          const cartData = await fetchCart();
+          const data = JSON.parse(cartData);
+          setCart(data);
         } catch (error) {
           console.error("Failed to fetch cart:", error);
         }
@@ -72,31 +111,58 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     getCart();
   }, [isLoaded, userId]);
 
-  const handleUpdateCart = async (product: IProduct, quantity: number) => {
-    if (userId) {
-      try {
-        await updateCart({ userId, productId: product._id, quantity });
-        const updatedCart = await fetchCart(userId);
-        setCart(updatedCart);
-      } catch (error) {
-        console.error("Failed to update cart:", error);
-      }
+  const handleUpdateCart = async (
+    product: IProduct,
+    quantity: number,
+    flavor: string,
+    size: string
+  ) => {
+    try {
+      await updateCart({
+        productId: product._id,
+        quantity,
+        flavor,
+        size,
+      });
+      const updatedCart = await fetchCart();
+      const data = JSON.parse(updatedCart);
+      setCart(data);
+      toast.success("Updated cart");
+    } catch (error) {
+      console.error("Failed to update cart:", error);
+    }
+  };
+
+  const handleRemoveFromCart = async (productId: string) => {
+    try {
+      await removeFromCart(productId);
+      const updatedCart = await fetchCart();
+      const data = JSON.parse(updatedCart);
+      setCart(data);
+      toast.success("Removed from cart");
+    } catch (error) {
+      console.error("Failed to remove item from cart:", error);
     }
   };
 
   const handleClearCart = async () => {
-    if (userId) {
-      try {
-        await clearCart(userId);
-        setCart([]);
-      } catch (error) {
-        console.error("Failed to clear cart:", error);
-      }
+    try {
+      await clearCart();
+      setCart([]);
+      toast.success("Cart cleared");
+    } catch (error) {
+      console.error("Failed to clear cart:", error);
     }
   };
+
   return (
     <CartContext.Provider
-      value={{ cart, updateCart: handleUpdateCart, clearCart: handleClearCart }}
+      value={{
+        cart,
+        updateCart: handleUpdateCart,
+        removeFromCart: handleRemoveFromCart,
+        clearCart: handleClearCart,
+      }}
     >
       {children}
     </CartContext.Provider>

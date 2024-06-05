@@ -19,12 +19,7 @@ const BestSellersSection = () => {
 
       try {
         const response = await axios.get(
-          "https://bioessentia.store/api/66585955a3fe976423095792/products",
-          {
-            httpsAgent: new https.Agent({
-              rejectUnauthorized: false, // Ignore SSL certificate errors
-            }),
-          }
+          "https://bioessentia.store/api/66585955a3fe976423095792/products"
         );
         setProducts(response.data);
         toast.success("Products loaded successfully!", {

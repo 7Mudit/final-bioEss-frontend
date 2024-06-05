@@ -83,7 +83,7 @@ const Product = ({
           className="rounded-lg duration-300 transition-all hover:scale-105 bg-white text-black border border-black"
           variant={"outline"}
         >
-          Add To Cart
+          Explore
         </Button>
       </div>
     </Link>
