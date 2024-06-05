@@ -149,7 +149,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     try {
       await clearCart();
       setCart([]);
-      toast.success("Cart cleared");
+      // toast.success("Cart cleared");
     } catch (error) {
       console.error("Failed to clear cart:", error);
     }

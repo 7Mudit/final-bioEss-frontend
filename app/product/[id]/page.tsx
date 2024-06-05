@@ -35,8 +35,9 @@ import Image from "next/image";
 import { useCart } from "@/context/cartContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Product } from "@/lib/models";
+
 import { useAuth } from "@clerk/nextjs";
+import { initiatePhonePePayment } from "@/utils/phonepay";
 
 interface Image {
   _id: string;
@@ -161,6 +162,38 @@ export default function ProductPage({ params }: any) {
     }
     if (product && selectedFlavor && selectedSize) {
       updateCart(product, quantity, selectedFlavor, selectedSize);
+    }
+  };
+  const handleBuyNow = async () => {
+    if (!userId) {
+      router.push("/sign-in");
+      return;
+    }
+
+    if (product && selectedFlavor && selectedSize) {
+      try {
+        const amount = product.price * quantity;
+        const products = [
+          {
+            productId: product._id,
+            quantity,
+            flavor: selectedFlavor,
+            size: selectedSize,
+          },
+        ];
+        const paymentResponse = await initiatePhonePePayment(
+          amount,
+          userId,
+          products
+        );
+        const response = JSON.parse(paymentResponse!);
+        if (response.paymentUrl) {
+          window.location.href = response.paymentUrl;
+        }
+      } catch (error) {
+        console.error("Payment initiation failed:", error);
+        toast.error("Failed to initiate payment");
+      }
     }
   };
 
@@ -318,7 +351,7 @@ export default function ProductPage({ params }: any) {
               <Button size="lg" onClick={handleAddToCart}>
                 Add to Cart
               </Button>
-              <Button size="lg" variant="outline">
+              <Button size="lg" variant="outline" onClick={handleBuyNow}>
                 Buy Now
               </Button>
             </div>

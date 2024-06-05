@@ -4,8 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { initiatePhonePePayment } from "@/utils/phonepay";
 
 import { useCart } from "@/context/cartContext";
+import router from "next/router";
+import { toast } from "react-toastify";
+import { useAuth } from "@clerk/nextjs";
 interface Image {
   _id: string;
   url: string;
@@ -59,6 +63,7 @@ interface CartItem {
 export default function CartComponent() {
   const { cart, updateCart, removeFromCart, clearCart } = useCart();
   const [total, setTotal] = useState(0);
+  const { userId } = useAuth();
 
   useEffect(() => {
     const cartTotal = cart.reduce(
@@ -84,6 +89,37 @@ export default function CartComponent() {
 
   const handleClearCart = async () => {
     await clearCart();
+  };
+
+  const handleCheckout = async () => {
+    if (!userId) {
+      router.push("/sign-in");
+      return;
+    }
+
+    if (cart.length > 0) {
+      try {
+        const amount = total;
+        const products = cart.map((item) => ({
+          productId: item.product._id,
+          quantity: item.quantity,
+          flavor: item.flavor,
+          size: item.size,
+        }));
+        const paymentResponse = await initiatePhonePePayment(
+          amount,
+          userId,
+          products
+        );
+        const response = JSON.parse(paymentResponse!);
+        if (response.paymentUrl) {
+          window.location.href = response.paymentUrl;
+        }
+      } catch (error) {
+        console.error("Payment initiation failed:", error);
+        toast.error("Failed to initiate payment");
+      }
+    }
   };
 
   if (cart.length === 0) {
@@ -185,7 +221,7 @@ export default function CartComponent() {
           <Button size="lg" onClick={handleClearCart}>
             Clear Cart
           </Button>
-          <Button size="lg" onClick={() => alert("Proceed to checkout")}>
+          <Button size="lg" onClick={handleCheckout}>
             Buy Now
           </Button>
         </div>
