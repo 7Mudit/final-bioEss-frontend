@@ -30,7 +30,7 @@ export default async function checkStatus(merchantTransactionId: string) {
         "X-MERCHANT-ID": merchantId,
       },
     });
-    console.log(response);
+
     return JSON.stringify(response.data);
   } catch (error) {
     console.error("Error checking payment status:", error);

@@ -17,9 +17,11 @@ export const initiatePhonePePayment = async (amount, userId, products) => {
     process.env.NEXT_PUBLIC_BASE_URL
   }/payment-status?merchantTransactionId=${`MT${Date.now()}`}`;
 
+  const merchantTransactionId = `MT${Date.now()}`;
+
   const payload = {
     merchantId,
-    merchantTransactionId: `MT${Date.now()}`,
+    merchantTransactionId,
     merchantUserId: userId,
     amount: amount * 100,
     redirectUrl,
@@ -33,7 +35,6 @@ export const initiatePhonePePayment = async (amount, userId, products) => {
 
   const base64Payload = Buffer.from(JSON.stringify(payload)).toString("base64");
   const xVerify = generateXVerifyHeader(base64Payload);
-  console.log(xVerify);
 
   try {
     const response = await axios.post(
@@ -46,10 +47,11 @@ export const initiatePhonePePayment = async (amount, userId, products) => {
         },
       }
     );
-    console.log(response);
+
     if (response.data.success) {
       return JSON.stringify({
         paymentUrl: response.data.data.instrumentResponse.redirectInfo.url,
+        merchantTransactionId: merchantTransactionId,
       });
     } else {
       return JSON.stringify({

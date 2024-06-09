@@ -10,6 +10,7 @@ import { useCart } from "@/context/cartContext";
 import router from "next/router";
 import { toast } from "react-toastify";
 import { useAuth } from "@clerk/nextjs";
+import { createOrder } from "@/lib/actions/order.action";
 interface Image {
   _id: string;
   url: string;
@@ -106,14 +107,27 @@ export default function CartComponent() {
           flavor: item.flavor,
           size: item.size,
         }));
+
         const paymentResponse = await initiatePhonePePayment(
           amount,
           userId,
           products
         );
         const response = JSON.parse(paymentResponse!);
-        if (response.paymentUrl) {
-          window.location.href = response.paymentUrl;
+
+        if (response.merchantTransactionId) {
+          const order = await createOrder(
+            userId as string,
+            products,
+            amount,
+            response.merchantTransactionId
+          );
+
+          if (response.paymentUrl) {
+            window.location.href = response.paymentUrl;
+          }
+        } else {
+          toast.error("Failed to get transaction ID");
         }
       } catch (error) {
         console.error("Payment initiation failed:", error);
@@ -121,7 +135,6 @@ export default function CartComponent() {
       }
     }
   };
-
   if (cart.length === 0) {
     return (
       <div className="container mx-auto py-12 px-4 md:px-6">

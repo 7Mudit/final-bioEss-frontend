@@ -3,6 +3,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import checkStatus from "@/utils/checkStatus";
 import { useCart } from "@/context/cartContext";
+import { updateOrderStatus } from "@/lib/actions/order.action";
+import { useAuth } from "@clerk/nextjs";
 
 interface StatusData {
   state: string;
@@ -23,11 +25,11 @@ const PaymentStatus: React.FC = () => {
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-  const { clearCart, cart } = useCart();
+  const { clearCart } = useCart();
+  const { userId } = useAuth();
 
   useEffect(() => {
     if (!merchantTransactionId) return;
-    console.log(merchantTransactionId);
 
     const getStatus = async () => {
       try {
@@ -36,9 +38,11 @@ const PaymentStatus: React.FC = () => {
         setStatus(data);
 
         if (data.success) {
+          await updateOrderStatus(merchantTransactionId, "Completed");
           await clearCart();
         }
       } catch (error) {
+        await updateOrderStatus(merchantTransactionId, "Failed");
         setError("Failed to check payment status.");
       } finally {
         setLoading(false);
@@ -79,7 +83,7 @@ const PaymentStatus: React.FC = () => {
             <div className="flex items-center justify-between">
               <p className="text-gray-500 dark:text-gray-400">Amount:</p>
               <p className="text-gray-900 font-medium dark:text-gray-100">
-                ₹{status?.data.amount}
+                ₹{status?.data?.amount}
               </p>
             </div>
             <div className="flex items-center justify-between">
@@ -87,7 +91,7 @@ const PaymentStatus: React.FC = () => {
                 Transaction ID:
               </p>
               <p className="text-gray-900 font-medium dark:text-gray-100">
-                {status?.data.transactionId}
+                {status?.data?.transactionId}
               </p>
             </div>
             <div>

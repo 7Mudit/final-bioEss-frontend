@@ -38,6 +38,7 @@ import toast from "react-hot-toast";
 
 import { useAuth } from "@clerk/nextjs";
 import { initiatePhonePePayment } from "@/utils/phonepay";
+import { createOrder } from "@/lib/actions/order.action";
 
 interface Image {
   _id: string;
@@ -181,14 +182,29 @@ export default function ProductPage({ params }: any) {
             size: selectedSize,
           },
         ];
+
+        // Initiate the payment first
         const paymentResponse = await initiatePhonePePayment(
           amount,
           userId,
           products
         );
         const response = JSON.parse(paymentResponse!);
-        if (response.paymentUrl) {
-          window.location.href = response.paymentUrl;
+
+        if (response.merchantTransactionId) {
+          // Create the order with the received merchantTransactionId
+          const order = await createOrder(
+            userId as string,
+            products,
+            amount,
+            response.merchantTransactionId
+          );
+
+          if (response.paymentUrl) {
+            window.location.href = response.paymentUrl;
+          }
+        } else {
+          toast.error("Failed to get transaction ID");
         }
       } catch (error) {
         console.error("Payment initiation failed:", error);
