@@ -34,11 +34,12 @@ import {
 import Image from "next/image";
 import { useCart } from "@/context/cartContext";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 import { useAuth } from "@clerk/nextjs";
 import { initiatePhonePePayment } from "@/utils/phonepay";
 import { createOrder } from "@/lib/actions/order.action";
+import AddressModal from "@/components/product/AddressModal";
+import { toast } from "sonner";
 
 interface Image {
   _id: string;
@@ -111,6 +112,7 @@ export default function ProductPage({ params }: any) {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
   const { updateCart } = useCart();
   const router = useRouter();
@@ -130,7 +132,9 @@ export default function ProductPage({ params }: any) {
         setSelectedSize(data.sizeId[0]?.name);
       } catch (error: any) {
         console.error("Error fetching product:", error);
-        toast.error(`Error: ${error.message}`);
+        toast.error("Error", {
+          description: `${error.message}`,
+        });
       }
     };
 
@@ -155,7 +159,6 @@ export default function ProductPage({ params }: any) {
     console.log("Stars:", stars);
   };
 
-  // const { addToCart } = useCart();
   const handleAddToCart = () => {
     if (!userId) {
       router.push("/sign-in");
@@ -165,12 +168,16 @@ export default function ProductPage({ params }: any) {
       updateCart(product, quantity, selectedFlavor, selectedSize);
     }
   };
-  const handleBuyNow = async () => {
+
+  const handleBuyNow = () => {
     if (!userId) {
       router.push("/sign-in");
       return;
     }
+    setIsAddressModalOpen(true);
+  };
 
+  const handleAddressSubmit = async () => {
     if (product && selectedFlavor && selectedSize) {
       try {
         const amount = product.price * quantity;
@@ -243,14 +250,12 @@ export default function ProductPage({ params }: any) {
             <div className="markdown-container">
               {parse(product.description)}
             </div>
-            {/* <ReactMarkdown>{product.description}</ReactMarkdown> */}
           </div>
           {product.benefits && (
             <Accordion title="Benefits">
               <div className="markdown-container">
                 {parse(product.benefits)}
               </div>
-              {/* <ReactMarkdown>{product.benefits}</ReactMarkdown> */}
             </Accordion>
           )}
           {product.suggestedUse && (
@@ -258,7 +263,6 @@ export default function ProductPage({ params }: any) {
               <div className="markdown-container">
                 {parse(product.suggestedUse)}
               </div>
-              {/* <ReactMarkdown>{product.suggestedUse}</ReactMarkdown> */}
             </Accordion>
           )}
           {product.nutritionalUse && (
@@ -266,7 +270,6 @@ export default function ProductPage({ params }: any) {
               <div className="markdown-container">
                 {parse(product.nutritionalUse)}
               </div>
-              {/* <ReactMarkdown>{product.nutritionalUse}</ReactMarkdown> */}
             </Accordion>
           )}
         </div>
@@ -304,7 +307,10 @@ export default function ProductPage({ params }: any) {
                 <Label className="text-base" htmlFor="flavor">
                   Flavor
                 </Label>
-                <Select defaultValue={product.flavourId[0]?.name}>
+                <Select
+                  defaultValue={product.flavourId[0]?.name}
+                  onValueChange={setSelectedFlavor}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Flavor" />
                   </SelectTrigger>
@@ -321,7 +327,10 @@ export default function ProductPage({ params }: any) {
                 <Label className="text-base" htmlFor="size">
                   Size
                 </Label>
-                <Select defaultValue={product.sizeId[0]?.name}>
+                <Select
+                  defaultValue={product.sizeId[0]?.name}
+                  onValueChange={setSelectedSize}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Size" />
                   </SelectTrigger>
@@ -533,6 +542,14 @@ export default function ProductPage({ params }: any) {
             </Button>
           </DialogFooter>
         </DialogContent>
+      </Dialog>
+
+      <Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
+        <AddressModal
+          isOpen={isAddressModalOpen}
+          onClose={() => setIsAddressModalOpen(false)}
+          onSubmit={handleAddressSubmit}
+        />
       </Dialog>
     </div>
   );

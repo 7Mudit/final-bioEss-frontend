@@ -1,41 +1,31 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+
+// import Products from "./Products";
+import { Toaster, toast } from "sonner";
 import Products from "./Products";
-import https from "https";
 
 const BestSellersSection = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const toastId = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (!toastId.current) {
-        toastId.current = toast.loading("Loading products...");
-      }
-
       try {
         const response = await axios.get(
           "https://bioessentia.store/api/66585955a3fe976423095792/products"
         );
         setProducts(response.data);
-        toast.success("Products loaded successfully!", {
-          id: toastId.current,
-        });
+        toast.success("Products loaded successfully");
       } catch (err: any) {
         setError(err.message);
-        toast.error(`Error: ${err.message}`, {
-          id: toastId.current,
+        toast.error("Error", {
+          description: err.message,
         });
       } finally {
         setLoading(false);
-        if (toastId.current) {
-          toast.dismiss(toastId.current);
-          toastId.current = undefined;
-        }
       }
     };
 

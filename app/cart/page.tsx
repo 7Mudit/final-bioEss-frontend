@@ -8,9 +8,13 @@ import { initiatePhonePePayment } from "@/utils/phonepay";
 
 import { useCart } from "@/context/cartContext";
 import router from "next/router";
-import { toast } from "react-toastify";
+
 import { useAuth } from "@clerk/nextjs";
 import { createOrder } from "@/lib/actions/order.action";
+import { toast } from "sonner";
+import AddressModal from "@/components/product/AddressModal";
+import { Dialog } from "@/components/ui/dialog";
+
 interface Image {
   _id: string;
   url: string;
@@ -64,6 +68,7 @@ interface CartItem {
 export default function CartComponent() {
   const { cart, updateCart, removeFromCart, clearCart } = useCart();
   const [total, setTotal] = useState(0);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const { userId } = useAuth();
 
   useEffect(() => {
@@ -72,6 +77,8 @@ export default function CartComponent() {
       0
     );
     setTotal(cartTotal);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart]);
 
   const handleQuantityChange = async (
@@ -97,7 +104,10 @@ export default function CartComponent() {
       router.push("/sign-in");
       return;
     }
+    setIsAddressModalOpen(true);
+  };
 
+  const handleAddressSubmit = async () => {
     if (cart.length > 0) {
       try {
         const amount = total;
@@ -135,6 +145,7 @@ export default function CartComponent() {
       }
     }
   };
+
   if (cart.length === 0) {
     return (
       <div className="container mx-auto py-12 px-4 md:px-6">
@@ -239,6 +250,14 @@ export default function CartComponent() {
           </Button>
         </div>
       </div>
+
+      <Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
+        <AddressModal
+          isOpen={isAddressModalOpen}
+          onClose={() => setIsAddressModalOpen(false)}
+          onSubmit={handleAddressSubmit}
+        />
+      </Dialog>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import checkStatus from "@/utils/checkStatus";
 import { useCart } from "@/context/cartContext";
 import { updateOrderStatus } from "@/lib/actions/order.action";
-import { useAuth } from "@clerk/nextjs";
 
 interface StatusData {
   state: string;
@@ -26,7 +25,6 @@ const PaymentStatus: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const { clearCart } = useCart();
-  const { userId } = useAuth();
 
   useEffect(() => {
     if (!merchantTransactionId) return;
@@ -83,7 +81,7 @@ const PaymentStatus: React.FC = () => {
             <div className="flex items-center justify-between">
               <p className="text-gray-500 dark:text-gray-400">Amount:</p>
               <p className="text-gray-900 font-medium dark:text-gray-100">
-                ₹{status?.data?.amount}
+                ₹{status?.data?.amount ? status.data.amount / 100 : "NaN"}
               </p>
             </div>
             <div className="flex items-center justify-between">

@@ -13,7 +13,7 @@ import {
   removeFromCart,
 } from "@/lib/actions/cart.action";
 import { useAuth } from "@clerk/nextjs";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 interface Image {
   _id: string;

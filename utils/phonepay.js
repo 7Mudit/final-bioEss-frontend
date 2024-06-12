@@ -48,7 +48,6 @@ export const initiatePhonePePayment = async (amount, userId, products) => {
         },
       }
     );
-    console.log(response);
 
     if (response.data.success) {
       return JSON.stringify({

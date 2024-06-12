@@ -11,7 +11,8 @@ export async function fetchCart() {
     await connectToDb();
 
     const { userId } = auth();
-    const user = await User.findOne({ userId }).populate({
+    console.log(userId);
+    const user = await User.findOne({ clerkId: userId }).populate({
       path: "cart.product",
       populate: { path: "images" },
     });
@@ -30,7 +31,7 @@ export async function updateCart(params: any) {
     const { userId } = auth();
     const { productId, quantity, flavor, size } = params;
 
-    const user = await User.findOne({ userId });
+    const user = await User.findOne({ clerkId: userId });
     if (!user) throw new Error("User not found");
 
     const cartItem = user.cart.find(
@@ -64,7 +65,7 @@ export async function removeFromCart(productId: string) {
     await connectToDb();
     const { userId } = auth();
 
-    const user = await User.findOne({ userId });
+    const user = await User.findOne({ clerkId: userId });
     if (!user) throw new Error("User not found");
 
     user.cart = user.cart.filter(
@@ -84,7 +85,7 @@ export async function clearCart() {
   try {
     await connectToDb();
     const { userId } = auth();
-    await User.findOneAndUpdate({ userId }, { cart: [] });
+    await User.findOneAndUpdate({ clerkId: userId }, { cart: [] });
   } catch (err) {
     console.log(err);
     throw new Error("Failed to clear cart");
