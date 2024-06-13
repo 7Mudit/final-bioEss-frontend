@@ -25,13 +25,13 @@ export async function fetchAddress() {
 
 // Update address for a user or create if it doesn't exist
 export interface AddressParams {
+  name: string;
   addressLine1: string;
   addressLine2?: string;
   city: string;
   state: string;
   postalCode: string;
-  country: string;
-  phoneNumber?: string;
+  phoneNumber: string;
 }
 
 export async function updateAddress(params: AddressParams) {
@@ -39,12 +39,12 @@ export async function updateAddress(params: AddressParams) {
     await connectToDb();
     const { userId } = auth();
     const {
+      name,
       addressLine1,
       addressLine2,
       city,
       state,
       postalCode,
-      country,
       phoneNumber,
     } = params;
 
@@ -52,23 +52,23 @@ export async function updateAddress(params: AddressParams) {
 
     if (address) {
       // Update existing address
+      address.name = name;
       address.addressLine1 = addressLine1;
       address.addressLine2 = addressLine2;
       address.city = city;
       address.state = state;
       address.postalCode = postalCode;
-      address.country = country;
       address.phoneNumber = phoneNumber;
     } else {
       // Create new address
       address = new Address({
         clerkId: userId,
+        name,
         addressLine1,
         addressLine2,
         city,
         state,
         postalCode,
-        country,
         phoneNumber,
       });
     }

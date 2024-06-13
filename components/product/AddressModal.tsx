@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { fetchAddress, updateAddress } from "@/lib/actions/address.action";
 import { useAuth } from "@clerk/nextjs";
@@ -70,13 +70,13 @@ const stateOptions = [
 ] as const;
 
 const addressSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   addressLine1: z.string().min(1, "Address Line 1 is required"),
   addressLine2: z.string().optional(),
   city: z.string().min(1, "City is required"),
   state: z.enum(stateOptions),
   postalCode: z.string().min(1, "Postal Code is required"),
-  country: z.string().min(1, "Country is required"),
-  phoneNumber: z.string().optional(),
+  phoneNumber: z.string().min(1, "Phone Number is required"),
 });
 
 interface AddressModalProps {
@@ -94,12 +94,12 @@ const AddressModal = ({ isOpen, onClose, onSubmit }: AddressModalProps) => {
   const form = useForm<z.infer<typeof addressSchema>>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
+      name: "",
       addressLine1: "",
       addressLine2: "",
       city: "",
       state: "Andhra Pradesh",
       postalCode: "",
-      country: "",
       phoneNumber: "",
     },
   });
@@ -153,6 +153,19 @@ const AddressModal = ({ isOpen, onClose, onSubmit }: AddressModalProps) => {
               >
                 <FormField
                   control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="addressLine1"
                   render={({ field }) => (
                     <FormItem>
@@ -201,7 +214,7 @@ const AddressModal = ({ isOpen, onClose, onSubmit }: AddressModalProps) => {
                   name="state"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>State</FormLabel>
+                      <FormLabel>State</FormLabel>{" "}
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -241,26 +254,13 @@ const AddressModal = ({ isOpen, onClose, onSubmit }: AddressModalProps) => {
                 />
                 <FormField
                   control={form.control}
-                  name="country"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Country</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your country" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Phone Number</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter your phone number (optional)"
+                          placeholder="Enter your phone number"
                           {...field}
                         />
                       </FormControl>

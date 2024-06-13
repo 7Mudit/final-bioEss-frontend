@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 // import Products from "./Products";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import Products from "./Products";
 
 const BestSellersSection = () => {
@@ -18,7 +18,6 @@ const BestSellersSection = () => {
           "https://bioessentia.store/api/66585955a3fe976423095792/products"
         );
         setProducts(response.data);
-        toast.success("Products loaded successfully");
       } catch (err: any) {
         setError(err.message);
         toast.error("Error", {
@@ -33,7 +32,6 @@ const BestSellersSection = () => {
   }, []);
   return (
     <div className="flex flex-col my-[60px] gap-[50px]">
-      <Toaster /> {/* Add this line to render toasts */}
       <h1 className="text-center leading-[37px] text-[34px]">Products</h1>
       {loading && <div className="text-center">Loading...</div>}
       {error && <div className="text-center text-red-500">Error: {error}</div>}
