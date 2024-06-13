@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="flex flex-col">
       <BannerSection />
-      <CategoriesSection />
+      {/* <CategoriesSection /> */}
       <BestSellersSection />
       <BannerSection />
       <ShopByGoalSection />

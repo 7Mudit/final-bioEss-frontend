@@ -19,6 +19,9 @@ export default async function checkStatus(merchantTransactionId: string) {
   //api.phonepe.com/apis/hermes/pg/v1/status/603eab88-4f77-47de-b575-b511e6dc0266/MT1718121426670
   // const apiEndpoint = `/pg/v1/status/${merchantId}/${merchantTransactionId}`;
   // const phonePeStatusUrl = `https://api-preprod.phonepe.com/apis/pg-sandbox${apiEndpoint}`;
+
+  // production urls
+
   const apiEndpoint = `/pg/v1/status/${merchantId}/${merchantTransactionId}`;
   const phonePeStatusUrl = `https://api.phonepe.com/apis/hermes${apiEndpoint}`;
 

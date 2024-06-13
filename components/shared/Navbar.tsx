@@ -19,6 +19,7 @@ const Navbar = () => {
   }, [cart]);
 
   return (
+    // <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center border-b ">
     <div className="flex px-2 py-10 sm:px-4 justify-between h-[72px] items-center border-b ">
       {/* Logo */}
       <Link href="/">
@@ -31,12 +32,10 @@ const Navbar = () => {
       </Link>
 
       {/* Navigation Links */}
-      <div className="hidden md:flex flex-row items-center justify-center gap-5">
-        <Link href="/product/2">Products</Link>
-        <a href="#best-sellers">Best Sellers</a>
-        <a href="#new-arrivals">New Arrivals</a>
-        <a href="#combos">Combos</a>
-      </div>
+      {/* <div className="hidden md:flex flex-row items-center justify-center gap-5">
+        <Link href="/products">Products</Link>
+        <Link href="/authenticate">Authenticate</Link>
+      </div> */}
 
       {/* User Actions */}
       <div className="flex flex-row items-center justify-center gap-5">
