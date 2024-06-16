@@ -38,8 +38,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@clerk/nextjs";
 import { initiatePhonePePayment } from "@/utils/phonepay";
 import { createOrder } from "@/lib/actions/order.action";
+import { validateCoupon } from "@/lib/actions/coupon.action";
 import AddressModal from "@/components/product/AddressModal";
 import { toast } from "sonner";
+import Loading from "../loading";
 
 interface Image {
   _id: string;
@@ -112,7 +114,12 @@ export default function ProductPage({ params }: any) {
   const [stars, setStars] = useState(0);
   const [review, setReview] = useState("");
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [couponCode, setCouponCode] = useState("");
+  const [isValidCoupon, setIsValidCoupon] = useState<null | boolean>(null);
+  const [discount, setDiscount] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [couponId, setCouponId] = useState<string | undefined>(undefined);
 
   const { updateCart } = useCart();
   const router = useRouter();
@@ -130,6 +137,7 @@ export default function ProductPage({ params }: any) {
         setProduct(data);
         setSelectedFlavor(data.flavourId[0]?.name);
         setSelectedSize(data.sizeId[0]?.name);
+        setFinalPrice(data.price); // Set initial final price to product price
       } catch (error: any) {
         console.error("Error fetching product:", error);
         toast.error("Error", {
@@ -142,6 +150,13 @@ export default function ProductPage({ params }: any) {
       fetchProduct();
     }
   }, [productId]);
+
+  useEffect(() => {
+    if (product) {
+      const discountAmount = (product.price * discount) / 100;
+      setFinalPrice((product.price - discountAmount) * quantity);
+    }
+  }, [quantity, discount, product]);
 
   const handleQuantityChange = (change: number) => {
     setQuantity((prevQuantity) => {
@@ -169,6 +184,30 @@ export default function ProductPage({ params }: any) {
     }
   };
 
+  const handleApplyCoupon = async () => {
+    try {
+      const response = await validateCoupon(couponCode);
+      const data = JSON.parse(response);
+      if (data.valid) {
+        const discountAmount = data.discountPercentage;
+        setDiscount(discountAmount);
+        setIsValidCoupon(true);
+        setCouponId(data.couponId);
+        toast.success("Coupon applied");
+      } else {
+        setDiscount(0);
+        setFinalPrice(product!.price * quantity);
+        setIsValidCoupon(false);
+        setCouponId(undefined);
+        toast.error("Invalid coupon applied");
+      }
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      setIsValidCoupon(false);
+      setCouponId(undefined);
+    }
+  };
+
   const handleBuyNow = () => {
     if (!userId) {
       router.push("/sign-in");
@@ -180,7 +219,7 @@ export default function ProductPage({ params }: any) {
   const handleAddressSubmit = async () => {
     if (product && selectedFlavor && selectedSize) {
       try {
-        const amount = product.price * quantity;
+        const amount = finalPrice;
         const products = [
           {
             productId: product._id,
@@ -204,7 +243,8 @@ export default function ProductPage({ params }: any) {
             userId as string,
             products,
             amount,
-            response.merchantTransactionId
+            response.merchantTransactionId,
+            couponId // Pass couponId if valid
           );
 
           if (response.paymentUrl) {
@@ -221,7 +261,11 @@ export default function ProductPage({ params }: any) {
   };
 
   if (!product) {
-    return <div></div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
 
   return (
@@ -370,6 +414,36 @@ export default function ProductPage({ params }: any) {
                     <PlusIcon className="h-4 w-4" />
                   </Button>
                 </div>
+              </div>
+              <div>
+                <Label className="text-base" htmlFor="coupon">
+                  Coupon Code
+                </Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="Enter Coupon Code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                  />
+                  <Button onClick={handleApplyCoupon}>Apply</Button>
+                </div>
+                {isValidCoupon !== null && (
+                  <div className="text-sm mt-2">
+                    {isValidCoupon ? (
+                      <span className="text-green-500">
+                        Coupon applied! Discount: ₹
+                        {(product.price * quantity - finalPrice).toFixed(2)}
+                      </span>
+                    ) : (
+                      <span className="text-red-500">
+                        Invalid or expired coupon
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="text-lg font-bold">
+                Final Price: ₹{finalPrice.toFixed(2)}
               </div>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">

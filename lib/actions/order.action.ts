@@ -13,10 +13,11 @@ export async function createOrder(
   clerkId: string,
   products: Product[],
   totalAmount: number,
-  merchantTransactionId: string
+  merchantTransactionId: string,
+  couponId?: string // Optional couponId parameter
 ): Promise<string> {
   try {
-    const order = new Order({
+    const orderData: any = {
       clerkId,
       products: products.map((product) => ({
         productId: new Types.ObjectId(product.productId),
@@ -27,7 +28,13 @@ export async function createOrder(
       merchantTransactionId,
       totalAmount,
       status: "Pending",
-    });
+    };
+    console.log(couponId);
+    if (couponId) {
+      orderData.coupon = new Types.ObjectId(couponId); // Add coupon reference if provided
+    }
+
+    const order = new Order(orderData);
 
     await order.save();
     console.log(order);
@@ -77,6 +84,7 @@ export async function fetchUserOrders(clerkId: string) {
         })),
         status: order.status,
         total: order.totalAmount,
+        coupon: order.coupon ? order.coupon.toString() : null, // Include coupon ID if present
       }))
     );
   } catch (error) {

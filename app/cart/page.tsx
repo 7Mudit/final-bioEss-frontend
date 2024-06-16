@@ -5,15 +5,16 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { initiatePhonePePayment } from "@/utils/phonepay";
-
 import { useCart } from "@/context/cartContext";
 import router from "next/router";
-
 import { useAuth } from "@clerk/nextjs";
 import { createOrder } from "@/lib/actions/order.action";
+import { validateCoupon } from "@/lib/actions/coupon.action";
 import { toast } from "sonner";
 import AddressModal from "@/components/product/AddressModal";
 import { Dialog } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 interface Image {
   _id: string;
@@ -68,18 +69,27 @@ interface CartItem {
 export default function CartComponent() {
   const { cart, updateCart, removeFromCart, clearCart } = useCart();
   const [total, setTotal] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [finalTotal, setFinalTotal] = useState(0);
+  const [couponCode, setCouponCode] = useState("");
+  const [isValidCoupon, setIsValidCoupon] = useState<null | boolean>(null);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [couponId, setCouponId] = useState<string | undefined>(undefined);
   const { userId } = useAuth();
 
   useEffect(() => {
-    const cartTotal = cart.reduce(
-      (acc, item) => acc + item.product.price * item.quantity,
-      0
-    );
-    setTotal(cartTotal);
+    const calculateTotals = () => {
+      const cartTotal = cart.reduce(
+        (acc, item) => acc + item.product.price * item.quantity,
+        0
+      );
+      const discountAmount = (cartTotal * discount) / 100;
+      setTotal(cartTotal);
+      setFinalTotal(cartTotal - discountAmount);
+    };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cart]);
+    calculateTotals();
+  }, [cart, discount]);
 
   const handleQuantityChange = async (
     product: IProduct,
@@ -99,6 +109,28 @@ export default function CartComponent() {
     await clearCart();
   };
 
+  const handleApplyCoupon = async () => {
+    try {
+      const response = await validateCoupon(couponCode);
+      const data = JSON.parse(response);
+      if (data.valid) {
+        setDiscount(data.discountPercentage);
+        setIsValidCoupon(true);
+        setCouponId(data.couponId);
+        toast.success("Coupon applied");
+      } else {
+        setDiscount(0);
+        setIsValidCoupon(false);
+        setCouponId(undefined);
+        toast.error("Invalid coupon applied");
+      }
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      setIsValidCoupon(false);
+      setCouponId(undefined);
+    }
+  };
+
   const handleCheckout = async () => {
     if (!userId) {
       router.push("/sign-in");
@@ -110,7 +142,7 @@ export default function CartComponent() {
   const handleAddressSubmit = async () => {
     if (cart.length > 0) {
       try {
-        const amount = total;
+        const amount = finalTotal;
         const products = cart.map((item) => ({
           productId: item.product._id,
           quantity: item.quantity,
@@ -130,7 +162,8 @@ export default function CartComponent() {
             userId as string,
             products,
             amount,
-            response.merchantTransactionId
+            response.merchantTransactionId,
+            couponId // Pass couponId if valid
           );
 
           if (response.paymentUrl) {
@@ -165,89 +198,125 @@ export default function CartComponent() {
   }
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-6">
-      <div className="grid gap-8">
-        {cart.map(({ product, quantity, flavor, size }, index) => (
-          <div
-            key={index}
-            className="grid gap-6 border-b border-gray-200 pb-8 dark:border-gray-800"
-          >
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr_auto] sm:gap-6">
-              <Image
-                alt={product.images[0].url}
-                className="aspect-square rounded-md object-cover"
-                height={100}
-                src={product.images[0].url}
-                width={100}
-              />
-              <div className="grid gap-1">
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <div className="text-sm text-gray-500">Flavor: {flavor}</div>
-                <div className="text-sm text-gray-500">Size: {size}</div>
-                <div className="flex items-center gap-2">
-                  <div className="text-lg font-semibold">
+    <section className="w-full py-12">
+      <div className="container grid gap-6 md:gap-8 px-4 md:px-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
+          <div className="grid gap-1">
+            <h1 className="text-2xl font-bold tracking-tight">Cart</h1>
+            <p className="text-gray-500 dark:text-gray-400">
+              Review your items and proceed to checkout.
+            </p>
+          </div>
+        </div>
+        <div className="grid gap-8">
+          <div className="grid gap-6">
+            {cart.map(({ product, quantity, flavor, size }, index) => (
+              <div
+                key={index}
+                className="grid grid-cols-[100px_1fr_auto] items-center gap-4"
+              >
+                <Image
+                  alt={product.images[0].url}
+                  className="aspect-square rounded-md object-cover"
+                  height={100}
+                  src={product.images[0].url}
+                  width={100}
+                />
+                <div className="grid gap-1">
+                  <h3 className="font-semibold">{product.name}</h3>
+                  <p className="text-gray-500 dark:text-gray-400">
                     ₹{product.price.toFixed(2)}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() =>
-                        handleQuantityChange(
-                          product,
-                          quantity - 1,
-                          flavor,
-                          size
-                        )
-                      }
-                    >
-                      <MinusIcon className="h-4 w-4" />
-                    </Button>
-                    <Input
-                      className="w-16 rounded-md border border-gray-200 bg-transparent px-2 py-1 text-center text-sm shadow-sm transition-colors focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 dark:border-gray-800 dark:focus:border-gray-50 dark:focus:ring-gray-50"
-                      value={quantity}
-                      readOnly
-                      type="number"
-                    />
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      onClick={() =>
-                        handleQuantityChange(
-                          product,
-                          quantity + 1,
-                          flavor,
-                          size
-                        )
-                      }
-                    >
-                      <PlusIcon className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  </p>
+                  <p className="text-sm text-gray-500">Flavor: {flavor}</p>
+                  <p className="text-sm text-gray-500">Size: {size}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() =>
+                      handleQuantityChange(product, quantity - 1, flavor, size)
+                    }
+                  >
+                    <MinusIcon className="h-4 w-4" />
+                  </Button>
+                  <span>{quantity}</span>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() =>
+                      handleQuantityChange(product, quantity + 1, flavor, size)
+                    }
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => handleRemoveFromCart(product._id)}
+                  >
+                    <Trash2Icon className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
-              <div className="flex items-start justify-end">
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={() => handleRemoveFromCart(product._id)}
-                >
-                  <TrashIcon className="h-5 w-5" />
-                </Button>
+            ))}
+          </div>
+          <div className="grid gap-6">
+            <div className="grid gap-2">
+              <div className="flex items-center gap-4">
+                <Input
+                  type="text"
+                  placeholder="Apply a coupon to get a discount."
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                />
+                <Button onClick={handleApplyCoupon}>Apply</Button>
+              </div>
+              {isValidCoupon !== null && (
+                <div className="text-sm">
+                  {isValidCoupon ? (
+                    <span className="text-green-500">
+                      Coupon applied! Discount: ₹
+                      {((total * discount) / 100).toFixed(2)}
+                    </span>
+                  ) : (
+                    <span className="text-red-500">
+                      Invalid or expired coupon
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-500 dark:text-gray-400">
+                  Subtotal
+                </span>
+                <span>₹{total.toFixed(2)}</span>
+              </div>
+              {isValidCoupon !== null && (
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-500 dark:text-gray-400">
+                    Discount
+                  </span>
+                  <span> - ₹{((total * discount) / 100).toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex items-center justify-between font-semibold">
+                <span>Total</span>
+                <span>₹{finalTotal.toFixed(2)}</span>
               </div>
             </div>
+            <Separator className="my-2" />
+            <div className="flex flex-row items-center gap-3 justify-end">
+              <Button size="lg" variant="outline" onClick={handleClearCart}>
+                Clear Cart
+              </Button>
+              <Button size="lg" onClick={handleCheckout}>
+                Buy Now
+              </Button>
+            </div>
           </div>
-        ))}
-        <div className="flex flex-col items-end gap-4">
-          <div className="text-2xl font-semibold">
-            Total: ₹{total.toFixed(2)}
-          </div>
-          <Button size="lg" onClick={handleClearCart}>
-            Clear Cart
-          </Button>
-          <Button size="lg" onClick={handleCheckout}>
-            Buy Now
-          </Button>
         </div>
       </div>
 
@@ -258,7 +327,7 @@ export default function CartComponent() {
           onSubmit={handleAddressSubmit}
         />
       </Dialog>
-    </div>
+    </section>
   );
 }
 
@@ -269,7 +338,7 @@ function MinusIcon(props: any) {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
+      viewBox="0 0 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -289,7 +358,7 @@ function PlusIcon(props: any) {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
+      viewBox="0 0 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -303,14 +372,14 @@ function PlusIcon(props: any) {
   );
 }
 
-function TrashIcon(props: any) {
+function Trash2Icon(props: any) {
   return (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
+      viewBox="0 0 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -321,6 +390,8 @@ function TrashIcon(props: any) {
       <path d="M3 6h18" />
       <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
       <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+      <line x1="10" x2="10" y1="11" y2="17" />
+      <line x1="14" x2="14" y1="11" y2="17" />
     </svg>
   );
 }

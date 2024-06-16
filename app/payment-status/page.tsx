@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import checkStatus from "@/utils/checkStatus";
 import { useCart } from "@/context/cartContext";
 import { updateOrderStatus } from "@/lib/actions/order.action";
+import Loading from "./loading";
 
 interface StatusData {
   state: string;
@@ -52,7 +53,7 @@ const PaymentStatus: React.FC = () => {
   }, [merchantTransactionId]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
