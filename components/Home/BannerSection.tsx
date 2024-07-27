@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const imageArr = [{ img: "/banners/banner.jpg" }];
+const imageArr = [{ img: "/banners/Banner.jpg" }];
 
 const BannerSection: React.FC = () => {
   const swiperRef = React.useRef<any>(null);
