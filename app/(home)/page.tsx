@@ -1,20 +1,23 @@
 import BannerSection from "@/components/Home/BannerSection";
 import BestSellersSection from "@/components/Home/BestSellersSection";
-import CategoriesSection from "@/components/Home/CategoriesSection";
-import FreeSection from "@/components/Home/FreeSection";
-import ShopByGoalSection from "@/components/Home/ShopByGoalSection";
-import TrustSection from "@/components/Home/TrustSection";
+import DummyCategories from "@/components/Home/DummyCategories";
+import DummyProductCombos from "@/components/Home/DummyProductCombos";
+import VideoSection from "@/components/Home/VideoSection";
 
 export default function Home() {
   return (
     <main className="flex flex-col">
       <BannerSection />
       {/* <CategoriesSection /> */}
+      <DummyCategories />
+      {/* <BestSellersSection /> */}
       <BestSellersSection />
-      <BannerSection />
-      <ShopByGoalSection />
-      <TrustSection />
-      <FreeSection />
+      <DummyProductCombos />
+      <VideoSection />
+      {/* <BannerSection /> */}
+      {/* <ShopByGoalSection /> */}
+      {/* <TrustSection /> */}
+      {/* <FreeSection /> */}
     </main>
   );
 }

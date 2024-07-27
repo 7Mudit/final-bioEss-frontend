@@ -1,0 +1,252 @@
+<div className="grid gap-8 mt-12">
+<div className="grid gap-4">
+  <h2 className="font-bold text-xl">Product Ratings</h2>
+  <div className="flex items-center gap-4">
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((index) => (
+        <StarIcon
+          key={index}
+          className={`w-5 h-5 ${
+            index <= Math.round(averageRating)
+              ? "fill-primary"
+              : "fill-muted"
+          } ${index <= averageRating ? "" : "stroke-muted-foreground"}`}
+        />
+      ))}
+    </div>
+    <span className="text-sm text-gray-500 dark:text-gray-400">
+      {averageRating}{" "}
+      {feedbacks.length > 1 ? (
+        <span>({feedbacks.length} reviews)</span>
+      ) : (
+        <span>({feedbacks.length} review)</span>
+      )}
+    </span>
+  </div>
+  <div className="grid gap-2">
+    <div className="flex items-center gap-2">
+      <div className="w-20 text-right text-sm text-gray-500 dark:text-gray-400">
+        5 stars
+      </div>
+      <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-800">
+        <div
+          className="h-2 rounded-full bg-primary"
+          style={{
+            width: `${(starsCounts[5] / feedbacks.length) * 100}%`,
+          }}
+        />
+      </div>
+      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+        {starsCounts[5]
+          ? `${((starsCounts[5] / feedbacks.length) * 100).toFixed(2)}%`
+          : "0%"}
+      </span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="w-20 text-right text-sm text-gray-500 dark:text-gray-400">
+        4 stars
+      </div>
+      <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-800">
+        <div
+          className="h-2 rounded-full bg-primary"
+          style={{
+            width: `${(starsCounts[4] / feedbacks.length) * 100}%`,
+          }}
+        />
+      </div>
+      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+        {starsCounts[4]
+          ? `${((starsCounts[4] / feedbacks.length) * 100).toFixed(2)}%`
+          : "0%"}
+      </span>
+    </div>
+    <div className="flex items-center gap-2">
+      <div className="w-20 text-right text-sm text-gray-500 dark:text-gray-400">
+        3 stars
+      </div>
+      <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-800">
+        <div
+          className="h-2 rounded-full bg-primary"
+          style={{
+            width: `${(starsCounts[3] / feedbacks.length) * 100}%`,
+          }}
+        />
+      </div>
+      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+        {starsCounts[3]
+          ? `${((starsCounts[4] / feedbacks.length) * 100).toFixed(2)}%`
+          : "0%"}
+      </span>
+    </div>
+  </div>
+</div>
+<Separator />
+<div className="grid gap-6">
+  <h2 className="font-bold text-xl">Customer Feedback</h2>
+  {feedbacks.map((feedback, index) => (
+    <div key={index} className="flex gap-4">
+      <Avatar className="w-10 h-10 border">
+        <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
+        <AvatarFallback>
+          {feedback.userName?.charAt(0).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+      <div className="grid gap-1">
+        <div className="flex items-center gap-2">
+          <h3 className="font-semibold">{feedback.userName}</h3>
+          <div className="flex items-center gap-0.5">
+            {[...Array(feedback.rating)].map((_, i) => (
+              <StarIcon key={i} className="w-5 h-5 fill-primary" />
+            ))}
+            {[...Array(5 - feedback.rating)].map((_, i) => (
+              <StarIcon
+                key={i + feedback.rating}
+                className="w-5 h-5 fill-muted stroke-muted-foreground"
+              />
+            ))}
+          </div>
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {feedback.feedback}
+        </p>
+
+        {/* {feedback.userName === userdetails?.fullName && (
+          <div className="flex gap-5 items-center">
+            <Button
+              onClick={() => handleDeleteFeedback(feedback._id)}
+              variant="outline"
+            >
+              Delete
+            </Button>
+
+            <Dialog>
+              <DialogTrigger>
+                <Button variant="outline">Edit</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit your review</DialogTitle>
+                  <DialogDescription>
+                    Select the number of stars and write your review.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <StarIcon
+                      key={star}
+                      className={`w-8 h-8 cursor-pointer ${
+                        star <= updatestars
+                          ? "fill-primary"
+                          : "fill-muted stroke-muted-foreground"
+                      }`}
+                      onClick={() => handleUpdateStarClick(star)}
+                    />
+                  ))}
+                </div>
+                <Textarea
+                  className="mt-4"
+                  value={updatereview}
+                  onChange={(e) => setUpdateReview(e.target.value)}
+                  placeholder="Write your review here"
+                />
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setupdateStars(0);
+                      setUpdateReview("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      handleUpdateReview(feedback._id);
+                      setupdateStars(0);
+                      setUpdateReview("");
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )} */}
+      </div>
+    </div>
+  ))}
+</div>
+</div>
+
+<Dialog>
+<DialogTrigger asChild>
+  <Button size="lg" className="mt-4 self-center">
+    Leave a Review
+  </Button>
+</DialogTrigger>
+<DialogContent>
+  <DialogHeader>
+    <DialogTitle>Leave a Review</DialogTitle>
+    <DialogDescription>
+      Select the number of stars and write your review.
+    </DialogDescription>
+  </DialogHeader>
+  <div className="flex items-center gap-2">
+    {[1, 2, 3, 4, 5].map((star) => (
+      <StarIcon
+        key={star}
+        className={`w-8 h-8 cursor-pointer ${
+          star <= stars
+            ? "fill-primary"
+            : "fill-muted stroke-muted-foreground"
+        }`}
+        onClick={() => handleStarClick(star)}
+      />
+    ))}
+  </div>
+  <Textarea
+    className="mt-4"
+    value={review}
+    onChange={(e) => setReview(e.target.value)}
+    placeholder="Write your review here"
+  />
+  <DialogFooter>
+    <Button
+      variant="outline"
+      onClick={() => {
+        setStars(0);
+        setReview("");
+      }}
+    >
+      Cancel
+    </Button>
+    <Button
+      onClick={() => {
+        handleReviewSubmit();
+        setStars(0);
+        setReview("");
+      }}
+    >
+      Submit
+    </Button>
+  </DialogFooter>
+</DialogContent>
+</Dialog>
+
+<Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
+<AddressModal
+  isOpen={isAddressModalOpen}
+  onClose={() => setIsAddressModalOpen(false)}
+  onSubmit={handleAddressSubmit}
+/>
+</Dialog>
+
+<Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
+<AlertModal
+  isOpen={isAlertModalOpen}
+  onClose={() => setIsAlertModalOpen(false)}
+  onConfirm={confirmDeleteFeedback}
+  loading={false}
+/>
+</Dialog>

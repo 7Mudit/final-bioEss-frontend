@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-
+import mongoose from "mongoose";
 import parse from "html-react-parser";
 import {
   CarouselItem,
@@ -42,6 +42,14 @@ import { validateCoupon } from "@/lib/actions/coupon.action";
 import AddressModal from "@/components/product/AddressModal";
 import { toast } from "sonner";
 import Loading from "../loading";
+import {
+  fetchFeedbackByProductId,
+  createFeedback,
+  deleteFeedbackById,
+  updateFeedbackById,
+} from "@/lib/actions/feedback.action";
+import { useUser } from "@clerk/nextjs";
+import { AlertModal } from "@/components/ui/alert-modal";
 
 interface Image {
   _id: string;
@@ -111,8 +119,11 @@ export default function ProductPage({ params }: any) {
   const [quantity, setQuantity] = useState(1);
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
-  const [stars, setStars] = useState(0);
-  const [review, setReview] = useState("");
+  // const [stars, setStars] = useState(0);
+
+  // const [updatestars, setupdateStars] = useState(0);
+  // const [review, setReview] = useState("");
+  // const [updatereview, setUpdateReview] = useState("");
   const [product, setProduct] = useState<IProduct | null>(null);
   const [couponCode, setCouponCode] = useState("");
   const [isValidCoupon, setIsValidCoupon] = useState<null | boolean>(null);
@@ -120,24 +131,73 @@ export default function ProductPage({ params }: any) {
   const [finalPrice, setFinalPrice] = useState(0);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [couponId, setCouponId] = useState<string | undefined>(undefined);
-
+  // const [feedbacks, setFeedbacks] = useState<any[]>([]);
+  const [userdetails, setUser] = useState<any | null>(null);
+  // const [deleteFeedbackId, setDeleteFeedbackId] = useState<string>("");
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
+  const [averageRating, setAverageRating] = useState<number>(0);
   const { updateCart } = useCart();
   const router = useRouter();
-  const { userId } = useAuth();
+  const { userId, isSignedIn } = useAuth();
+  const user = useUser();
+  const [starsCounts, setStarsCounts] = useState({
+    3: 0,
+    4: 0,
+    5: 0,
+  });
 
   const productId = params.id;
 
   useEffect(() => {
+    setUser(user.user);
+  }, [user]);
+
+  // useEffect(() => {
+  //   if (feedbacks.length > 0) {
+  //     const totalStars = feedbacks.reduce(
+  //       (accumulator, feedback) => accumulator + feedback.rating,
+  //       0
+  //     );
+  //     const average = totalStars / feedbacks.length;
+  //     setAverageRating(average);
+
+  //     const counts = {
+  //       3: feedbacks.filter((feedback) => feedback.rating === 3).length,
+  //       4: feedbacks.filter((feedback) => feedback.rating === 4).length,
+  //       5: feedbacks.filter((feedback) => feedback.rating === 5).length,
+  //     };
+  //     setStarsCounts(counts);
+
+  //     console.log("this is avaerage rating : ", averageRating);
+  //   } else {
+  //     setAverageRating(0);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [feedbacks]);
+
+  useEffect(() => {
     const fetchProduct = async () => {
+      if (!isSignedIn) {
+        router.push("/sign-in");
+        return;
+      }
+
       try {
         const response = await fetch(
           `https://bioessentia.store/api/66585955a3fe976423095792/products/${productId}`
         );
+
+        // const responseofFeedback = await fetchFeedbackByProductId(productId);
+
+        // console.log("response of feedback : ", responseofFeedback);
+
+        // setFeedbacks(responseofFeedback);
+
         const data = await response.json();
         setProduct(data);
         setSelectedFlavor(data.flavourId[0]?.name);
         setSelectedSize(data.sizeId[0]?.name);
-        setFinalPrice(data.price); // Set initial final price to product price
+        setFinalPrice(data.price);
       } catch (error: any) {
         console.error("Error fetching product:", error);
         toast.error("Error", {
@@ -149,6 +209,7 @@ export default function ProductPage({ params }: any) {
     if (productId) {
       fetchProduct();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   useEffect(() => {
@@ -165,14 +226,73 @@ export default function ProductPage({ params }: any) {
     });
   };
 
-  const handleStarClick = (star: number) => {
-    setStars(star);
-  };
+  // const handleStarClick = (star: number) => {
+  //   setStars(star);
+  // };
 
-  const handleReviewSubmit = () => {
-    console.log("Review:", review);
-    console.log("Stars:", stars);
-  };
+  // const handleUpdateStarClick = (star: number) => {
+  //   setupdateStars(star);
+  // };
+
+  // const handleDeleteFeedback = (feedbackId: string) => {
+  //   setDeleteFeedbackId(feedbackId);
+  //   setIsAlertModalOpen(true);
+  // };
+
+  // const handleReviewSubmit = async () => {
+  //   console.log("Review:", review);
+  //   console.log("Stars:", stars);
+  //   console.log("this is user : ", userdetails?.fullName);
+  //   const loadingId = toast.loading("Processing...");
+
+  //   try {
+  //     const obj = {
+  //       userName: userdetails?.fullName || "Anonymous",
+  //       rating: Number(stars),
+  //       feedback: review,
+  //       productId: productId,
+  //     };
+
+  //     console.log("this is final objedct : ", obj);
+
+  //     const feedbackSubmitResponse = await createFeedback(obj);
+
+  //     setFeedbacks((prevFeedbacks) => [
+  //       ...prevFeedbacks,
+  //       feedbackSubmitResponse,
+  //     ]);
+  //     console.log(
+  //       "this is feedback submit response : ",
+  //       feedbackSubmitResponse
+  //     );
+  //     toast.dismiss(loadingId);
+  //     toast.success("Feedback successfully created");
+  //   } catch (error) {
+  //     toast.error("An error occured");
+  //     toast.dismiss(loadingId);
+  //     console.log("an error occured while submitting the feedback : ", error);
+  //   }
+  // };
+
+  // const confirmDeleteFeedback = async () => {
+  //   const loadingId = toast.loading("Deleting feedback...");
+
+  //   try {
+  //     await deleteFeedbackById(new mongoose.Types.ObjectId(deleteFeedbackId));
+  //     toast.dismiss(loadingId);
+  //     toast.success("Successfully deleted feedback");
+  //     setFeedbacks((prevFeedbacks) =>
+  //       prevFeedbacks.filter((feedback) => feedback._id !== deleteFeedbackId)
+  //     );
+  //   } catch (error) {
+  //     toast.error("Error while deleting feedback");
+  //     toast.dismiss(loadingId);
+  //     console.error("Error deleting feedback:", error);
+  //   }
+
+  //   setIsAlertModalOpen(false);
+  //   setDeleteFeedbackId("");
+  // };
 
   const handleAddToCart = () => {
     if (!userId) {
@@ -207,6 +327,37 @@ export default function ProductPage({ params }: any) {
       setCouponId(undefined);
     }
   };
+
+  // const handleUpdateReview = async (feedbackId: string) => {
+  //   const loadingId = toast.loading("processing...");
+
+  //   try {
+  //     const obj = {
+  //       rating: updatestars,
+  //       feedback: updatereview,
+  //     };
+
+  //     const id = new mongoose.Types.ObjectId(feedbackId);
+
+  //     const updatefeedbackResponse = await updateFeedbackById(id, obj);
+
+  //     console.log("this is reponse : ", updatefeedbackResponse);
+
+  //     toast.dismiss(loadingId);
+
+  //     toast.success("feedback updated successfully");
+
+  //     setFeedbacks((prevFeedbacks) =>
+  //       prevFeedbacks.map((feedback) =>
+  //         feedback._id === feedbackId ? updatefeedbackResponse : feedback
+  //       )
+  //     );
+  //   } catch (error) {
+  //     toast.dismiss(loadingId);
+  //     toast.error("Error occured");
+  //     console.log("error occured while editing the feedback");
+  //   }
+  // };
 
   const handleBuyNow = () => {
     if (!userId) {
@@ -329,16 +480,25 @@ export default function ProductPage({ params }: any) {
             <div className="text-sm dark:text-gray-200 text-gray-500">
               Free shipping on orders over ₹500
             </div>
-            <div className="flex items-center gap-2">
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+            {/* <div className="flex items-center gap-2">
+              {[1, 2, 3, 4, 5].map((index) => (
+                <StarIcon
+                  key={index}
+                  className={`w-5 h-5 ${
+                    index <= Math.round(averageRating)
+                      ? "fill-primary"
+                      : "fill-muted"
+                  } ${index <= averageRating ? "" : "stroke-muted-foreground"}`}
+                />
+              ))}
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                (123 reviews)
+                {feedbacks.length > 1 ? (
+                  <span>({feedbacks.length} reviews)</span>
+                ) : (
+                  <span>({feedbacks.length} review)</span>
+                )}
               </span>
-            </div>
+            </div> */}
             <div className="text-sm dark:text-white text-gray-500">
               <ul className="list-disc list-inside">
                 {product.features.map((feature: any, index: any) => (
@@ -457,167 +617,6 @@ export default function ProductPage({ params }: any) {
           </div>
         </div>
       </div>
-      <div className="grid gap-8 mt-12">
-        <div className="grid gap-4">
-          <h2 className="font-bold text-xl">Product Ratings</h2>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-0.5">
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-primary" />
-              <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-              <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-            </div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              4.3 (123 reviews)
-            </span>
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2">
-              <div className="w-20 text-right text-sm text-gray-500 dark:text-gray-400">
-                5 stars
-              </div>
-              <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-800">
-                <div className="h-2 w-[80%] rounded-full bg-primary" />
-              </div>
-              <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                80%
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-20 text-right text-sm text-gray-500 dark:text-gray-400">
-                4 stars
-              </div>
-              <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-800">
-                <div className="h-2 w-[15%] rounded-full bg-primary" />
-              </div>
-              <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                15%
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-20 text-right text-sm text-gray-500 dark:text-gray-400">
-                3 stars
-              </div>
-              <div className="h-2 w-full rounded-full bg-gray-200 dark:bg-gray-800">
-                <div className="h-2 w-[5%] rounded-full bg-primary" />
-              </div>
-              <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                5%
-              </span>
-            </div>
-          </div>
-        </div>
-        <Separator />
-        <div className="grid gap-6">
-          <h2 className="font-bold text-xl">Customer Feedback</h2>
-          <div className="grid gap-6">
-            <div className="flex gap-4">
-              <Avatar className="w-10 h-10 border">
-                <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold">Sarah Johnson</h3>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                    <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                  </div>
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  I&apos;ve been using this protein powder for a few weeks now
-                  and I&apos;m really impressed with the quality and taste. It
-                  blends smoothly into my shakes and provides a great boost of
-                  protein to start my day.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <Avatar className="w-10 h-10 border">
-                <AvatarImage alt="@shadcn" src="/placeholder-user.jpg" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <div className="grid gap-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold">Michael Brown</h3>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-                  </div>
-                </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  This is hands down the best protein powder I&apos;ve tried.
-                  The chocolate flavor is delicious, and I love that it&apos;s
-                  made with organic ingredients. Highly recommend!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button size="lg" className="mt-4 self-center">
-            Leave a Review
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Leave a Review</DialogTitle>
-            <DialogDescription>
-              Select the number of stars and write your review.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex items-center gap-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <StarIcon
-                key={star}
-                className={`w-8 h-8 cursor-pointer ${
-                  star <= stars
-                    ? "fill-primary"
-                    : "fill-muted stroke-muted-foreground"
-                }`}
-                onClick={() => handleStarClick(star)}
-              />
-            ))}
-          </div>
-          <Textarea
-            className="mt-4"
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-            placeholder="Write your review here"
-          />
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setStars(0);
-                setReview("");
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                handleReviewSubmit();
-                setStars(0);
-                setReview("");
-              }}
-            >
-              Submit
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       <Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
         <AddressModal
           isOpen={isAddressModalOpen}
@@ -642,7 +641,7 @@ function MinusIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={props.className} // Use className instead of class
+      className={props.className}
     >
       <path d="M5 12h14" />
     </svg>
@@ -662,7 +661,7 @@ function PlusIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={props.className} // Use className instead of class
+      className={props.className}
     >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
@@ -683,7 +682,7 @@ function StarIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={props.className} // Use className instead of class
+      className={props.className}
     >
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>

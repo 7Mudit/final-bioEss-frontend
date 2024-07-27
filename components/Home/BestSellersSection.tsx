@@ -5,6 +5,8 @@ import axios from "axios";
 // import Products from "./Products";
 import { toast } from "sonner";
 import Products from "./Products";
+import Loading from "@/app/(home)/loading";
+// import { redirect } from "next/navigation";
 
 const BestSellersSection = () => {
   const [products, setProducts] = useState([]);
@@ -30,11 +32,20 @@ const BestSellersSection = () => {
 
     fetchProducts();
   }, []);
+  // if (error) {
+  //   redirect("/error");
+  // }
   return (
     <div className="flex flex-col my-[60px] gap-[50px]">
-      <h1 className="text-center leading-[37px] text-[34px]">Products</h1>
-      {loading && <div className="text-center">Loading...</div>}
-      {error && <div className="text-center text-red-500">Error: {error}</div>}
+      <div className="text-center">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          Products
+        </h2>
+        <p className="mt-2 text-muted-foreground">
+          Get the most value with our curated supplements.
+        </p>
+      </div>
+      {loading && <Loading />}
       {products.length !== 0 && (
         <Products products={products} heading="Popular Products" />
       )}

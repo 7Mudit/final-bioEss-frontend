@@ -52,30 +52,47 @@ export const products = [
   },
 ];
 
-export const explore = [
+export const AboutBen = [
   {
     id: 1,
-    name: "News",
+    name: "About Us",
+    link: "/about-us",
   },
   {
     id: 2,
-    name: "Blogs",
+    name: "Our Quality",
+    link: "/our-quality",
   },
   {
     id: 3,
-    name: "About",
-  },
-  {
-    id: 4,
-    name: "Our Athletes",
-  },
-  {
-    id: 5,
-    name: "Our Stories",
+    name: "Our Testing Process",
+    link: "/our-testing-process",
   },
 ];
 
 export const information = [
+  {
+    id: 1,
+    name: "Terms of Service",
+    link: "terms-of-service",
+  },
+  {
+    id: 2,
+    name: "Privacy Policy",
+    link: "privacy-policy",
+  },
+  {
+    id: 3,
+    name: "Shipping & Delivery Policy",
+    link: "shipping-delivery-policy",
+  },
+  {
+    id: 4,
+    name: "Return and Refund",
+    link: "return-refund",
+  },
+];
+export const NeedHelp = [
   {
     id: 1,
     name: "Contact Us",
@@ -83,28 +100,13 @@ export const information = [
   },
   {
     id: 2,
-    name: "Terms of Service",
-    link: "terms-of-service",
+    name: "+91 9781387038",
+    link: "",
   },
   {
     id: 3,
-    name: "Privacy Policy",
-    link: "privacy-policy",
-  },
-  {
-    id: 4,
-    name: "Shipping & Delivery Policy",
-    link: "shipping-delivery-policy",
-  },
-  {
-    id: 5,
-    name: "Return and Refund",
-    link: "return-refund",
-  },
-  {
-    id: 6,
-    name: "About Us",
-    link: "about-us",
+    name: "support@bioessentia.in",
+    link: "",
   },
 ];
 
