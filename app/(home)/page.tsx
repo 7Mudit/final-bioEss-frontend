@@ -1,7 +1,7 @@
 import BannerSection from "@/components/Home/BannerSection";
 import BestSellersSection from "@/components/Home/BestSellersSection";
 import DummyCategories from "@/components/Home/DummyCategories";
-import DummyProductCombos from "@/components/Home/DummyProductCombos";
+import DummyComponent from "@/components/Home/DummyComponent";
 import VideoSection from "@/components/Home/VideoSection";
 
 export default function Home() {
@@ -9,10 +9,10 @@ export default function Home() {
     <main className="flex flex-col">
       <BannerSection />
       {/* <CategoriesSection /> */}
+      <DummyComponent />
       <DummyCategories />
       {/* <BestSellersSection /> */}
       <BestSellersSection />
-      <DummyProductCombos />
       <VideoSection />
       {/* <BannerSection /> */}
       {/* <ShopByGoalSection /> */}

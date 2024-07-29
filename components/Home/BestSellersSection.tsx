@@ -17,7 +17,7 @@ const BestSellersSection = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "https://bioessentia.store/api/66585955a3fe976423095792/products"
+          "https://bioessentia.store/api/66585955a3fe976423095792/products?isFeatured=true"
         );
         setProducts(response.data);
       } catch (err: any) {
@@ -38,7 +38,7 @@ const BestSellersSection = () => {
   return (
     <div className="flex flex-col my-[60px] gap-[50px]">
       <div className="text-center">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-[50px]">
           Products
         </h2>
         <p className="mt-2 text-muted-foreground">
@@ -46,9 +46,7 @@ const BestSellersSection = () => {
         </p>
       </div>
       {loading && <Loading />}
-      {products.length !== 0 && (
-        <Products products={products} heading="Popular Products" />
-      )}
+      {products.length !== 0 && <Products products={products} />}
     </div>
   );
 };

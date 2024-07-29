@@ -29,7 +29,7 @@ export default function ProductsLayout({
 }>) {
   return (
     <div
-      className={`max-w-[1440px] mx-auto {libre_franklin.variable + ' ' + cormorant_garamond.variable}`}
+      className={`{libre_franklin.variable + ' ' + cormorant_garamond.variable}`}
     >
       <Navbar />
       {children}
