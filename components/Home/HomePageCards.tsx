@@ -19,6 +19,13 @@ interface ProductProps {
   newPro?: boolean;
 }
 
+const generateSlug = (name: string) => {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+};
+
 const Product = ({
   id,
   img,
@@ -33,22 +40,14 @@ const Product = ({
   sale = false,
   newPro = false,
 }: ProductProps) => {
-  const discount = ((discountPrize / prizeStrike) * 100).toFixed(0);
+  // const discount = ((discountPrize / prizeStrike) * 100).toFixed(0);
+  const slug = generateSlug(name);
+
   return (
     <Link
-      href={`/product/${id}`}
+      href={`/product/${slug}`}
       className="rounded-xl border flex flex-col gap-1 p-4 items-start justify-between relative bg-white shadow-xl dark:bg-zinc-900 max-w-[350px] duration-300 hover:scale-105 transition-all"
     >
-      {/* <Image
-        src={"/Offer_Tag.svg"}
-        width={50}
-        height={50}
-        alt="svg offer"
-        className="absolute left-0   top-0"
-      />
-      <p className="absolute left-2 text-white font-bold leading-[26px]">
-        {discount}%
-      </p> */}
       <Image
         src={img}
         alt={name}

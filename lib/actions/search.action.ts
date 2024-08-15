@@ -5,6 +5,7 @@ import Product from "@/lib/models/product.model";
 interface Product {
   _id: string;
   name: string;
+  slug: string;
 }
 
 export default async function handleSearchNavbar(query: string) {
@@ -18,7 +19,7 @@ export default async function handleSearchNavbar(query: string) {
     const results: Product[] = await Product.find({
       storeId: "66585955a3fe976423095792",
       name: { $regex: query, $options: "i" },
-    }).select("name");
+    }).select("slug name");
     return JSON.stringify(results);
   } catch (error) {
     console.error("Error fetching search results:", error);

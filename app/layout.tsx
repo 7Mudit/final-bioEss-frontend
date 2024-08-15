@@ -5,6 +5,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { CartProvider } from "@/context/cartContext";
 import { Toaster } from "@/components/ui/sonner";
+import "./prose-mirror.css";
 
 const poppins = Poppins({
   subsets: ["latin"],

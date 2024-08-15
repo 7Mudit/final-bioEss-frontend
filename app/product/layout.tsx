@@ -4,7 +4,7 @@ import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { Libre_Franklin } from "next/font/google";
 import { Cormorant_Garamond } from "next/font/google";
-import "./[id]/styles.css";
+import "./[slug]/styles.css";
 
 const libre_franklin = Libre_Franklin({
   subsets: ["latin"],

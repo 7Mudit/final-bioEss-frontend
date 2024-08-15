@@ -6,7 +6,7 @@ import crypto from "crypto";
 export const initiatePhonePePayment = async (amount, userId, products) => {
   // PhonePe payment initiation details
   // const phonePeInitiateUrl =
-  // "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
+  //   "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
 
   // production urls
   const phonePeInitiateUrl = "https://api.phonepe.com/apis/hermes/pg/v1/pay";

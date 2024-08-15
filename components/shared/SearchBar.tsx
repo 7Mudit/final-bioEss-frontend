@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import { Input } from "../ui/input";
-import { BadgeRussianRuble } from "lucide-react";
 import handleSearchNavbar from "@/lib/actions/search.action";
 import Link from "next/link";
 
@@ -18,6 +17,7 @@ const fontHeading = Bricolage_Grotesque({
 interface Product {
   _id: string;
   name: string;
+  slug: string;
 }
 
 interface SearchBarProps {
@@ -140,7 +140,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ show, onClose }) => {
                   <BiRadioCircle className="w-5 h-5 " />
                   <div>
                     <Link
-                      href={`/product/${result._id}`}
+                      href={`/product/${result.slug}`}
                       className="font-medium"
                       onClick={onClose}
                     >

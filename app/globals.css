@@ -40,6 +40,15 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+    --novel-highlight-default: #ffffff;
+    --novel-highlight-purple: #f6f3f8;
+    --novel-highlight-red: #fdebeb;
+    --novel-highlight-yellow: #fbf4a2;
+    --novel-highlight-blue: #c1ecf9;
+    --novel-highlight-green: #acf79f;
+    --novel-highlight-orange: #faebdd;
+    --novel-highlight-pink: #faf1f5;
+    --novel-highlight-gray: #f1f1ef;
   }
 
   .dark {
@@ -70,6 +79,16 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --novel-highlight-default: #000000;
+    --novel-highlight-purple: #3f2c4b;
+    --novel-highlight-red: #5c1a1a;
+    --novel-highlight-yellow: #5c4b1a;
+    --novel-highlight-blue: #1a3d5c;
+    --novel-highlight-green: #1a5c20;
+    --novel-highlight-orange: #5c3a1a;
+    --novel-highlight-pink: #5c1a3a;
+    --novel-highlight-gray: #3a3a3a;
   }
 }
 
@@ -92,106 +111,6 @@
   scrollbar-width: none;
 }
 
-/* General styling for the container */
-.markdown-container {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  color: #333;
-}
-
-/* Paragraphs */
-.markdown-container p {
-  margin: 0 0 1.5em;
-  font-size: 1rem;
-}
-
-/* Headings */
-.markdown-container h1,
-.markdown-container h2,
-.markdown-container h3,
-.markdown-container h4,
-.markdown-container h5,
-.markdown-container h6 {
-  margin-top: 1.5em;
-  margin-bottom: 0.75em;
-  font-weight: bold;
-}
-
-.markdown-container h1 {
-  font-size: 2em;
-}
-
-.markdown-container h2 {
-  font-size: 1.75em;
-}
-
-.markdown-container h3 {
-  font-size: 1.5em;
-}
-
-.markdown-container h4 {
-  font-size: 1.25em;
-}
-
-.markdown-container h5 {
-  font-size: 1em;
-}
-
-.markdown-container h6 {
-  font-size: 0.875em;
-}
-
-/* Lists */
-.markdown-container ul,
-.markdown-container ol {
-  margin: 0 0 1.5em 1.5em;
-}
-
-.markdown-container ul li,
-.markdown-container ol li {
-  margin-bottom: 0.5em;
-}
-
-/* Anchors */
-.markdown-container a {
-  color: #1e90ff;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.markdown-container a:hover {
-  color: #0d6efd;
-  text-decoration: underline;
-}
-
-/* Blockquotes */
-.markdown-container blockquote {
-  margin: 0 0 1.5em;
-  padding: 0.5em 1em;
-  background-color: #f9f9f9;
-  border-left: 4px solid #ccc;
-  font-style: italic;
-  color: #555;
-}
-
-/* Code */
-.markdown-container pre,
-.markdown-container code {
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.markdown-container pre {
-  background: #f4f4f4;
-  padding: 1em;
-  overflow: auto;
-  border-radius: 4px;
-}
-
-.markdown-container code {
-  background: #f4f4f4;
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-}
 
 .spinner {
   width: 56px;

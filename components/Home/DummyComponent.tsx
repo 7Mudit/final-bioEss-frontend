@@ -2,6 +2,7 @@ import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import img from "../../public/dummyComponent/hypermax.png";
 import Image from "next/image";
+import Link from "next/link";
 
 const DummyComponent = () => {
   return (
@@ -21,7 +22,10 @@ const DummyComponent = () => {
             full potential and dominate the gym bros with SIEGE ULTRA.
           </p>
         </div>
-        <div className="flex gap-3 sm:w-[300px]  justify-center items-center group border relative  border-black bg-slate-100 px-5 py-5">
+        <Link
+          href="/product/ben-seige-ultra"
+          className="flex gap-3 sm:w-[300px]  justify-center items-center group border relative  border-black bg-slate-100 px-5 py-5"
+        >
           <p className="font-semibold sm:text-md group-hover:text-white z-20 text-sm">
             GET SIEGE ULTRA NOW
           </p>
@@ -29,7 +33,7 @@ const DummyComponent = () => {
 
           <div className=" bg-black h-2/4 w-0 group-hover:w-full z-0 transition-all duration-300  absolute right-0 top-0"></div>
           <div className="w-0 group-hover:w-full z-0 transition-all duration-300 bg-black h-2/4 absolute left-0 bottom-0"></div>
-        </div>
+        </Link>
       </div>
 
       <div className="left-section relative md:w-7/12 lg:w-6/12 w-full  sm:w-9/12  ">

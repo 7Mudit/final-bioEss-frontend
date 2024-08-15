@@ -14,6 +14,7 @@ import {
 } from "@/lib/actions/cart.action";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { JSONContent } from "novel";
 
 interface Image {
   _id: string;
@@ -42,11 +43,8 @@ interface IProduct {
   name: string;
   price: number;
   fakePrice: number;
-  description: string;
   features: string[];
-  suggestedUse: string;
-  benefits: string;
-  nutritionalUse: string;
+  content?: JSONContent;
   isFeatured: boolean;
   isArchived: boolean;
   sizeId: Size[];

@@ -15,6 +15,7 @@ import AddressModal from "@/components/product/AddressModal";
 import { Dialog } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { JSONContent } from "novel";
 
 interface Image {
   _id: string;
@@ -43,11 +44,9 @@ interface IProduct {
   name: string;
   price: number;
   fakePrice: number;
-  description: string;
   features: string[];
-  suggestedUse: string;
-  benefits: string;
-  nutritionalUse: string;
+  content?: JSONContent;
+  contentHTML?: string;
   isFeatured: boolean;
   isArchived: boolean;
   sizeId: Size[];

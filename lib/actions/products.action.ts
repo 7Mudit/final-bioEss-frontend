@@ -35,3 +35,25 @@ export async function fetchProductById(id: string) {
     throw new Error("Failed to fetch product");
   }
 }
+
+export async function fetchProductBySlug(slug: string) {
+  try {
+    await connectToDb();
+
+    const product = await Product.findOne({ slug })
+      .populate("images")
+      .populate("sizeId")
+      .populate("flavourId")
+      .populate("categoryId")
+      .exec();
+    console.log(product);
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    return JSON.stringify(product);
+  } catch (error) {
+    console.error("Error fetching product by slug:", error);
+    throw new Error("Failed to fetch product");
+  }
+}

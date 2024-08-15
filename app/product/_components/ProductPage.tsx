@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import mongoose from "mongoose";
+import { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
 import {
   CarouselItem,
@@ -50,6 +49,9 @@ import {
 } from "@/lib/actions/feedback.action";
 import { useUser } from "@clerk/nextjs";
 import { AlertModal } from "@/components/ui/alert-modal";
+import { fetchProductBySlug } from "@/lib/actions/products.action";
+import { IoCheckmarkDone } from "react-icons/io5";
+import { type JSONContent } from "novel";
 
 interface Image {
   _id: string;
@@ -78,11 +80,9 @@ interface IProduct {
   name: string;
   price: number;
   fakePrice: number;
-  description: string;
+  content?: JSONContent;
+  contentHTML?: string;
   features: string[];
-  suggestedUse: string;
-  benefits: string;
-  nutritionalUse: string;
   isFeatured: boolean;
   isArchived: boolean;
   sizeId: Size[];
@@ -94,36 +94,10 @@ interface IProduct {
   updatedAt: Date;
 }
 
-function Accordion({ title, children }: any) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="border-b">
-      <button
-        className="w-full flex justify-between items-center py-4 text-left"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span className="font-medium">{title}</span>
-        <span>{isOpen ? "-" : "+"}</span>
-      </button>
-      {isOpen && (
-        <div className="py-4 transition duration-500 ease-in-out">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function ProductPage({ params }: any) {
   const [quantity, setQuantity] = useState(1);
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
-  // const [stars, setStars] = useState(0);
-
-  // const [updatestars, setupdateStars] = useState(0);
-  // const [review, setReview] = useState("");
-  // const [updatereview, setUpdateReview] = useState("");
   const [product, setProduct] = useState<IProduct | null>(null);
   const [couponCode, setCouponCode] = useState("");
   const [isValidCoupon, setIsValidCoupon] = useState<null | boolean>(null);
@@ -131,9 +105,7 @@ export default function ProductPage({ params }: any) {
   const [finalPrice, setFinalPrice] = useState(0);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [couponId, setCouponId] = useState<string | undefined>(undefined);
-  // const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [userdetails, setUser] = useState<any | null>(null);
-  // const [deleteFeedbackId, setDeleteFeedbackId] = useState<string>("");
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [averageRating, setAverageRating] = useState<number>(0);
   const { updateCart } = useCart();
@@ -146,58 +118,22 @@ export default function ProductPage({ params }: any) {
     5: 0,
   });
 
-  const productId = params.id;
+  const slug = params.slug;
 
   useEffect(() => {
     setUser(user.user);
   }, [user]);
 
-  // useEffect(() => {
-  //   if (feedbacks.length > 0) {
-  //     const totalStars = feedbacks.reduce(
-  //       (accumulator, feedback) => accumulator + feedback.rating,
-  //       0
-  //     );
-  //     const average = totalStars / feedbacks.length;
-  //     setAverageRating(average);
-
-  //     const counts = {
-  //       3: feedbacks.filter((feedback) => feedback.rating === 3).length,
-  //       4: feedbacks.filter((feedback) => feedback.rating === 4).length,
-  //       5: feedbacks.filter((feedback) => feedback.rating === 5).length,
-  //     };
-  //     setStarsCounts(counts);
-
-  //     console.log("this is avaerage rating : ", averageRating);
-  //   } else {
-  //     setAverageRating(0);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [feedbacks]);
-
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!isSignedIn) {
-        router.push("/sign-in");
-        return;
-      }
-
       try {
-        const response = await fetch(
-          `https://bioessentia.store/api/66585955a3fe976423095792/products/${productId}`
-        );
+        let data = await fetchProductBySlug(slug);
+        const parsedData: IProduct = JSON.parse(data);
 
-        // const responseofFeedback = await fetchFeedbackByProductId(productId);
-
-        // console.log("response of feedback : ", responseofFeedback);
-
-        // setFeedbacks(responseofFeedback);
-
-        const data = await response.json();
-        setProduct(data);
-        setSelectedFlavor(data.flavourId[0]?.name);
-        setSelectedSize(data.sizeId[0]?.name);
-        setFinalPrice(data.price);
+        setProduct(parsedData);
+        setSelectedFlavor(parsedData.flavourId[0]?.name);
+        setSelectedSize(parsedData.sizeId[0]?.name);
+        setFinalPrice(parsedData.price);
       } catch (error: any) {
         console.error("Error fetching product:", error);
         toast.error("Error", {
@@ -206,11 +142,11 @@ export default function ProductPage({ params }: any) {
       }
     };
 
-    if (productId) {
+    if (slug) {
       fetchProduct();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productId]);
+  }, [slug]);
 
   useEffect(() => {
     if (product) {
@@ -225,74 +161,6 @@ export default function ProductPage({ params }: any) {
       return newQuantity > 0 ? newQuantity : 1;
     });
   };
-
-  // const handleStarClick = (star: number) => {
-  //   setStars(star);
-  // };
-
-  // const handleUpdateStarClick = (star: number) => {
-  //   setupdateStars(star);
-  // };
-
-  // const handleDeleteFeedback = (feedbackId: string) => {
-  //   setDeleteFeedbackId(feedbackId);
-  //   setIsAlertModalOpen(true);
-  // };
-
-  // const handleReviewSubmit = async () => {
-  //   console.log("Review:", review);
-  //   console.log("Stars:", stars);
-  //   console.log("this is user : ", userdetails?.fullName);
-  //   const loadingId = toast.loading("Processing...");
-
-  //   try {
-  //     const obj = {
-  //       userName: userdetails?.fullName || "Anonymous",
-  //       rating: Number(stars),
-  //       feedback: review,
-  //       productId: productId,
-  //     };
-
-  //     console.log("this is final objedct : ", obj);
-
-  //     const feedbackSubmitResponse = await createFeedback(obj);
-
-  //     setFeedbacks((prevFeedbacks) => [
-  //       ...prevFeedbacks,
-  //       feedbackSubmitResponse,
-  //     ]);
-  //     console.log(
-  //       "this is feedback submit response : ",
-  //       feedbackSubmitResponse
-  //     );
-  //     toast.dismiss(loadingId);
-  //     toast.success("Feedback successfully created");
-  //   } catch (error) {
-  //     toast.error("An error occured");
-  //     toast.dismiss(loadingId);
-  //     console.log("an error occured while submitting the feedback : ", error);
-  //   }
-  // };
-
-  // const confirmDeleteFeedback = async () => {
-  //   const loadingId = toast.loading("Deleting feedback...");
-
-  //   try {
-  //     await deleteFeedbackById(new mongoose.Types.ObjectId(deleteFeedbackId));
-  //     toast.dismiss(loadingId);
-  //     toast.success("Successfully deleted feedback");
-  //     setFeedbacks((prevFeedbacks) =>
-  //       prevFeedbacks.filter((feedback) => feedback._id !== deleteFeedbackId)
-  //     );
-  //   } catch (error) {
-  //     toast.error("Error while deleting feedback");
-  //     toast.dismiss(loadingId);
-  //     console.error("Error deleting feedback:", error);
-  //   }
-
-  //   setIsAlertModalOpen(false);
-  //   setDeleteFeedbackId("");
-  // };
 
   const handleAddToCart = () => {
     if (!userId) {
@@ -328,37 +196,6 @@ export default function ProductPage({ params }: any) {
     }
   };
 
-  // const handleUpdateReview = async (feedbackId: string) => {
-  //   const loadingId = toast.loading("processing...");
-
-  //   try {
-  //     const obj = {
-  //       rating: updatestars,
-  //       feedback: updatereview,
-  //     };
-
-  //     const id = new mongoose.Types.ObjectId(feedbackId);
-
-  //     const updatefeedbackResponse = await updateFeedbackById(id, obj);
-
-  //     console.log("this is reponse : ", updatefeedbackResponse);
-
-  //     toast.dismiss(loadingId);
-
-  //     toast.success("feedback updated successfully");
-
-  //     setFeedbacks((prevFeedbacks) =>
-  //       prevFeedbacks.map((feedback) =>
-  //         feedback._id === feedbackId ? updatefeedbackResponse : feedback
-  //       )
-  //     );
-  //   } catch (error) {
-  //     toast.dismiss(loadingId);
-  //     toast.error("Error occured");
-  //     console.log("error occured while editing the feedback");
-  //   }
-  // };
-
   const handleBuyNow = () => {
     if (!userId) {
       router.push("/sign-in");
@@ -369,6 +206,7 @@ export default function ProductPage({ params }: any) {
 
   const handleAddressSubmit = async () => {
     if (product && selectedFlavor && selectedSize) {
+      console.log("here i am");
       try {
         const amount = finalPrice;
         const products = [
@@ -440,35 +278,8 @@ export default function ProductPage({ params }: any) {
             <CarouselPrevious className="absolute left-0 top-1/2 transform -translate-y-1/2" />
             <CarouselNext className="absolute right-0 top-1/2 transform -translate-y-1/2" />
           </Carousel>
-          <h2 className="font-bold text-xl mt-4">Product Description</h2>
-          <div className="grid gap-4 text-sm leading-loose">
-            <div className="markdown-container">
-              {parse(product.description)}
-            </div>
-          </div>
-          {product.benefits && (
-            <Accordion title="Benefits">
-              <div className="markdown-container">
-                {parse(product.benefits)}
-              </div>
-            </Accordion>
-          )}
-          {product.suggestedUse && (
-            <Accordion title="Suggested Use">
-              <div className="markdown-container">
-                {parse(product.suggestedUse)}
-              </div>
-            </Accordion>
-          )}
-          {product.nutritionalUse && (
-            <Accordion title="Nutritional Information">
-              <div className="markdown-container">
-                {parse(product.nutritionalUse)}
-              </div>
-            </Accordion>
-          )}
         </div>
-        <div className="grid gap-8 md:gap-12 items-start">
+        <div className="grid gap-8 md:gap-10 items-start">
           <div className="grid gap-4">
             <h1 className="font-bold text-3xl">{product.name}</h1>
             <div className="text-2xl font-bold dark:text-white text-gray-900">
@@ -477,32 +288,14 @@ export default function ProductPage({ params }: any) {
                 ₹{product.fakePrice}
               </span>
             </div>
-            <div className="text-sm dark:text-gray-200 text-gray-500">
-              Free shipping on orders over ₹500
-            </div>
-            {/* <div className="flex items-center gap-2">
-              {[1, 2, 3, 4, 5].map((index) => (
-                <StarIcon
-                  key={index}
-                  className={`w-5 h-5 ${
-                    index <= Math.round(averageRating)
-                      ? "fill-primary"
-                      : "fill-muted"
-                  } ${index <= averageRating ? "" : "stroke-muted-foreground"}`}
-                />
-              ))}
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                {feedbacks.length > 1 ? (
-                  <span>({feedbacks.length} reviews)</span>
-                ) : (
-                  <span>({feedbacks.length} review)</span>
-                )}
-              </span>
-            </div> */}
+
             <div className="text-sm dark:text-white text-gray-500">
-              <ul className="list-disc list-inside">
+              <ul className="flex flex-col gap-3">
                 {product.features.map((feature: any, index: any) => (
-                  <li key={index}>{feature}</li>
+                  <li className="list-none flex gap-2" key={index}>
+                    <IoCheckmarkDone color={"red"} size={20} />
+                    {feature}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -602,9 +395,15 @@ export default function ProductPage({ params }: any) {
                   </div>
                 )}
               </div>
-              <div className="text-lg font-bold">
-                Final Price: ₹{finalPrice.toFixed(2)}
+              <div className="">
+                <p className="text-lg flex flex-col font-bold">
+                  Final Price: ₹{finalPrice.toFixed(2)}
+                </p>
+                <span className="text-xs ml-3 dark:text-gray-200 text-gray-500">
+                  <b>Note :</b> Free shipping on orders over ₹500
+                </span>
               </div>
+              <div className=""></div>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button size="lg" onClick={handleAddToCart}>
@@ -617,6 +416,12 @@ export default function ProductPage({ params }: any) {
           </div>
         </div>
       </div>
+      <article
+        className="prose mt-12 text-justify max-w-none break-words  "
+        dangerouslySetInnerHTML={{
+          __html: product.contentHTML || "No content",
+        }}
+      />
       <Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
         <AddressModal
           isOpen={isAddressModalOpen}
