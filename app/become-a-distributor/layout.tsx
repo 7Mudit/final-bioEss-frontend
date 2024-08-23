@@ -1,17 +1,15 @@
-import BannerSection from "@/components/Home/BannerSection";
-import BestSellersSection from "@/components/Home/BestSellersSection";
-import DummyCategories from "@/components/Home/DummyCategories";
-import DummyComponent from "@/components/Home/DummyComponent";
-import VideoSection from "@/components/Home/VideoSection";
-import { Metadata } from "next";
+import type { Metadata } from "next";
+import Navbar from "@/components/shared/Navbar";
+import Footer from "@/components/shared/Footer";
 
 export const metadata: Metadata = {
-  title: "BIO-ESSENTIA : Quality you deserve, Results you can see",
+  title: "Become A PARTNER : Get a Franchise",
   description:
     "At Bio Essentia, we redefine wellness with top-tier nutraceuticals. Achieve your health goals with our premium supplements.",
-  keywords: "Bio Essentia, Essential, Premium Nutraceuticals",
+  keywords:
+    "Nutraceutical Distributors,Bio Essentia Partnership,Distributor Opportunities",
   openGraph: {
-    title: "BIO-ESSENTIA : Quality you deserve, Results you can see",
+    title: "Become A PARTNER : Get a Franchise",
     description:
       "At Bio Essentia, we redefine wellness with top-tier nutraceuticals. Achieve your health goals with our premium supplements.",
     url: "https://www.bioessentia.in/",
@@ -27,7 +25,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BIO-ESSENTIA : Quality you deserve, Results you can see",
+    title: "Become A PARTNER : Get a Franchise",
     description:
       "At Bio Essentia, we redefine wellness with top-tier nutraceuticals. Achieve your health goals with our premium supplements.",
     images: [
@@ -39,20 +37,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default function HomeLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <main className="flex flex-col">
-      <BannerSection />
-      {/* <CategoriesSection /> */}
-      <DummyComponent />
-      <DummyCategories />
-      {/* <BestSellersSection /> */}
-      <BestSellersSection />
-      <VideoSection />
-      {/* <BannerSection /> */}
-      {/* <ShopByGoalSection /> */}
-      {/* <TrustSection /> */}
-      {/* <FreeSection /> */}
-    </main>
+    <div className="mx-auto">
+      <Navbar />
+      {children}
+      <Footer />
+    </div>
   );
 }

@@ -13,7 +13,6 @@ import { validateCoupon } from "@/lib/actions/coupon.action";
 import { toast } from "sonner";
 import AddressModal from "@/components/product/AddressModal";
 import { Dialog } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { JSONContent } from "novel";
 

@@ -50,12 +50,12 @@ const Navbar = () => {
         <Link href="/products" className={isActiveLink("/products")}>
           Products
         </Link>
-        {/* <Link
+        <Link
           href="/become-a-distributor"
           className={isActiveLink("/become-a-distributor")}
         >
           Become a Distributor
-        </Link> */}
+        </Link>
       </div>
 
       {/* User Actions */}
