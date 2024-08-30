@@ -52,6 +52,14 @@ import { AlertModal } from "@/components/ui/alert-modal";
 import { fetchProductBySlug } from "@/lib/actions/products.action";
 import { IoCheckmarkDone } from "react-icons/io5";
 import { type JSONContent } from "novel";
+import ReviewComponent from "@/components/product/Review";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Image {
   _id: string;
@@ -108,6 +116,11 @@ export default function ProductPage({ params }: any) {
   const [userdetails, setUser] = useState<any | null>(null);
   const [isAlertModalOpen, setIsAlertModalOpen] = useState(false);
   const [averageRating, setAverageRating] = useState<number>(0);
+  const [watchingCount, setWatchingCount] = useState(0);
+  const [showCouponInput, setShowCouponInput] = useState(false);
+  const [pincode, setPincode] = useState("");
+  const [isPincodeValid, setIsPincodeValid] = useState(false);
+  const [isCheckingPincode, setIsCheckingPincode] = useState(false);
   const { updateCart } = useCart();
   const router = useRouter();
   const { userId, isSignedIn } = useAuth();
@@ -249,6 +262,21 @@ export default function ProductPage({ params }: any) {
     }
   };
 
+  useEffect(() => {
+    const randomWatchingCount = Math.floor(Math.random() * 11) + 15;
+    setWatchingCount(randomWatchingCount);
+  }, []);
+
+  const handlePincodeCheck = async () => {
+    setIsCheckingPincode(true);
+    if (pincode.length === 6) {
+      setIsPincodeValid(true);
+    } else {
+      setIsPincodeValid(false);
+    }
+    setIsCheckingPincode(false);
+  };
+
   if (!product) {
     return (
       <div>
@@ -288,7 +316,10 @@ export default function ProductPage({ params }: any) {
                 ₹{product.fakePrice}
               </span>
             </div>
-
+            <div className="text-base font-medium text-gray-700 dark:text-gray-200">
+              <span className="text-red-700 text-2xl">{watchingCount}</span>{" "}
+              people are watching this product right now
+            </div>
             <div className="text-sm dark:text-white text-gray-500">
               <ul className="flex flex-col gap-3">
                 {product.features.map((feature: any, index: any) => (
@@ -368,50 +399,116 @@ export default function ProductPage({ params }: any) {
                   </Button>
                 </div>
               </div>
-              <div>
-                <Label className="text-base" htmlFor="coupon">
-                  Coupon Code
-                </Label>
-                <div className="flex items-center gap-2">
-                  <Input
-                    placeholder="Enter Coupon Code"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                  />
-                  <Button onClick={handleApplyCoupon}>Apply</Button>
+              <div className="flex items-center gap-2">
+                <Input
+                  placeholder="Enter Pincode"
+                  value={pincode}
+                  onChange={(e) => setPincode(e.target.value)}
+                />
+                <Button
+                  onClick={handlePincodeCheck}
+                  disabled={isCheckingPincode}
+                >
+                  {isCheckingPincode ? "Checking..." : "Check"}
+                </Button>
+              </div>
+              {isPincodeValid !== null && pincode !== "" && (
+                <div className="text-sm mt-2">
+                  {isPincodeValid ? (
+                    <span className="text-green-500">
+                      Delivery available in your area!
+                    </span>
+                  ) : (
+                    <span className="text-red-500">
+                      Sorry, we don&apos;t deliver to this pincode.
+                    </span>
+                  )}
                 </div>
-                {isValidCoupon !== null && (
-                  <div className="text-sm mt-2">
-                    {isValidCoupon ? (
-                      <span className="text-green-500">
-                        Coupon applied! Discount: ₹
-                        {(product.price * quantity - finalPrice).toFixed(2)}
-                      </span>
-                    ) : (
-                      <span className="text-red-500">
-                        Invalid or expired coupon
-                      </span>
-                    )}
-                  </div>
-                )}
+              )}
+              <div>
+                <motion.div
+                  initial={false}
+                  animate={{ height: showCouponInput ? "auto" : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {showCouponInput && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Input
+                        placeholder="Enter Coupon Code"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                      />
+                      <Button onClick={handleApplyCoupon}>Apply</Button>
+                    </div>
+                  )}
+                </motion.div>
+                <Button
+                  variant="outline"
+                  className="mt-2"
+                  onClick={() => setShowCouponInput(!showCouponInput)}
+                >
+                  {showCouponInput ? "Hide Coupon" : "Have a Coupon?"}
+                </Button>
+                <AnimatePresence>
+                  {isValidCoupon !== null && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-sm mt-2"
+                    >
+                      {isValidCoupon ? (
+                        <span className="text-green-500">
+                          Coupon applied! Discount: ₹
+                          {(product.price * quantity - finalPrice).toFixed(2)}
+                        </span>
+                      ) : (
+                        <span className="text-red-500">
+                          Invalid or expired coupon
+                        </span>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
               <div className="">
                 <p className="text-lg flex flex-col font-bold">
                   Final Price: ₹{finalPrice.toFixed(2)}
                 </p>
                 <span className="text-xs ml-3 dark:text-gray-200 text-gray-500">
-                  <b>Note :</b> Free shipping on orders over ₹500
+                  <b>Note :</b> Free shipping
                 </span>
               </div>
-              <div className=""></div>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button size="lg" onClick={handleAddToCart}>
-                Add to Cart
-              </Button>
-              <Button size="lg" variant="outline" onClick={handleBuyNow}>
-                Buy Now
-              </Button>
+              <div>
+                <Button size="lg" onClick={handleAddToCart}>
+                  Add to Cart
+                </Button>
+              </div>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div>
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        onClick={handleBuyNow}
+                        disabled={!isPincodeValid}
+                      >
+                        Buy Now
+                      </Button>
+                    </div>
+                  </TooltipTrigger>
+                  {!isPincodeValid && (
+                    <TooltipContent>
+                      <p>Please enter a valid pincode to enable this button</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
         </div>
@@ -422,6 +519,7 @@ export default function ProductPage({ params }: any) {
           __html: product.contentHTML || "No content",
         }}
       />
+      <ReviewComponent />
       <Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
         <AddressModal
           isOpen={isAddressModalOpen}
