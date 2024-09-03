@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.bioessentia.in
+
+# Sitemaps
+Sitemap: https://www.bioessentia.in/sitemap.xml
