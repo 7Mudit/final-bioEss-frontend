@@ -29,7 +29,7 @@ export async function updateCart(params: any) {
   try {
     await connectToDb();
     const { userId } = auth();
-    const { productId, quantity, flavor, size } = params;
+    const { productId, quantity, flavor, size, price } = params;
 
     const user = await User.findOne({ clerkId: userId });
     if (!user) throw new Error("User not found");
@@ -42,12 +42,14 @@ export async function updateCart(params: any) {
       cartItem.quantity = quantity;
       cartItem.flavor = flavor;
       cartItem.size = size;
+      cartItem.price = price; // Store the price for the selected size
     } else {
       user.cart.push({
         product: productId,
         quantity,
         flavor,
         size,
+        price, // Include the price when adding to the cart
       });
     }
 

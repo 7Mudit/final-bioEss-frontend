@@ -35,6 +35,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.bioessentia.in/about-us",
   },
+  robots: "index follow",
 };
 
 const AboutUs: React.FC = () => {

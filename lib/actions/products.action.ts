@@ -42,16 +42,19 @@ export async function fetchProductBySlug(slug: string) {
 
     const product = await Product.findOne({ slug })
       .populate("images")
-      .populate("sizeId")
+      .populate("sizes.sizeId")
       .populate("flavourId")
       .populate("categoryId")
       .exec();
-    console.log(product);
+
     if (!product) {
       throw new Error("Product not found");
     }
 
-    return JSON.stringify(product);
+    console.log(product.sizes);
+    const productObj = product.toObject();
+
+    return JSON.stringify(productObj);
   } catch (error) {
     console.error("Error fetching product by slug:", error);
     throw new Error("Failed to fetch product");

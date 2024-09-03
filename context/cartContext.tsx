@@ -33,7 +33,10 @@ interface Flavour {
 
 interface Size {
   _id: string;
-  name: string;
+  sizeId: {
+    name: string;
+  };
+  price: number;
 }
 
 interface IProduct {
@@ -41,13 +44,12 @@ interface IProduct {
   storeId: string;
   categoryId: Category;
   name: string;
-  price: number;
+  sizes: Size[];
   fakePrice: number;
   features: string[];
   content?: JSONContent;
   isFeatured: boolean;
   isArchived: boolean;
-  sizeId: Size[];
   flavourId: Flavour[];
   images: Image[];
   orderItems: string[];
@@ -61,6 +63,7 @@ interface CartItem {
   quantity: number;
   flavor: string;
   size: string;
+  price: number; // Storing price of the selected size
 }
 
 interface CartContextType {
@@ -69,7 +72,8 @@ interface CartContextType {
     product: IProduct,
     quantity: number,
     flavor: string,
-    size: string
+    size: string,
+    price: number // Pass the price of the selected size
   ) => Promise<void>;
   removeFromCart: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -113,7 +117,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     product: IProduct,
     quantity: number,
     flavor: string,
-    size: string
+    size: string,
+    price: number
   ) => {
     try {
       await updateCart({
@@ -121,7 +126,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         quantity,
         flavor,
         size,
+        price, // Pass the selected size's price
       });
+
       const updatedCart = await fetchCart();
       const data = JSON.parse(updatedCart);
       setCart(data);
@@ -147,7 +154,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     try {
       await clearCart();
       setCart([]);
-      // toast.success("Cart cleared");
     } catch (error) {
       console.error("Failed to clear cart:", error);
     }

@@ -37,6 +37,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.bioessentia.in/",
   },
+  robots: "index follow",
 };
 
 export default function Home() {

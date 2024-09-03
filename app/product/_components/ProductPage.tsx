@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import {
   CarouselItem,
@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
+import axios from "axios";
 import {
   Dialog,
   DialogContent,
@@ -78,22 +79,23 @@ interface Flavour {
 
 interface Size {
   _id: string;
-  name: string;
+  sizeId: {
+    name: string;
+  };
+  price: number;
 }
-
 interface IProduct {
   _id: string;
   storeId: string;
   categoryId: Category;
   name: string;
-  price: number;
+  sizes: Size[];
   fakePrice: number;
   content?: JSONContent;
   contentHTML?: string;
   features: string[];
   isFeatured: boolean;
   isArchived: boolean;
-  sizeId: Size[];
   flavourId: Flavour[];
   images: Image[];
   orderItems: string[];
@@ -101,7 +103,6 @@ interface IProduct {
   createdAt: Date;
   updatedAt: Date;
 }
-
 export default function ProductPage({ params }: any) {
   const [quantity, setQuantity] = useState(1);
   const [selectedFlavor, setSelectedFlavor] = useState("");
@@ -125,11 +126,6 @@ export default function ProductPage({ params }: any) {
   const router = useRouter();
   const { userId, isSignedIn } = useAuth();
   const user = useUser();
-  const [starsCounts, setStarsCounts] = useState({
-    3: 0,
-    4: 0,
-    5: 0,
-  });
 
   const slug = params.slug;
 
@@ -141,12 +137,16 @@ export default function ProductPage({ params }: any) {
     const fetchProduct = async () => {
       try {
         let data = await fetchProductBySlug(slug);
+        console.log(data);
         const parsedData: IProduct = JSON.parse(data);
 
         setProduct(parsedData);
         setSelectedFlavor(parsedData.flavourId[0]?.name);
-        setSelectedSize(parsedData.sizeId[0]?.name);
-        setFinalPrice(parsedData.price);
+        setSelectedSize(parsedData.sizes[0]?.sizeId.name); // Access the name from sizeId
+
+        // Set the price based on the selected size or first size by default
+        const initialSizePrice = parsedData.sizes[0]?.price || 0;
+        setFinalPrice(initialSizePrice);
       } catch (error: any) {
         console.error("Error fetching product:", error);
         toast.error("Error", {
@@ -158,15 +158,18 @@ export default function ProductPage({ params }: any) {
     if (slug) {
       fetchProduct();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   useEffect(() => {
-    if (product) {
-      const discountAmount = (product.price * discount) / 100;
-      setFinalPrice((product.price - discountAmount) * quantity);
+    if (product && selectedSize) {
+      const selectedSizeObj = product.sizes.find(
+        (size) => size.sizeId.name === selectedSize
+      );
+      const sizePrice = selectedSizeObj ? selectedSizeObj.price : 0;
+      const discountAmount = (sizePrice * discount) / 100;
+      setFinalPrice((sizePrice - discountAmount) * quantity);
     }
-  }, [quantity, discount, product]);
+  }, [quantity, discount, product, selectedSize]);
 
   const handleQuantityChange = (change: number) => {
     setQuantity((prevQuantity) => {
@@ -181,7 +184,12 @@ export default function ProductPage({ params }: any) {
       return;
     }
     if (product && selectedFlavor && selectedSize) {
-      updateCart(product, quantity, selectedFlavor, selectedSize);
+      const selectedSizeObj = product.sizes.find(
+        (size) => size.sizeId.name === selectedSize
+      );
+      const price = selectedSizeObj ? selectedSizeObj.price : 0;
+
+      updateCart(product, quantity, selectedFlavor, selectedSize, price);
     }
   };
 
@@ -197,7 +205,11 @@ export default function ProductPage({ params }: any) {
         toast.success("Coupon applied");
       } else {
         setDiscount(0);
-        setFinalPrice(product!.price * quantity);
+        const selectedSizeObj = product?.sizes.find(
+          (size) => size.sizeId.name === selectedSize
+        );
+        const sizePrice = selectedSizeObj ? selectedSizeObj.price : 0;
+        setFinalPrice(sizePrice * quantity);
         setIsValidCoupon(false);
         setCouponId(undefined);
         toast.error("Invalid coupon applied");
@@ -219,7 +231,6 @@ export default function ProductPage({ params }: any) {
 
   const handleAddressSubmit = async () => {
     if (product && selectedFlavor && selectedSize) {
-      console.log("here i am");
       try {
         const amount = finalPrice;
         const products = [
@@ -263,18 +274,51 @@ export default function ProductPage({ params }: any) {
   };
 
   useEffect(() => {
-    const randomWatchingCount = Math.floor(Math.random() * 11) + 15;
+    const randomWatchingCount = Math.floor(Math.random() * 50) + 50;
     setWatchingCount(randomWatchingCount);
   }, []);
 
   const handlePincodeCheck = async () => {
     setIsCheckingPincode(true);
-    if (pincode.length === 6) {
-      setIsPincodeValid(true);
-    } else {
+    try {
+      const response = await axios.get(
+        `https://staging-express.delhivery.com/c/api/pin-codes/json/`,
+        {
+          params: {
+            filter_codes: pincode,
+          },
+          headers: {
+            Authorization: `Token fe772cbcac5112ea2265d9116b8a9c3fbb71137e`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
+
+      if (data.delivery_codes && data.delivery_codes.length > 0) {
+        const isServiceable = data.delivery_codes.some(
+          (code: any) => code.delivery_code.pincode === pincode
+        );
+
+        if (isServiceable) {
+          setIsPincodeValid(true);
+          toast.success("Delivery available in your area!");
+        } else {
+          setIsPincodeValid(false);
+          toast.error("Sorry, we don't deliver to this pincode.");
+        }
+      } else {
+        setIsPincodeValid(false);
+        toast.error("Sorry, we don't deliver to this pincode.");
+      }
+    } catch (error) {
+      console.error("Error checking pincode:", error);
       setIsPincodeValid(false);
+      toast.error("Failed to check pincode. Please try again later.");
+    } finally {
+      setIsCheckingPincode(false);
     }
-    setIsCheckingPincode(false);
   };
 
   if (!product) {
@@ -311,10 +355,12 @@ export default function ProductPage({ params }: any) {
           <div className="grid gap-4">
             <h1 className="font-bold text-3xl">{product.name}</h1>
             <div className="text-2xl font-bold dark:text-white text-gray-900">
-              ₹{product.price}{" "}
-              <span className="text-lg text-red-500 line-through">
-                ₹{product.fakePrice}
-              </span>
+              ₹{finalPrice.toFixed(2)}{" "}
+              {product.fakePrice > 0 && (
+                <span className="text-lg text-red-500 line-through">
+                  ₹{product.fakePrice}
+                </span>
+              )}
             </div>
             <div className="text-base font-medium text-gray-700 dark:text-gray-200">
               <span className="text-red-700 text-2xl">{watchingCount}</span>{" "}
@@ -356,16 +402,16 @@ export default function ProductPage({ params }: any) {
                   Size
                 </Label>
                 <Select
-                  defaultValue={product.sizeId[0]?.name}
+                  defaultValue={product.sizes[0]?.sizeId.name}
                   onValueChange={setSelectedSize}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select Size" />
                   </SelectTrigger>
                   <SelectContent>
-                    {product.sizeId.map((size) => (
-                      <SelectItem key={size._id} value={size.name}>
-                        {size.name}
+                    {product.sizes.map((size) => (
+                      <SelectItem key={size._id} value={size.sizeId.name}>
+                        {size.sizeId.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -450,7 +496,7 @@ export default function ProductPage({ params }: any) {
                   {showCouponInput ? "Hide Coupon" : "Have a Coupon?"}
                 </Button>
                 <AnimatePresence>
-                  {isValidCoupon !== null && (
+                  {isValidCoupon !== null && product && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -461,7 +507,13 @@ export default function ProductPage({ params }: any) {
                       {isValidCoupon ? (
                         <span className="text-green-500">
                           Coupon applied! Discount: ₹
-                          {(product.price * quantity - finalPrice).toFixed(2)}
+                          {(
+                            (product.sizes.find(
+                              (size) => size.sizeId.name === selectedSize
+                            )?.price || 0) *
+                              quantity -
+                            finalPrice
+                          ).toFixed(2)}
                         </span>
                       ) : (
                         <span className="text-red-500">
@@ -496,7 +548,7 @@ export default function ProductPage({ params }: any) {
                         size="lg"
                         variant="outline"
                         onClick={handleBuyNow}
-                        disabled={!isPincodeValid}
+                        // disabled={!isPincodeValid}
                       >
                         Buy Now
                       </Button>
@@ -568,26 +620,6 @@ function PlusIcon(props: any) {
     >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
-    </svg>
-  );
-}
-
-function StarIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={props.className}
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
 }

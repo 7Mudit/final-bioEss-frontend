@@ -33,7 +33,10 @@ interface Flavour {
 
 interface Size {
   _id: string;
-  name: string;
+  sizeId: {
+    name: string;
+  };
+  price: number;
 }
 
 interface IProduct {
@@ -41,14 +44,13 @@ interface IProduct {
   storeId: string;
   categoryId: Category;
   name: string;
-  price: number;
-  fakePrice: number;
   features: string[];
   content?: JSONContent;
   contentHTML?: string;
+  fakePrice: number;
   isFeatured: boolean;
   isArchived: boolean;
-  sizeId: Size[];
+  sizes: Size[];
   flavourId: Flavour[];
   images: Image[];
   orderItems: string[];
@@ -62,6 +64,7 @@ interface CartItem {
   quantity: number;
   flavor: string;
   size: string;
+  price: number; // Add price to CartItem to store the selected size's price
 }
 
 export default function CartComponent() {
@@ -77,10 +80,9 @@ export default function CartComponent() {
 
   useEffect(() => {
     const calculateTotals = () => {
-      const cartTotal = cart.reduce(
-        (acc, item) => acc + item.product.price * item.quantity,
-        0
-      );
+      const cartTotal = cart.reduce((acc, item) => {
+        return acc + item.price * item.quantity;
+      }, 0);
       const discountAmount = (cartTotal * discount) / 100;
       setTotal(cartTotal);
       setFinalTotal(cartTotal - discountAmount);
@@ -93,10 +95,11 @@ export default function CartComponent() {
     product: IProduct,
     quantity: number,
     flavor: string,
-    size: string
+    size: string,
+    price: number
   ) => {
     if (quantity <= 0) return;
-    await updateCart(product, quantity, flavor, size);
+    await updateCart(product, quantity, flavor, size, price);
   };
 
   const handleRemoveFromCart = async (productId: string) => {
@@ -146,6 +149,7 @@ export default function CartComponent() {
           quantity: item.quantity,
           flavor: item.flavor,
           size: item.size,
+          price: item.price, // Pass the price to the order creation
         }));
 
         const paymentResponse = await initiatePhonePePayment(
@@ -208,7 +212,7 @@ export default function CartComponent() {
         </div>
         <div className="grid gap-8">
           <div className="grid gap-6">
-            {cart.map(({ product, quantity, flavor, size }, index) => (
+            {cart.map(({ product, quantity, flavor, size, price }, index) => (
               <div
                 key={index}
                 className="grid grid-cols-[100px_1fr_auto] items-center gap-4"
@@ -223,7 +227,7 @@ export default function CartComponent() {
                 <div className="grid gap-1">
                   <h3 className="font-semibold">{product.name}</h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    ₹{product.price.toFixed(2)}
+                    ₹{price.toFixed(2)}
                   </p>
                   <p className="text-sm text-gray-500">Flavor: {flavor}</p>
                   <p className="text-sm text-gray-500">Size: {size}</p>
@@ -233,8 +237,15 @@ export default function CartComponent() {
                     size="icon"
                     variant="outline"
                     onClick={() =>
-                      handleQuantityChange(product, quantity - 1, flavor, size)
+                      handleQuantityChange(
+                        product,
+                        quantity - 1,
+                        flavor,
+                        size,
+                        price
+                      )
                     }
+                    className="flex items-center justify-center"
                   >
                     <MinusIcon className="h-4 w-4" />
                   </Button>
@@ -243,8 +254,15 @@ export default function CartComponent() {
                     size="icon"
                     variant="outline"
                     onClick={() =>
-                      handleQuantityChange(product, quantity + 1, flavor, size)
+                      handleQuantityChange(
+                        product,
+                        quantity + 1,
+                        flavor,
+                        size,
+                        price
+                      )
                     }
+                    className="flex items-center justify-center"
                   >
                     <PlusIcon className="h-4 w-4" />
                   </Button>
@@ -252,6 +270,7 @@ export default function CartComponent() {
                     size="icon"
                     variant="outline"
                     onClick={() => handleRemoveFromCart(product._id)}
+                    className="flex items-center justify-center"
                   >
                     <Trash2Icon className="h-4 w-4" />
                   </Button>
@@ -259,6 +278,7 @@ export default function CartComponent() {
               </div>
             ))}
           </div>
+
           <div className="grid gap-6">
             <div className="grid gap-2">
               <div className="flex items-center gap-4">

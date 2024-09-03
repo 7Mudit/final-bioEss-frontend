@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import Product from "@/components/Home/HomePageCards";
 import Loading from "../loading";
-import { useState, useEffect, useMemo } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,7 +19,14 @@ interface Product {
     name: string;
   };
   name: string;
-  price: number;
+  sizes: {
+    sizeId: {
+      _id: string;
+      name: string;
+      value: string;
+    };
+    price: number;
+  }[];
   fakePrice: number;
   description: string;
   features: string[];
@@ -29,11 +35,6 @@ interface Product {
   nutritionalUse: string;
   isFeatured: boolean;
   isArchived: boolean;
-  sizeId: {
-    _id: string;
-    name: string;
-    value: string;
-  }[];
   flavourId: {
     _id: string;
     name: string;
@@ -126,11 +127,27 @@ const Products = () => {
         return false;
       }
       return (
-        product.price >= filters.priceRange[0] &&
-        product.price <= filters.priceRange[1]
+        product.sizes.some((size) => size.price >= filters.priceRange[0]) &&
+        product.sizes.some((size) => size.price <= filters.priceRange[1])
       );
     });
   }, [filters, products]);
+
+  const [selectedSize, setSelectedSize] = useState<{ [key: string]: string }>(
+    {}
+  );
+
+  const handleSizeChange = (productId: string, sizeId: string) => {
+    setSelectedSize((prev) => ({ ...prev, [productId]: sizeId }));
+  };
+
+  const getPriceForSelectedSize = (product: Product) => {
+    const selectedSizeId = selectedSize[product._id];
+    const selectedSizeObj = product.sizes.find(
+      (size) => size.sizeId._id === selectedSizeId
+    );
+    return selectedSizeObj ? selectedSizeObj.price : product.sizes[0].price;
+  };
 
   if (loading) return <Loading />;
   if (error) return <p>Error: {error}</p>;
@@ -211,19 +228,41 @@ const Products = () => {
           <div className="col-span-1 md:col-span-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {filteredProducts.map((product: Product) => (
-                <Product
-                  key={product._id}
-                  id={product._id}
-                  img={product.images[0]?.url}
-                  category={product.categoryId.name}
-                  name={product.name}
-                  desc={product.description}
-                  prize={product.price}
-                  prizeStrike={product.fakePrice}
-                  discountPrize={product.fakePrice - product.price}
-                  rating={4.5} // Assuming a static rating for now
-                  hot={product.isFeatured}
-                />
+                <div key={product._id}>
+                  <div className="flex flex-col mb-2">
+                    <label className="text-sm font-medium mb-1">Size</label>
+                    <select
+                      value={
+                        selectedSize[product._id] || product.sizes[0].sizeId._id
+                      }
+                      onChange={(e) =>
+                        handleSizeChange(product._id, e.target.value)
+                      }
+                      className="p-2 border rounded-md"
+                    >
+                      {product.sizes.map((size) => (
+                        <option key={size.sizeId._id} value={size.sizeId._id}>
+                          {size.sizeId.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <Product
+                    key={product._id}
+                    id={product._id}
+                    img={product.images[0]?.url}
+                    category={product.categoryId.name}
+                    name={product.name}
+                    desc={product.description}
+                    prize={getPriceForSelectedSize(product)}
+                    prizeStrike={product.fakePrice}
+                    discountPrize={
+                      product.fakePrice - getPriceForSelectedSize(product)
+                    }
+                    rating={4.5} // Assuming a static rating for now
+                    hot={product.isFeatured}
+                  />
+                </div>
               ))}
             </div>
           </div>
