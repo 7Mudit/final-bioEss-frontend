@@ -8,8 +8,10 @@ export default function Products({ heading, products }: any) {
       <div className="grid w-full mx-auto grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product: any) => {
           const defaultSize = product.sizes[0];
-          const prize = defaultSize ? defaultSize.price : product.price;
-          const prizeStrike = product.fakePrice;
+          const prize = defaultSize
+            ? defaultSize.price
+            : product.sizes[0].price;
+          const prizeStrike = product.sizes[0].fakePrice;
           const discountPrize = prizeStrike ? prizeStrike - prize : 0;
 
           return (

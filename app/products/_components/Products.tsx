@@ -26,6 +26,7 @@ interface Product {
       value: string;
     };
     price: number;
+    fakePrice: number;
   }[];
   fakePrice: number;
   description: string;
@@ -133,22 +134,6 @@ const Products = () => {
     });
   }, [filters, products]);
 
-  const [selectedSize, setSelectedSize] = useState<{ [key: string]: string }>(
-    {}
-  );
-
-  const handleSizeChange = (productId: string, sizeId: string) => {
-    setSelectedSize((prev) => ({ ...prev, [productId]: sizeId }));
-  };
-
-  const getPriceForSelectedSize = (product: Product) => {
-    const selectedSizeId = selectedSize[product._id];
-    const selectedSizeObj = product.sizes.find(
-      (size) => size.sizeId._id === selectedSizeId
-    );
-    return selectedSizeObj ? selectedSizeObj.price : product.sizes[0].price;
-  };
-
   if (loading) return <Loading />;
   if (error) return <p>Error: {error}</p>;
   return (
@@ -229,24 +214,6 @@ const Products = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {filteredProducts.map((product: Product) => (
                 <div key={product._id}>
-                  <div className="flex flex-col mb-2">
-                    <label className="text-sm font-medium mb-1">Size</label>
-                    <select
-                      value={
-                        selectedSize[product._id] || product.sizes[0].sizeId._id
-                      }
-                      onChange={(e) =>
-                        handleSizeChange(product._id, e.target.value)
-                      }
-                      className="p-2 border rounded-md"
-                    >
-                      {product.sizes.map((size) => (
-                        <option key={size.sizeId._id} value={size.sizeId._id}>
-                          {size.sizeId.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                   <Product
                     key={product._id}
                     id={product._id}
@@ -254,12 +221,12 @@ const Products = () => {
                     category={product.categoryId.name}
                     name={product.name}
                     desc={product.description}
-                    prize={getPriceForSelectedSize(product)}
-                    prizeStrike={product.fakePrice}
+                    prize={product.sizes[0].price}
+                    prizeStrike={product.sizes[0].fakePrice}
                     discountPrize={
-                      product.fakePrice - getPriceForSelectedSize(product)
+                      product.sizes[0].fakePrice - product.sizes[0].price
                     }
-                    rating={4.5} // Assuming a static rating for now
+                    rating={4.5}
                     hot={product.isFeatured}
                   />
                 </div>

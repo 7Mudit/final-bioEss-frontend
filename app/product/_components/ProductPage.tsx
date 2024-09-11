@@ -83,6 +83,7 @@ interface Size {
     name: string;
   };
   price: number;
+  fakePrice: number;
 }
 interface IProduct {
   _id: string;
@@ -122,6 +123,7 @@ export default function ProductPage({ params }: any) {
   const [pincode, setPincode] = useState("");
   const [isPincodeValid, setIsPincodeValid] = useState(false);
   const [isCheckingPincode, setIsCheckingPincode] = useState(false);
+  const [finalFakePrice, setFinalFakePrice] = useState(0);
   const { updateCart } = useCart();
   const router = useRouter();
   const { userId, isSignedIn } = useAuth();
@@ -142,11 +144,11 @@ export default function ProductPage({ params }: any) {
 
         setProduct(parsedData);
         setSelectedFlavor(parsedData.flavourId[0]?.name);
-        setSelectedSize(parsedData.sizes[0]?.sizeId.name); // Access the name from sizeId
-
-        // Set the price based on the selected size or first size by default
+        setSelectedSize(parsedData.sizes[0]?.sizeId.name);
         const initialSizePrice = parsedData.sizes[0]?.price || 0;
+        const initialSizeFakePrice = parsedData.sizes[0]?.fakePrice || 0;
         setFinalPrice(initialSizePrice);
+        setFinalFakePrice(initialSizeFakePrice);
       } catch (error: any) {
         console.error("Error fetching product:", error);
         toast.error("Error", {
@@ -166,8 +168,11 @@ export default function ProductPage({ params }: any) {
         (size) => size.sizeId.name === selectedSize
       );
       const sizePrice = selectedSizeObj ? selectedSizeObj.price : 0;
+      const sizeFakePrice = selectedSizeObj ? selectedSizeObj.fakePrice : 0;
       const discountAmount = (sizePrice * discount) / 100;
+
       setFinalPrice((sizePrice - discountAmount) * quantity);
+      setFinalFakePrice(sizeFakePrice);
     }
   }, [quantity, discount, product, selectedSize]);
 
@@ -356,9 +361,9 @@ export default function ProductPage({ params }: any) {
             <h1 className="font-bold text-3xl">{product.name}</h1>
             <div className="text-2xl font-bold dark:text-white text-gray-900">
               ₹{finalPrice.toFixed(2)}{" "}
-              {product.fakePrice > 0 && (
+              {finalFakePrice > 0 && (
                 <span className="text-lg text-red-500 line-through">
-                  ₹{product.fakePrice}
+                  ₹{finalFakePrice.toFixed(2)}
                 </span>
               )}
             </div>
