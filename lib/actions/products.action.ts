@@ -45,13 +45,14 @@ export async function fetchProductBySlug(slug: string) {
       .populate("sizes.sizeId")
       .populate("flavourId")
       .populate("categoryId")
+      .populate("feedbacks")
       .exec();
 
     if (!product) {
       throw new Error("Product not found");
     }
 
-    console.log(product.sizes);
+    console.log(product);
     const productObj = product.toObject();
 
     return JSON.stringify(productObj);

@@ -61,6 +61,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ProductFeedback from "./ProductFeedback";
 
 interface Image {
   _id: string;
@@ -85,6 +86,15 @@ interface Size {
   price: number;
   fakePrice: number;
 }
+interface Feedback {
+  _id: string;
+  userName: string;
+  rating: number;
+  feedback: string;
+  createdAt: string;
+  approved: boolean;
+}
+
 interface IProduct {
   _id: string;
   storeId: string;
@@ -100,7 +110,7 @@ interface IProduct {
   flavourId: Flavour[];
   images: Image[];
   orderItems: string[];
-  feedbacks: string[];
+  feedbacks: Feedback[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -576,7 +586,10 @@ export default function ProductPage({ params }: any) {
           __html: product.contentHTML || "No content",
         }}
       />
-      <ReviewComponent />
+
+      {product.feedbacks && product.feedbacks.length > 0 && (
+        <ProductFeedback feedbacks={product.feedbacks} />
+      )}
       <Dialog open={isAddressModalOpen} onOpenChange={setIsAddressModalOpen}>
         <AddressModal
           isOpen={isAddressModalOpen}

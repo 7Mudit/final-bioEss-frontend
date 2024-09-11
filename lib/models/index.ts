@@ -9,6 +9,7 @@ import "./size.model";
 import "./flavour.model";
 import "./category.model";
 import "./seo.model";
+import "./feedback.model";
 
 export { default as Product } from "./product.model";
 export { default as User } from "./user.model";
@@ -21,3 +22,4 @@ export { default as Size } from "./size.model";
 export { default as Flavour } from "./flavour.model";
 export { default as Category } from "./category.model";
 export { default as SeoMetadata } from "./seo.model";
+export { default as Feedback } from "./feedback.model";

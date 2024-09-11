@@ -39,6 +39,15 @@ interface Size {
   price: number;
 }
 
+interface Feedback {
+  _id: string;
+  userName: string;
+  rating: number;
+  feedback: string;
+  createdAt: string;
+  approved: boolean;
+}
+
 interface IProduct {
   _id: string;
   storeId: string;
@@ -53,7 +62,7 @@ interface IProduct {
   flavourId: Flavour[];
   images: Image[];
   orderItems: string[];
-  feedbacks: string[];
+  feedbacks: Feedback[];
   createdAt: Date;
   updatedAt: Date;
 }
